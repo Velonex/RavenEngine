@@ -1,0 +1,14 @@
+# Visual studio files and folders
+*.vcxproj.user
+*.vcxproj
+*.vcxproj.filters
+*.sln
+.vs/
+
+# Temporary Raven files
+*.json
+*.log
+
+# Binaries
+**/bin-int/
+**/bin/
