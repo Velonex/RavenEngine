@@ -1,11 +1,14 @@
 #include "Logger.h"
+#if defined(ENABLE_LOGGING)
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <ctime>
 #include <chrono>
 #include <string>
 
+
 namespace rvn {
+
 
 	ref<spdlog::logger> Logger::s_engineLogger = nullptr;
 	ref<spdlog::logger> Logger::s_appLogger = nullptr;
@@ -52,3 +55,4 @@ namespace rvn {
 	}
 
 }
+#endif
