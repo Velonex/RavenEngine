@@ -6,8 +6,17 @@ raven_cppdialect = "C++17"
 -- Additional include directories, that need to be included in your project.
 -- Example: includedirs { raven_include_directories, ... }
 raven_include_directories = {}
-raven_include_directories["Raven"] = "Raven/src"
-raven_include_directories["Raven_Core"] = "Raven-Core/src"
+
+
+raven_internal_include_directories = {}
+raven_internal_include_directories["Raven"] = "Raven/src"
+raven_internal_include_directories["Raven_Core"] = "Raven_Core/src"
+raven_internal_include_directories["spdlog"] = "vendor/spdlog/include"
+
+
+for key,value in pairs(raven_internal_include_directories) do
+    raven_include_directories[key] = path_to_raven .. raven_internal_include_directories[key]
+end
 
 -- Architecture, Raven only supports only 64-bit. This probably won't change.
 -- 32-bit might work but this isn't guaranteed.
@@ -60,12 +69,12 @@ project "Raven"
 	
 	includedirs
 	{
-		raven_include_directories
+		raven_internal_include_directories
 	}
 	
 	links
 	{
-		"Raven-Core"
+		"Raven_Core"
 	}
 	
 	filter "system:windows"
@@ -85,10 +94,11 @@ project "Raven"
 		defines "DIST"
 		optimize "on"
 		runtime "Release"
--- Project: Raven-Core
+
+-- Project: Raven_Core
 -- This project implements core features that all other parts of Raven might need
-project "Raven-Core"
-	location "Raven-Core"
+project "Raven_Core"
+	location "Raven_Core"
 	kind "StaticLib"
 	language (raven_language)
 	cppdialect (raven_cppdialect)
@@ -107,7 +117,8 @@ project "Raven-Core"
 	
 	includedirs
 	{
-		"%{raven_include_directories.Raven_core}",
+		"%{raven_internal_include_directories.Raven_Core}",
+		"%{raven_internal_include_directories.spdlog}"
 	}
 	
 	filter "system:windows"

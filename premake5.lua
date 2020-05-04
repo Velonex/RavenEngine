@@ -1,6 +1,7 @@
 -- Example project file for a Raven project
 workspace "Raven"
 	startproject "Sandbox"
+	path_to_raven = "Raven/" -- This needs to be set so to make the include directories point to the correct place
 	include "Raven" -- This path needs to be changed to fit the path to the Raven subdirectory
 
 project "Sandbox"
@@ -23,7 +24,7 @@ project "Sandbox"
 	
 	includedirs
 	{
-		raven_include_dirs -- This includes all include directories that are necessary
+		raven_include_directories
 	}
 	
 	links
