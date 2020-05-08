@@ -10,8 +10,7 @@
 #endif
 
 int main() {
-	rvn::Logger::init("Sandbox");
-	LOG_INFO("Test");
+	rvn::Application app("Sandbox");
 
 	DUMP_MEMORY_LEAKS();
 	return 0;

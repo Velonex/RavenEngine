@@ -8,3 +8,6 @@
 
 // Datatypes
 #include <Raven_Core/datatypes/Memory.h>
+
+// Events
+#include <Raven_Core/event/EventSystem.h>

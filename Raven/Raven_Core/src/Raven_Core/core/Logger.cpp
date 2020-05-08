@@ -16,7 +16,7 @@ namespace rvn {
 	void Logger::init(std::string name)
 	{
 		if (s_engineLogger != nullptr) {
-			LOG_ENGINE_ERROR("Logger already initialized");
+			LOG_ENGINE_WARN("Logger already initialized");
 			return;
 		}
 		std::vector<spdlog::sink_ptr> sinks;
