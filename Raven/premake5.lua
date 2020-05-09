@@ -12,6 +12,7 @@ raven_internal_include_directories = {}
 raven_internal_include_directories["Raven"] = "Raven/src"
 raven_internal_include_directories["Raven_Core"] = "Raven_Core/src"
 raven_internal_include_directories["spdlog"] = "vendor/spdlog/include"
+raven_internal_include_directories["GLFW"] = "vendor/glfw/include"
 
 
 for key,value in pairs(raven_internal_include_directories) do
@@ -42,6 +43,9 @@ raven_objprefix = "bin-int/"
 raven_binprefix = "bin/"
 
 -- Set groups
+group "Engine/Dependencies"
+include "vendor"
+
 group "Engine"
 
 -- Project: Raven
@@ -74,7 +78,8 @@ project "Raven"
 	
 	links
 	{
-		"Raven_Core"
+		"Raven_Core",
+		"GLFW"
 	}
 	
 	filter "system:windows"

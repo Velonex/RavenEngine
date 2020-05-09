@@ -26,26 +26,28 @@ namespace rvn {
 		EventType _type;
 	};
 	struct EventListener {
-		virtual void onEvent(ref<Event> e) = 0;
+		virtual void onEvent(Event* e) = 0;
 	};
 	class EventHandler {
 	public:
-		void subscribe(ref<EventListener> clazz, EventType type) {
+		void subscribe(EventListener* clazz, EventType type) {
 			if (std::find(_subs.begin(), _subs.end(), _Subscriber(clazz, type)) != _subs.end()) {
 				LOG_ENGINE_WARN("Instance has subscribed multiple times");
 				return;
 			}
 			_subs.push_back({ clazz, type });
 		}
-		void dispatchEvent(ref<Event> e) {
+		// The event will get dispatched and will automatically be deleted
+		void dispatchEvent(Event* e) {
 			for (int i = 0; i < _subs.size(); i++) {
 				if ((e->getType() == _subs[i].type || _subs[i].type == rvn::EventType::ALL) && e->getType() != rvn::EventType::UNINITIALIZED) {
 					_subs[i].clazz->onEvent(e);
 				}
 				if (e->handled) break;
 			}
+			delete e;
 		}
-		void unsubscribe(ref<EventListener> clazz, EventType type) {
+		void unsubscribe(EventListener* clazz, EventType type) {
 			if (!(std::find(_subs.begin(), _subs.end(), _Subscriber(clazz, type)) != _subs.end())) {
 				LOG_ENGINE_WARN("Instance that hasn't subscribed tried to unsubscribe");
 				return;
@@ -54,12 +56,12 @@ namespace rvn {
 		}
 	private:
 		struct _Subscriber {
-			ref<EventListener> clazz;
+			EventListener* clazz;
 			EventType type;
 			bool operator==(_Subscriber rhs) {
 				return rhs.clazz == clazz && rhs.type == type;
 			}
-			_Subscriber(ref<EventListener> clazz, EventType type) : clazz(clazz), type(type) {
+			_Subscriber(EventListener* clazz, EventType type) : clazz(clazz), type(type) {
 
 			}
 			_Subscriber() : clazz(nullptr), type(EventType::UNINITIALIZED) {

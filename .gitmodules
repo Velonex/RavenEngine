@@ -1,3 +1,8 @@
 [submodule "Raven/vendor/spdlog"]
 	path = Raven/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+	branch = v1.x
+[submodule "Raven/vendor/glfw"]
+	path = Raven/vendor/glfw
+	url = https://github.com/glfw/glfw
+	branch = master
