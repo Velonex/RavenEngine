@@ -40,3 +40,25 @@ project "GLFW"
 			"_GLFW_WIN32",
 			"_CRT_SECURE_NO_WARNINGS"
 		}
+project "glad"
+	kind "StaticLib"
+	language "C"
+	staticruntime "on"
+	
+	targetdir (raven_binprefix .. raven_outputdir .. "/%{prj.name}")
+	objdir (raven_objprefix .. raven_outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"glad/include/KHR/khrplatform.h",
+		"glad/include/glad/glad.h",
+		"glad/src/glad.c"
+	}
+	
+	includedirs
+	{
+		"glad/include"
+	}
+	
+	filter "system:windows"
+		systemversion "latest"

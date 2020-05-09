@@ -4,6 +4,7 @@
 #if defined(PLATFORM_WINDOWS)
 #include <Raven/application/Window.h>
 #include <GLFW/glfw3.h>
+#include <Raven/rendering/GraphicsContext.h>
 
 namespace rvn {
 
@@ -24,7 +25,7 @@ namespace rvn {
 		virtual void _shutdown();
 	private:
 		GLFWwindow* _window;
-		//scope<GraphicsContext> _context;
+		scope<GraphicsContext> _context;
 		struct _WindowData {
 			unsigned int width, height;
 			std::string title;

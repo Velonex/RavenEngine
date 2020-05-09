@@ -50,10 +50,10 @@ namespace rvn {
 		_window = glfwCreateWindow(props.width, props.height, props.title.c_str(), nullptr, nullptr);
 		s_glfwWindowCount++;
 
-		//_context.reset(GraphicsContext::createGraphicsContext(_window));
-		//_context->init();
+		_context.reset(GraphicsContext::createGraphicsContext(_window));
+		_context->init();
 		glfwSetWindowUserPointer(_window, &_windowData);
-		//setVSync(true);
+		setVSync(true);
 
 		glfwSetWindowCloseCallback(_window, [](GLFWwindow* window) {
 			_WindowData& data = *(_WindowData*)glfwGetWindowUserPointer(window);
@@ -122,7 +122,7 @@ namespace rvn {
 	void WindowsWindow::onUpdate()
 	{
 		glfwPollEvents();
-		//_context->swapBuffers();
+		_context->swapBuffers();
 	}
 
 	void WindowsWindow::_shutdown()

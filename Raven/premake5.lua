@@ -13,6 +13,7 @@ raven_internal_include_directories["Raven"] = "Raven/src"
 raven_internal_include_directories["Raven_Core"] = "Raven_Core/src"
 raven_internal_include_directories["spdlog"] = "vendor/spdlog/include"
 raven_internal_include_directories["GLFW"] = "vendor/glfw/include"
+raven_internal_include_directories["glad"] = "vendor/glad/include"
 
 
 for key,value in pairs(raven_internal_include_directories) do
@@ -79,7 +80,8 @@ project "Raven"
 	links
 	{
 		"Raven_Core",
-		"GLFW"
+		"GLFW",
+		"glad"
 	}
 	
 	filter "system:windows"
