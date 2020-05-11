@@ -6,3 +6,7 @@
 	path = Raven/vendor/glfw
 	url = https://github.com/glfw/glfw
 	branch = master
+[submodule "Raven/vendor/imgui"]
+	path = Raven/vendor/imgui
+	url = https://github.com/ocornut/imgui
+	branch = docking

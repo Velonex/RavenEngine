@@ -3,6 +3,7 @@
 #include <Raven/application/Input.h>
 #include <chrono>
 #include "Timestep.h"
+#include <imgui.h>
 
 namespace rvn {
 	Application::Application(std::string name)
@@ -27,6 +28,7 @@ namespace rvn {
 			LOG_ENGINE_ERROR("The constructor has to be called first");
 			return;
 		}
+		_layerStack->pushOverlay(_imGuiLayer = new ImGuiLayer(&(this->getWindow())));
 		Timestep timestep;
 		std::chrono::time_point<std::chrono::steady_clock> lastFrame = std::chrono::time_point<std::chrono::steady_clock>();
 		std::chrono::time_point<std::chrono::steady_clock> now;
@@ -39,6 +41,19 @@ namespace rvn {
 			for (auto it = _layerStack->rbegin(); it < _layerStack->rend(); it++) {
 				(*it)->onUpdate(timestep);
 			}
+			_imGuiLayer->beginFrame();
+			{
+				ImGui::Begin("Renderer");
+				ImGui::Text("FPS: %f", 1 / timestep.getSeconds());
+				ImGui::End();
+			}
+			{
+				for (auto it = _layerStack->end(); it != _layerStack->begin(); )
+				{
+					(*--it)->onImGuiRender();
+				}
+			}
+			_imGuiLayer->endFrame();
 			// Update window
 			_window->onUpdate();
 		}

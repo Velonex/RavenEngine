@@ -12,7 +12,6 @@
 int main() {
 	rvn::Application app("Sandbox");
 	app.run();
-
 	DUMP_MEMORY_LEAKS();
 	return 0;
 }

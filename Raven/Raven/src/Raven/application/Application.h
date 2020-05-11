@@ -6,6 +6,8 @@
 #include <Raven_Core/datatypes/Memory.h>
 #include <Raven/application/Window.h>
 #include <Raven/layers/LayerStack.h>
+#include <Raven/imgui/ImGuiLayer.h>
+
 
 namespace rvn {
 
@@ -24,6 +26,7 @@ namespace rvn {
 		scope<EventHandler> _eventHandler;
 		scope<Window> _window;
 		scope<LayerStack> _layerStack;
+		ImGuiLayer* _imGuiLayer;
 	};
 
 }
