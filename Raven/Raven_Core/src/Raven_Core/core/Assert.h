@@ -10,7 +10,7 @@
 	template<typename... Args>
 	inline void rvn_assert(bool x, const char* basestr, Args... args) {
 	}
-#define ASSERT(x, basestr,...) { if (!x) {\
+#define ASSERT(x, basestr,...) { if (!(x)) {\
 		std::string str = "Assertion failed: ";\
 		str.append(basestr);\
 		rvn::Logger::getEngineLogger()->error(str.c_str(), __VA_ARGS__);\

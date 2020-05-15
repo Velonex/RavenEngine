@@ -1,7 +1,7 @@
 #include <pch.h>
 #include "Application.h"
 #include <Raven/application/Input.h>
-#include <chrono>
+#include <Raven_Core/utility/Timer.h>
 #include "Timestep.h"
 #include <imgui.h>
 #include <Raven/rendering/RenderCommand.h>
@@ -32,15 +32,21 @@ namespace rvn {
 		}
 		_layerStack->pushOverlay(_imGuiLayer = new ImGuiLayer(&(this->getWindow())));
 		Timestep timestep;
-		std::chrono::time_point<std::chrono::steady_clock> lastFrame = std::chrono::time_point<std::chrono::steady_clock>();
-		std::chrono::time_point<std::chrono::steady_clock> now;
+		using clock = std::chrono::steady_clock;
+		std::chrono::time_point<clock> lastFrame = std::chrono::time_point<clock>();
+		std::chrono::time_point<clock> now;
+
+		Timer timer;
+		int lastFPS = 0;
+
 		while (_running) {
 			// Clear screen
 			RenderCommand::setClearColor({ 0.5f, 0.5f, 0.5f, 1.0f });
 			RenderCommand::clear();
 			// Calculate time passed
 			now = std::chrono::steady_clock::now();
-			timestep = ((float)(now - lastFrame).count()) / 1000000000;
+			std::chrono::duration<float, std::micro> duration(now - lastFrame);
+			timestep = duration.count() / 1000000;
 			lastFrame = now;
 			// Update all layers
 			for (auto it = _layerStack->rbegin(); it < _layerStack->rend(); it++) {
@@ -49,7 +55,10 @@ namespace rvn {
 			_imGuiLayer->beginFrame();
 			{
 				ImGui::Begin("Renderer");
-				ImGui::Text("FPS: %f", 1 / timestep.getSeconds());
+				if (timer.hasReached(100)) {
+					lastFPS = (int)(1 / timestep.getSeconds());
+				}
+				ImGui::Text("FPS: %d", lastFPS);
 				ImGui::End();
 			}
 			{
