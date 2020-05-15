@@ -4,6 +4,7 @@
 #include <chrono>
 #include "Timestep.h"
 #include <imgui.h>
+#include <Raven/rendering/RenderCommand.h>
 
 namespace rvn {
 	Application::Application(std::string name)
@@ -18,6 +19,7 @@ namespace rvn {
 		WindowProps props(1280, 720, name);
 		_window.reset(Window::createWindow(props, this));
 		Input::setInstance(Input::createInput(this));
+		RenderCommand::init();
 		_layerStack = createScope<LayerStack>();
 		LOG_ENGINE_INFO("Initialized.");
 		_initialized = true;
@@ -33,6 +35,9 @@ namespace rvn {
 		std::chrono::time_point<std::chrono::steady_clock> lastFrame = std::chrono::time_point<std::chrono::steady_clock>();
 		std::chrono::time_point<std::chrono::steady_clock> now;
 		while (_running) {
+			// Clear screen
+			RenderCommand::setClearColor({ 0.5f, 0.5f, 0.5f, 1.0f });
+			RenderCommand::clear();
 			// Calculate time passed
 			now = std::chrono::steady_clock::now();
 			timestep = ((float)(now - lastFrame).count()) / 1000000000;

@@ -15,6 +15,7 @@ raven_internal_include_directories["spdlog"] = "vendor/spdlog/include"
 raven_internal_include_directories["GLFW"] = "vendor/glfw/include"
 raven_internal_include_directories["glad"] = "vendor/glad/include"
 raven_internal_include_directories["ImGui"] = "vendor/imgui"
+raven_internal_include_directories["glm"] = "vendor/glm/glm"
 
 
 for key,value in pairs(raven_internal_include_directories) do
