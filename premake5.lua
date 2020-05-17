@@ -24,7 +24,8 @@ project "Sandbox"
 	
 	includedirs
 	{
-		raven_include_directories
+		raven_include_directories,
+		"%{prj.name}/src"
 	}
 	
 	links

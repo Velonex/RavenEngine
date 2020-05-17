@@ -1,4 +1,5 @@
 #include <Raven.h>
+#include <TestLayer.h>
 
 #if defined (_MSC_VER) && defined (DEBUG)
 	#define _CRTDBG_MAP_ALLOC
@@ -11,6 +12,7 @@
 
 int main() {
 	rvn::Application app("Sandbox");
+	app.getLayerStack().pushLayer(new TestLayer());
 	app.run();
 	DUMP_MEMORY_LEAKS();
 	return 0;

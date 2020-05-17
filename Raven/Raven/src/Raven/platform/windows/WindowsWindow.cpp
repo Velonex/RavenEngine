@@ -7,6 +7,7 @@
 #include <Raven/events/MouseEvents.h>
 #include <Raven/events/WindowEvents.h>
 #include <Raven/application/Application.h>
+#include <Raven/rendering/RendererAPI.h>
 
 namespace rvn {
 
@@ -43,10 +44,10 @@ namespace rvn {
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
-		//#if defined(DEBUG)
-		//	if (Renderer::getApi() == RendererAPI::API::OpenGL)
-		//		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-		//#endif
+		#if defined(DEBUG)
+			if (RendererAPI::getRendererApi() == RendererAPI::API::OpenGL)
+				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+		#endif
 		_window = glfwCreateWindow(props.width, props.height, props.title.c_str(), nullptr, nullptr);
 		s_glfwWindowCount++;
 
