@@ -4,7 +4,6 @@
 namespace rvn {
 	LayerStack::~LayerStack()
 	{
-		for (Layer* layer : _layers) { layer->onDetach(); delete layer; }
 	}
 	void LayerStack::pushLayer(Layer* layer)
 	{

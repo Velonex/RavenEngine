@@ -62,9 +62,8 @@ namespace rvn {
 				ImGui::End();
 			}
 			{
-				for (auto it = _layerStack->end(); it != _layerStack->begin(); )
-				{
-					(*--it)->onImGuiRender();
+				for (auto it = _layerStack->rbegin(); it < _layerStack->rend(); it++) {
+					(*it)->onImGuiRender();
 				}
 			}
 			_imGuiLayer->endFrame();
@@ -75,6 +74,10 @@ namespace rvn {
 	Application::~Application()
 	{
 		LOG_ENGINE_TRACE("Stopping...");
+		for (auto it = _layerStack->rbegin(); it < _layerStack->rend(); it++) {
+			(*it)->onDetach();
+			delete (*it);
+		}
 		LOG_ENGINE_INFO("Stopped.");
 	}
 	void Application::onEvent(Event* e)

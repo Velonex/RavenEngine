@@ -7,7 +7,7 @@ namespace rvn {
 	class Layer {
 	public:
 		Layer(std::string name = "Layer") : _name(name) {}
-		~Layer() {}
+		virtual ~Layer() {}
 		virtual void onAttach() {}
 		virtual void onUpdate(Timestep ts) {}
 		virtual void onEvent(Event* e) {}
