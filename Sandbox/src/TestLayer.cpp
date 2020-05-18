@@ -11,28 +11,27 @@ void TestLayer::onAttach()
 	glViewport(0, 0, 1280, 720);
 
 	// Create and bind vertex array
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
+	vao = rvn::VertexArray::create();
+	vao->bind();
 
 	// Vertex positions
 	Vertex vertices[4] = {
 		{-0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f},
 		{-0.5f, -0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f},
 		{ 0.5f, -0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f},
-		{ 0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f}
+		{ 0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f}
 	};
 
 	// Create and bind vertex buffer
-	glGenBuffers(1, &vao);
-	glBindBuffer(GL_ARRAY_BUFFER, vao);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	vbo = rvn::VertexBuffer::create(vertices, sizeof(vertices));
 
 	// Set Layout
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)0);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)sizeof(Vertex::position));
+	vbo->setLayout({
+		{ rvn::ShaderDataType::Float3, "a_Position" },
+		{ rvn::ShaderDataType::Float4, "a_Color" }
+		});
+
+	vao->addVertexBuffer(vbo);
 
 	// Indices
 	unsigned int indices[2 * 3] = {
@@ -41,10 +40,8 @@ void TestLayer::onAttach()
 	};
 
 	// Create and bind index buffer
-	glGenBuffers(1, &ibo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	ibo = rvn::IndexBuffer::create(indices, sizeof(indices) / sizeof(unsigned int));
+	vao->setIndexBuffer(ibo);
 
 	// Create shaders
 	const GLchar* vertexShaderSource =
@@ -111,8 +108,8 @@ void main()
 void TestLayer::onUpdate(rvn::Timestep timestep)
 {
 	glUseProgram(shader);
-	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	vao->bind();
+	glDrawElements(GL_TRIANGLES, vao->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
 }
 
 void TestLayer::onDetach()

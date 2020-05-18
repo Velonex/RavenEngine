@@ -29,3 +29,5 @@
 #include <Raven/rendering/GraphicsContext.h>
 #include <Raven/rendering/RenderCommand.h>
 #include <Raven/rendering/RendererAPI.h>
+#include <Raven/rendering/VertexArray.h>
+#include <Raven/rendering/Buffer.h>
