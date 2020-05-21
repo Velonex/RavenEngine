@@ -24,7 +24,7 @@ namespace rvn {
 		// Generating name for logfile
 		std::time_t t = std::time(0);
 		std::tm now = *std::localtime(&t);
-		std::string filename = "Raven-" + std::to_string(now.tm_mon) + std::to_string(now.tm_mday) + std::to_string(now.tm_year + 1900) + "-" +
+		std::string filename = "Raven-" + std::to_string(now.tm_mon + 1) + std::to_string(now.tm_mday) + std::to_string(now.tm_year + 1900) + "-" +
 			std::to_string(now.tm_hour) + "-" + std::to_string(now.tm_min) + ".log";
 		sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(std::string(filename), false));
 
