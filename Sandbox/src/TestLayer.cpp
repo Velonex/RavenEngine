@@ -75,39 +75,12 @@ void main()
 }
 )";
 
-	std::uint32_t vertexShader, fragmentShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	shader = glCreateProgram();
-	glAttachShader(shader, vertexShader);
-	glAttachShader(shader, fragmentShader);
-	glLinkProgram(shader);
-	GLint result = GL_FALSE;
-	int infoLogLength;
-	glGetProgramiv(shader, GL_LINK_STATUS, &result);
-	glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
-	if (infoLogLength > 0) {
-		std::vector<char> ProgramErrorMessage(infoLogLength + 1);
-		glGetProgramInfoLog(shader, infoLogLength, NULL, &ProgramErrorMessage[0]);
-		LOG_ENGINE_ERROR("{}", &ProgramErrorMessage[0]);
-	}
-	ASSERT(result, "Shader linking error");
-	glDetachShader(shader, vertexShader);
-	glDetachShader(shader, fragmentShader);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	shader = rvn::Shader::createShader(vertexShaderSource, fragmentShaderSource, "test");
 }
 
 void TestLayer::onUpdate(rvn::Timestep timestep)
 {
-	glUseProgram(shader);
+	shader->bind();
 	vao->bind();
 	glDrawElements(GL_TRIANGLES, vao->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
 }

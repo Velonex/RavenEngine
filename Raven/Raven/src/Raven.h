@@ -31,3 +31,4 @@
 #include <Raven/rendering/RendererAPI.h>
 #include <Raven/rendering/VertexArray.h>
 #include <Raven/rendering/Buffer.h>
+#include <Raven/rendering/Shader.h>

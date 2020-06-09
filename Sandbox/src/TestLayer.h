@@ -12,8 +12,8 @@ public:
 	virtual void onImGuiRender() override;
 	virtual void onEvent(rvn::Event* e) override;
 private:
-	std::uint32_t shader = 0;
 	rvn::ref<rvn::VertexArray> vao;
 	rvn::ref<rvn::VertexBuffer> vbo;
 	rvn::ref<rvn::IndexBuffer> ibo;
+	rvn::ref<rvn::Shader> shader;
 };
