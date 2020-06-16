@@ -3,7 +3,7 @@
 #include <Raven/platform/opengl/OpenGLShader.h>
 
 namespace rvn {
-	ref<Shader> Shader::createShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource, const std::string& name)
+	ref<Shader> Shader::create(const std::string& vertexShaderSource, const std::string& fragmentShaderSource, const std::string& name)
 	{
 		switch (RendererAPI::getRendererApi()) {
 		case RendererAPI::API::OpenGL:
