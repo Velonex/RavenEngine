@@ -69,19 +69,24 @@ layout(location = 0) out vec4 color;
 
 in vec4 v_Color;
 
+uniform vec4 u_TintColor;
+
 void main()
 {
-	color = v_Color;
+	color = v_Color * u_TintColor;
 }
 )";
 
-	shader = rvn::Shader::createShader(vertexShaderSource, fragmentShaderSource, "test");
+	shader = rvn::Shader::create(vertexShaderSource, fragmentShaderSource, "test");
 }
 
 void TestLayer::onUpdate(rvn::Timestep timestep)
 {
 	shader->bind();
-	vao->bind();
+	brightness += brightnessAdd * timestep.getSeconds();
+	if (brightness < 0.0f) { brightness = 0.0f; brightnessAdd *= -1; }
+	if (brightness > 1.0f) { brightness = 1.0f; brightnessAdd *= -1; }
+	shader->setFloat4("u_TintColor", glm::vec4(brightness, brightness, brightness, 1.0f));
 	glDrawElements(GL_TRIANGLES, vao->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
 }
 

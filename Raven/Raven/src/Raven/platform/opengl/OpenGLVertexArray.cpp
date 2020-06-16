@@ -29,7 +29,6 @@ namespace rvn {
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
-		LOG_ENGINE_INFO("OpenGL vertex array deconstructor called");
 		glDeleteVertexArrays(1, &_id);
 	}
 

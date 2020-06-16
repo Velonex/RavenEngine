@@ -16,4 +16,6 @@ private:
 	rvn::ref<rvn::VertexBuffer> vbo;
 	rvn::ref<rvn::IndexBuffer> ibo;
 	rvn::ref<rvn::Shader> shader;
+	float brightness = 1.0f;
+	float brightnessAdd = -0.25f;
 };

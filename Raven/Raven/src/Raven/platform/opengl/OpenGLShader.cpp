@@ -1,6 +1,7 @@
 #include <pch.h>
 #include "OpenGLShader.h"
 #include <glad/glad.h>
+#include <gtc/type_ptr.hpp>
 
 namespace rvn {
 	OpenGLShader::OpenGLShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource, const std::string& name)
@@ -26,6 +27,69 @@ namespace rvn {
 	const std::string& OpenGLShader::getName() const
 	{
 		return _name;
+	}
+	void OpenGLShader::uploadUniformInt(const std::string& name, int value) const
+	{
+		GLuint loc = glGetUniformLocation(_id, name.c_str());
+		glUniform1i(loc, value);
+	}
+	void OpenGLShader::uploadUniformFloat(const std::string& name, float value) const
+	{
+		GLuint loc = glGetUniformLocation(_id, name.c_str());
+		glUniform1f(loc, value);
+	}
+	void OpenGLShader::uploadUniformFloat2(const std::string& name, const glm::vec2& value) const
+	{
+		GLuint loc = glGetUniformLocation(_id, name.c_str());
+		glUniform2f(loc, value.x, value.y);
+	}
+	void OpenGLShader::uploadUniformFloat3(const std::string& name, const glm::vec3& value) const
+	{
+		GLuint loc = glGetUniformLocation(_id, name.c_str());
+		glUniform3f(loc, value.x, value.y, value.z);
+	}
+	void OpenGLShader::uploadUniformFloat4(const std::string& name, const glm::vec4& value) const
+	{
+		GLuint loc = glGetUniformLocation(_id, name.c_str());
+		glUniform4f(loc, value.x, value.y, value.z, value.w);
+	}
+	void OpenGLShader::uploadUniformMat3(const std::string& name, const glm::mat3& value) const
+	{
+		GLuint loc = glGetUniformLocation(_id, name.c_str());
+		glUniformMatrix3fv(loc, 1, false, glm::value_ptr(value));
+	}
+	void OpenGLShader::uploadUniformMat4(const std::string& name, const glm::mat4& value) const
+	{
+		GLuint loc = glGetUniformLocation(_id, name.c_str());
+		glUniformMatrix4fv(loc, 1, false, glm::value_ptr(value));
+	}
+	void OpenGLShader::setInt(const std::string& name, int value) const
+	{
+		uploadUniformInt(name, value);
+	}
+	void OpenGLShader::setFloat(const std::string& name, float value) const
+	{
+		uploadUniformFloat(name, value);
+	}
+	void OpenGLShader::setFloat2(const std::string& name, const glm::vec2& value) const
+	{
+		uploadUniformFloat2(name, value);
+	}
+	void OpenGLShader::setFloat3(const std::string& name, const glm::vec3& value) const
+	{
+		uploadUniformFloat3(name, value);
+	}
+	void OpenGLShader::setFloat4(const std::string& name, const glm::vec4& value) const
+	{
+		uploadUniformFloat4(name, value);
+	}
+	void OpenGLShader::setMat3(const std::string& name, const glm::mat3& value) const
+	{
+		uploadUniformMat3(name, value);
+	}
+	void OpenGLShader::setMat4(const std::string& name, const glm::mat4& value) const
+	{
+		uploadUniformMat4(name, value);
 	}
 	GLenum stringToShaderType(const std::string& str) {
 		if (str == "vert") return GL_VERTEX_SHADER;
