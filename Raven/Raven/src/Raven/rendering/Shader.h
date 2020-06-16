@@ -12,7 +12,7 @@ namespace rvn {
 
 		virtual const std::string& getName() const = 0;
 
-		static ref<Shader> createShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource, const std::string& name);
+		static ref<Shader> create(const std::string& vertexShaderSource, const std::string& fragmentShaderSource, const std::string& name);
 		//TODO: Create Shader from file
 
 		//TODO: Uniforms

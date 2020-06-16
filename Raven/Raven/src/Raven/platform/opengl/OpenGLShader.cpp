@@ -31,6 +31,7 @@ namespace rvn {
 		if (str == "vert") return GL_VERTEX_SHADER;
 		if (str == "frag" || str == "pixel") return GL_FRAGMENT_SHADER;
 		ASSERT(false, "Unknown/Unsupported shader type");
+		return 0;
 	}
 	void OpenGLShader::compileShaders(std::unordered_map<std::string, std::string> shaderSources)
 	{
