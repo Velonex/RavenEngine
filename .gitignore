@@ -8,6 +8,7 @@
 # Temporary Raven files
 *.json
 *.log
+Sandbox/imgui.ini
 
 # Binaries
 **/bin-int/

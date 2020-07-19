@@ -53,10 +53,12 @@ layout(location = 1) in vec4 a_Color;
 
 out vec4 v_Color;
 
+uniform mat4 u_ViewProjectionMatrix;
+
 void main()
 {
 	v_Color = a_Color;
-	gl_Position = vec4(a_Position, 1.0);
+	gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
 }
 
 )";
@@ -78,15 +80,20 @@ void main()
 )";
 
 	shader = rvn::Shader::create(vertexShaderSource, fragmentShaderSource, "test");
+
+	camera = rvn::createRef<rvn::OrthographicCamera>(-(16.f / 9.f), 16.f / 9.f, -1, 1);
 }
 
 void TestLayer::onUpdate(rvn::Timestep timestep)
 {
+	camera->setPosition({ -0.5f, 0.0f, 0.0f });
+	camera->setRotation(45.f);
 	shader->bind();
 	brightness += brightnessAdd * timestep.getSeconds();
 	if (brightness < 0.0f) { brightness = 0.0f; brightnessAdd *= -1; }
 	if (brightness > 1.0f) { brightness = 1.0f; brightnessAdd *= -1; }
 	shader->setFloat4("u_TintColor", glm::vec4(brightness, brightness, brightness, 1.0f));
+	shader->setMat4("u_ViewProjectionMatrix", camera->getViewProjectionMatrix());
 	glDrawElements(GL_TRIANGLES, vao->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
 }
 
