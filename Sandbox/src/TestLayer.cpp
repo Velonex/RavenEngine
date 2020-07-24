@@ -9,8 +9,6 @@ struct Vertex {
 
 void TestLayer::onAttach()
 {
-	glViewport(0, 0, 1280, 720);
-
 	// Create and bind vertex array
 	vao = rvn::VertexArray::create();
 	vao->bind();
@@ -45,7 +43,7 @@ void TestLayer::onAttach()
 	vao->setIndexBuffer(ibo);
 
 	// Create shaders
-	const GLchar* vertexShaderSource =
+	const char* vertexShaderSource =
 R"(
 #version 330 core
 
@@ -65,7 +63,7 @@ void main()
 
 )";
 
-	const GLchar* fragmentShaderSource =
+	const char* fragmentShaderSource =
 R"(
 #version 330 core
 

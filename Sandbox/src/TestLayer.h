@@ -1,6 +1,5 @@
 #pragma once
 #include <Raven.h>
-#include <glad/glad.h>
 #include <cstdint>
 #include <Raven/rendering/OrthographicCameraController.h>
 
