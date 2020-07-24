@@ -2,7 +2,7 @@
 #include <Raven.h>
 #include <glad/glad.h>
 #include <cstdint>
-#include <Raven/rendering/OrthographicCamera.h>
+#include <Raven/rendering/OrthographicCameraController.h>
 
 class TestLayer : public rvn::Layer {
 public:
@@ -17,7 +17,7 @@ private:
 	rvn::ref<rvn::VertexBuffer> vbo;
 	rvn::ref<rvn::IndexBuffer> ibo;
 	rvn::ref<rvn::Shader> shader;
-	rvn::ref<rvn::OrthographicCamera> camera;
+	rvn::OrthographicCameraController camera = rvn::OrthographicCameraController(16.f / 9.f);
 	float brightness = 1.0f;
 	float brightnessAdd = -0.25f;
 };

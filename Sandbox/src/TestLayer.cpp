@@ -83,19 +83,18 @@ void main()
 
 	shader = rvn::Shader::create(vertexShaderSource, fragmentShaderSource, "test");
 
-	camera = rvn::createRef<rvn::OrthographicCamera>(-(16.f / 9.f), 16.f / 9.f, -1, 1);
+	camera = rvn::OrthographicCameraController(16.f / 9.f, true);
 }
 
 void TestLayer::onUpdate(rvn::Timestep timestep)
 {
-	camera->setPosition({ -0.5f, 0.0f, 0.0f });
-	camera->setRotation(45.f);
+	camera.onUpdate(timestep);
 	shader->bind();
 	brightness += brightnessAdd * timestep.getSeconds();
 	if (brightness < 0.0f) { brightness = 0.0f; brightnessAdd *= -1; }
 	if (brightness > 1.0f) { brightness = 1.0f; brightnessAdd *= -1; }
 	shader->setFloat4("u_TintColor", glm::vec4(brightness, brightness, brightness, 1.0f));
-	rvn::Renderer::beginScene(*camera);
+	rvn::Renderer::beginScene(camera.getCamera());
 	rvn::Renderer::draw(vao, shader);
 	rvn::Renderer::endScene();
 }
@@ -110,14 +109,5 @@ void TestLayer::onImGuiRender()
 
 void TestLayer::onEvent(rvn::Event* e)
 {
-	switch (e->getType()) {
-	case rvn::EventType::EVENT_WINDOW_RESIZE:
-	{
-		// TODO: Move this code to orthographic camera controller and just pass the event
-		rvn::WindowResizeEvent* ev = (rvn::WindowResizeEvent*)e;
-		float aspectRatio = (float)ev->getWidth() / (float)ev->getHeight();
-		camera->setProjection(-aspectRatio, aspectRatio, -1, 1);
-		break;
-	}
-	}
+	camera.onEvent(e);
 }
