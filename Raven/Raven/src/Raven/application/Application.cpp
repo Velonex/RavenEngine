@@ -5,6 +5,7 @@
 #include "Timestep.h"
 #include <imgui.h>
 #include <Raven/rendering/RenderCommand.h>
+#include <Raven/rendering/Renderer.h>
 
 namespace rvn {
 	Application::Application(std::string name)
@@ -19,7 +20,7 @@ namespace rvn {
 		WindowProps props(1280, 720, name);
 		_window.reset(Window::createWindow(props, this));
 		Input::setInstance(Input::createInput(this));
-		RenderCommand::init();
+		Renderer::init();
 		_layerStack = createScope<LayerStack>();
 		LOG_ENGINE_INFO("Initialized.");
 		_initialized = true;
@@ -92,6 +93,14 @@ namespace rvn {
 				_running = false;
 				break;
 			}
+			case EventType::EVENT_WINDOW_RESIZE: {
+				onWindowResize((WindowResizeEvent*)e);
+			}
+
 		}
+	}
+	void Application::onWindowResize(WindowResizeEvent* e)
+	{
+		Renderer::onWindowResize(e->getWidth(), e->getHeight());
 	}
 }

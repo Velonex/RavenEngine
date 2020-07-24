@@ -1,5 +1,6 @@
 #include "TestLayer.h"
 #include <string>
+#include <Raven/rendering/Renderer.h>
 
 struct Vertex {
 	float position[3];
@@ -54,11 +55,12 @@ layout(location = 1) in vec4 a_Color;
 out vec4 v_Color;
 
 uniform mat4 u_ViewProjectionMatrix;
+uniform mat4 u_Transform;
 
 void main()
 {
 	v_Color = a_Color;
-	gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
+	gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0);
 }
 
 )";
@@ -93,8 +95,9 @@ void TestLayer::onUpdate(rvn::Timestep timestep)
 	if (brightness < 0.0f) { brightness = 0.0f; brightnessAdd *= -1; }
 	if (brightness > 1.0f) { brightness = 1.0f; brightnessAdd *= -1; }
 	shader->setFloat4("u_TintColor", glm::vec4(brightness, brightness, brightness, 1.0f));
-	shader->setMat4("u_ViewProjectionMatrix", camera->getViewProjectionMatrix());
-	glDrawElements(GL_TRIANGLES, vao->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+	rvn::Renderer::beginScene(*camera);
+	rvn::Renderer::draw(vao, shader);
+	rvn::Renderer::endScene();
 }
 
 void TestLayer::onDetach()
@@ -107,4 +110,14 @@ void TestLayer::onImGuiRender()
 
 void TestLayer::onEvent(rvn::Event* e)
 {
+	switch (e->getType()) {
+	case rvn::EventType::EVENT_WINDOW_RESIZE:
+	{
+		// TODO: Move this code to orthographic camera controller and just pass the event
+		rvn::WindowResizeEvent* ev = (rvn::WindowResizeEvent*)e;
+		float aspectRatio = (float)ev->getWidth() / (float)ev->getHeight();
+		camera->setProjection(-aspectRatio, aspectRatio, -1, 1);
+		break;
+	}
+	}
 }

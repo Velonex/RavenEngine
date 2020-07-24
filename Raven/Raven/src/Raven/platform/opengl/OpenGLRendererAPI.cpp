@@ -30,6 +30,14 @@ namespace rvn {
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
+	void OpenGLRendererAPI::draw(const ref<VertexArray> vertexArray)
+	{
+		glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+	}
+	void OpenGLRendererAPI::setViewport(std::uint32_t x, std::uint32_t y, std::uint32_t width, std::uint32_t height)
+	{
+		glViewport(x, y, width, height);
+	}
 	void OpenGLRendererAPI::OpenGLMessageCallback(unsigned source,
 		unsigned type,
 		unsigned id,

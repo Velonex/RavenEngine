@@ -1,4 +1,5 @@
 #pragma once
+#include <Raven_Core/core/Assert.h>
 #include <Raven_Core/datatypes/Memory.h>
 #include <initializer_list>
 

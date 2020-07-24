@@ -7,7 +7,7 @@
 #include <Raven/application/Window.h>
 #include <Raven/layers/LayerStack.h>
 #include <Raven/imgui/ImGuiLayer.h>
-
+#include <Raven/events/WindowEvents.h>
 
 namespace rvn {
 
@@ -20,6 +20,8 @@ namespace rvn {
 		Window& getWindow() const { return *_window; }
 		LayerStack& getLayerStack() const { return *_layerStack; }
 		virtual void onEvent(Event* e) override;
+	private:
+		void onWindowResize(WindowResizeEvent* e);
 	private:
 		bool _initialized = false;
 		bool _running = true;

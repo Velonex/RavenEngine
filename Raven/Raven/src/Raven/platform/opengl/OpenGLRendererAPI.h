@@ -10,6 +10,10 @@ namespace rvn {
 
 		virtual void setClearColor(const glm::vec4& color) override;
 		virtual void clear() override;
+
+		virtual void draw(const ref<VertexArray> vertexArray) override;
+
+		virtual void setViewport(std::uint32_t x, std::uint32_t y, std::uint32_t width, std::uint32_t height) override;
 	private:
 		static void OpenGLRendererAPI::OpenGLMessageCallback(unsigned source,
 			unsigned type,
