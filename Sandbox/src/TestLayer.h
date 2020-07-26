@@ -17,6 +17,5 @@ private:
 	rvn::ref<rvn::IndexBuffer> ibo;
 	rvn::ref<rvn::Shader> shader;
 	rvn::OrthographicCameraController camera = rvn::OrthographicCameraController(16.f / 9.f);
-	float brightness = 1.0f;
-	float brightnessAdd = -0.25f;
+	rvn::ref<rvn::Texture2D> texture;
 };

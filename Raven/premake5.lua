@@ -16,6 +16,7 @@ raven_internal_include_directories["GLFW"] = "vendor/glfw/include"
 raven_internal_include_directories["glad"] = "vendor/glad/include"
 raven_internal_include_directories["ImGui"] = "vendor/imgui"
 raven_internal_include_directories["glm"] = "vendor/glm/glm"
+raven_internal_include_directories["stb_image"] = "vendor/stb_image"
 
 
 for key,value in pairs(raven_internal_include_directories) do
@@ -71,7 +72,7 @@ project "Raven"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
 	}
 	
 	includedirs
