@@ -102,10 +102,13 @@ namespace rvn {
 		virtual void bind() const = 0;
 		virtual void unbind() const = 0;
 
+		virtual void setData(void* data, std::uint32_t size) = 0;
+
 		virtual void setLayout(const BufferLayout& layout) = 0;
 		virtual const BufferLayout& getLayout() const = 0;
 
-		static ref<VertexBuffer> create(void* vertices, uint32_t size);
+		static ref<VertexBuffer> create(std::uint32_t size);
+		static ref<VertexBuffer> create(void* vertices, std::uint32_t size);
 	};
 
 	class IndexBuffer {

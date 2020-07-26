@@ -6,6 +6,7 @@
 #include <imgui.h>
 #include <Raven/rendering/RenderCommand.h>
 #include <Raven/rendering/Renderer.h>
+#include <Raven/rendering/Renderer2D.h>
 
 namespace rvn {
 	Application::Application(std::string name)
@@ -21,6 +22,7 @@ namespace rvn {
 		_window.reset(Window::createWindow(props, this));
 		Input::setInstance(Input::createInput(this));
 		Renderer::init();
+		Renderer2D::init();
 		_layerStack = createScope<LayerStack>();
 		LOG_ENGINE_INFO("Initialized.");
 		_initialized = true;
@@ -42,7 +44,7 @@ namespace rvn {
 
 		while (_running) {
 			// Clear screen
-			RenderCommand::setClearColor({ 0.5f, 0.5f, 0.5f, 1.0f });
+			RenderCommand::setClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
 			RenderCommand::clear();
 			// Calculate time passed
 			now = std::chrono::steady_clock::now();
@@ -79,6 +81,8 @@ namespace rvn {
 			(*it)->onDetach();
 			delete (*it);
 		}
+		Renderer::shutdown();
+		Renderer2D::shutdown();
 		LOG_ENGINE_INFO("Stopped.");
 	}
 	void Application::onEvent(Event* e)

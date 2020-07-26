@@ -6,7 +6,10 @@ namespace rvn {
 	class OpenGLVertexBuffer : public VertexBuffer {
 	public:
 		OpenGLVertexBuffer(void* vertices, std::uint32_t size);
+		OpenGLVertexBuffer(std::uint32_t size);
 		virtual ~OpenGLVertexBuffer();
+
+		virtual void setData(void* data, std::uint32_t size);
 
 		virtual void bind() const override;
 		virtual void unbind() const override;

@@ -30,9 +30,11 @@ namespace rvn {
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
-	void OpenGLRendererAPI::draw(const ref<VertexArray> vertexArray)
+	void OpenGLRendererAPI::draw(const ref<VertexArray> vertexArray, std::uint32_t indexCount)
 	{
-		glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+		std::uint32_t count = indexCount ? indexCount : vertexArray->getIndexBuffer()->getCount();
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	void OpenGLRendererAPI::setViewport(std::uint32_t x, std::uint32_t y, std::uint32_t width, std::uint32_t height)
 	{

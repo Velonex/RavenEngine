@@ -11,9 +11,22 @@ namespace rvn {
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 	}
 
+	OpenGLVertexBuffer::OpenGLVertexBuffer(std::uint32_t size)
+	{
+		glGenBuffers(1, &_id);
+		glBindBuffer(GL_ARRAY_BUFFER, _id);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+	}
+
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
 	{
 		glDeleteBuffers(1, &_id);
+	}
+
+	void OpenGLVertexBuffer::setData(void* data, std::uint32_t size)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, _id);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 	}
 
 	void OpenGLVertexBuffer::bind() const

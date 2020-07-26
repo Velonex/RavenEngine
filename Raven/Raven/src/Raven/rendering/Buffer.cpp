@@ -3,6 +3,15 @@
 #include <Raven/platform/opengl/OpenGLBuffer.h>
 
 namespace rvn {
+	ref<VertexBuffer> VertexBuffer::create(std::uint32_t size)
+	{
+		switch (RendererAPI::getRendererApi()) {
+		case RendererAPI::API::OpenGL:
+			return createRef<OpenGLVertexBuffer>(size);
+		}
+		ASSERT(false, "Unsupported RendererAPI");
+		return nullptr;
+	}
 	ref<VertexBuffer> VertexBuffer::create(void* vertices, uint32_t size)
 	{
 		switch (RendererAPI::getRendererApi()) {
