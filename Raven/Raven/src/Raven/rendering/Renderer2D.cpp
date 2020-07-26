@@ -25,7 +25,7 @@ namespace rvn {
 		static const std::uint32_t maxQuads = 20000;
 		static const std::uint32_t maxVertices = maxQuads * 4;
 		static const std::uint32_t maxIndices = maxQuads * 6;
-		static const std::uint32_t maxTexSlots = 16; // TODO: Find real max texture slots
+		static const std::uint32_t maxTexSlots = 8; // TODO: Find real max texture slots
 	};
 
 
@@ -162,6 +162,7 @@ void main()
 			s_data.quadVertexBufferPtr->color = color;
 			s_data.quadVertexBufferPtr++;
 		}
+		s_data.quadIndexCount += 6;
 	}
 
 	void Renderer2D::flush()
