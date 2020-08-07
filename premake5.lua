@@ -47,7 +47,7 @@ project "Sandbox"
 		optimize "on"
 		runtime "Release"
 
-	filter "configurations:Dist"
+	filter "configurations:Distribution"
 		defines "DIST"
 		optimize "on"
 		runtime "Release"
