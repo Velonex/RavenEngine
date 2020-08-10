@@ -13,4 +13,5 @@ public:
 	virtual void onEvent(rvn::Event* e) override;
 private:
 	rvn::OrthographicCameraController camera = rvn::OrthographicCameraController(16.f / 9.f);
+	rvn::ref<rvn::Texture2D> texture;
 };

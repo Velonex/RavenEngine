@@ -14,6 +14,7 @@ namespace rvn {
 		virtual const std::string& getName() const override;
 
 		void uploadUniformInt(const std::string& name, int value) const;
+		void uploadUniformIntArray(const std::string& name, int* values, uint32_t count) const;
 
 		void uploadUniformFloat(const std::string& name, float value) const;
 		void uploadUniformFloat2(const std::string& name, const glm::vec2& value) const;
@@ -24,6 +25,7 @@ namespace rvn {
 		void uploadUniformMat4(const std::string& name, const glm::mat4& value) const;
 
 		virtual void setInt(const std::string& name, int value) const override;
+		virtual void setIntArray(const std::string& name, int* values, uint32_t count) const override;
 
 		virtual void setFloat(const std::string& name, float value) const override;
 		virtual void setFloat2(const std::string& name, const glm::vec2& value) const override;

@@ -34,7 +34,6 @@ namespace rvn {
 	{
 		std::uint32_t count = indexCount ? indexCount : vertexArray->getIndexBuffer()->getCount();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
-		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	void OpenGLRendererAPI::setViewport(std::uint32_t x, std::uint32_t y, std::uint32_t width, std::uint32_t height)
 	{

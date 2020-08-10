@@ -16,6 +16,7 @@ namespace rvn {
 		//TODO: Create Shader from file
 		
 		virtual void setInt(const std::string& name, int value) const = 0;
+		virtual void setIntArray(const std::string& name, int* values, uint32_t count) const = 0;
 
 		virtual void setFloat(const std::string& name, float value) const = 0;
 		virtual void setFloat2(const std::string& name, const glm::vec2& value) const = 0;
