@@ -26,5 +26,19 @@ namespace rvn {
 		virtual void setMat3(const std::string& name, const glm::mat3& value) const = 0;
 		virtual void setMat4(const std::string& name, const glm::mat4& value) const = 0;
 	};
-	//TODO: Shader lib
+
+	class ShaderLib {
+	public:
+		void add(ref<Shader> shader);
+		void add(const std::string& name, ref<Shader> shader);
+
+		//ref<Shader> load(const std::string& name, const std::string& filepath);
+		//ref<Shader> load(const std::string& filepath);
+
+		bool exists(const std::string& name) const;
+
+		ref<Shader> get(const std::string& name);
+	private:
+		std::unordered_map<std::string, ref<Shader>> _shaders;
+	};
 }
