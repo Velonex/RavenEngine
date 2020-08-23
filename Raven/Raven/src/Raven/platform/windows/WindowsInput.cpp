@@ -44,8 +44,5 @@ namespace rvn {
 		return { x, y };
 	}
 
-	Input* Input::createInput(Application* appPtr) {
-		return new WindowsInput(appPtr);
-	}
 }
 #endif

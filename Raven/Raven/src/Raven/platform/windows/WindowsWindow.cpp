@@ -162,9 +162,6 @@ namespace rvn {
 		return (void*)_window;
 	}
 
-	Window* Window::createWindow(const WindowProps& props, Application* appPtr) {
-		return new WindowsWindow(props, appPtr);
-	}
 }
 
 #endif
