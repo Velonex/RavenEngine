@@ -23,7 +23,7 @@ namespace rvn {
 	}
 	bool ShaderLib::exists(const std::string& name) const
 	{
-		return _shaders.find(name) != _shaders.end;
+		return _shaders.find(name) != _shaders.end();
 	}
 	ref<Shader> ShaderLib::get(const std::string& name)
 	{

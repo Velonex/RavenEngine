@@ -6,14 +6,19 @@
 void TestLayer2D::onAttach()
 {
 	camera = rvn::OrthographicCameraController(16.f / 9.f, true);
-	texture = rvn::Texture2D::create("assets/textures/chess.png");
+	chess = rvn::Texture2D::create("assets/textures/chess.png");
+	check = rvn::Texture2D::create("assets/textures/check.png");
+	atlas = rvn::Texture2D::create("assets/textures/atlas.png");
+	fence = rvn::SubTexture2D::createFromCoords(atlas, { 6.0f, 0.0f }, { 128.0f, 128.0f });
 }
 
 void TestLayer2D::onUpdate(rvn::Timestep timestep)
 {
 	camera.onUpdate(timestep);
 	rvn::Renderer2D::beginScene(camera.getCamera());
-	rvn::Renderer2D::drawQuad({ 0.0f, 0.0f, -0.1f }, { 0.8f, 0.8f }, texture, { 1.0f, 0.0f, 0.0f, 1.0f }, 1.0f);
+	rvn::Renderer2D::drawQuad({ -1.0f, 0.0f, -0.1f }, { 0.8f, 0.8f }, chess, { 1.0f, 0.0f, 0.0f, 1.0f }, 1.0f);
+	rvn::Renderer2D::drawQuad({ 1.0f, 0.0f, -0.05f }, { 0.8f, 0.8f }, check, { 0.0f, 0.8f, 0.0f, 1.0f }, 1.0f);
+	rvn::Renderer2D::drawQuad({ 0.0f, 0.0f, 0.0f }, { 0.8f, 0.8f }, fence, { 1.0f, 1.0f, 1.0f, 1.0f }, 1.0f);
 	rvn::Renderer2D::endScene();
 }
 

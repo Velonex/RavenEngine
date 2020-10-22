@@ -193,7 +193,18 @@ void main()
 
 		drawQuad(transform, texture, color, tilingFactor);
 	}
+	void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor)
+	{
+		drawQuad({ position.x, position.y, 0.0f }, size, subtexture, color, tilingFactor);
+	}
 
+	void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor)
+	{
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		drawQuad(transform, subtexture, color, tilingFactor);
+	}
 	void Renderer2D::drawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
 		drawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, color);
@@ -221,7 +232,19 @@ void main()
 
 		drawQuad(transform, texture, color, tilingFactor);
 	}
+	void Renderer2D::drawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor)
+	{
+		drawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, subtexture, color, tilingFactor);
+	}
 
+	void Renderer2D::drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor)
+	{
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+			glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		drawQuad(transform, subtexture, color, tilingFactor);
+	}
 	void Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color)
 	{
 		if (s_data.quadIndexCount >= s_data.maxIndices)
@@ -261,6 +284,35 @@ void main()
 			s_data.quadVertexBufferPtr->position = transform * s_data.quadPositions[i];
 			s_data.quadVertexBufferPtr->color = color;
 			s_data.quadVertexBufferPtr->texCoord = s_data.quadTexCoords[i];
+			s_data.quadVertexBufferPtr->texIndex = (float)texIndex;
+			s_data.quadVertexBufferPtr->tilingFactor = tilingFactor;
+			s_data.quadVertexBufferPtr++;
+		}
+		s_data.quadIndexCount += 6;
+	}
+	void Renderer2D::drawQuad(const glm::mat4& transform, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor)
+	{
+		if (s_data.quadIndexCount >= s_data.maxIndices)
+			flushAndReset();
+
+		if (s_data.textureIndex >= s_data.maxTexSlots)
+			flushAndReset();
+
+		int texIndex = 0;
+		for (std::uint32_t i = 1; i < s_data.textureIndex; i++) {
+			if (subtexture->getTexture() == s_data.textures[i]) texIndex = i;
+		}
+		if (texIndex == 0) {
+			s_data.textures[s_data.textureIndex] = subtexture->getTexture();
+			texIndex = s_data.textureIndex;
+			s_data.textureIndex++;
+		}
+
+		constexpr int vertexCount = 4;
+		for (int i = 0; i < vertexCount; i++) {
+			s_data.quadVertexBufferPtr->position = transform * s_data.quadPositions[i];
+			s_data.quadVertexBufferPtr->color = color;
+			s_data.quadVertexBufferPtr->texCoord = subtexture->getTexCoords()[i];
 			s_data.quadVertexBufferPtr->texIndex = (float)texIndex;
 			s_data.quadVertexBufferPtr->tilingFactor = tilingFactor;
 			s_data.quadVertexBufferPtr++;

@@ -41,7 +41,7 @@ namespace rvn {
 	{
 		double x, y;
 		glfwGetCursorPos(_window, &x, &y);
-		return { x, y };
+		return { (float)x, (float)y };
 	}
 
 }

@@ -3,6 +3,7 @@
 #include <glm.hpp>
 #include <Raven_Core.h>
 #include <Raven/rendering/Texture.h>
+#include <Raven/rendering/SubTexture2D.h>
 
 namespace rvn {
 
@@ -21,6 +22,10 @@ namespace rvn {
 			const glm::vec4& color, float tilingFactor);
 		static void drawQuad(const glm::vec3& position, const glm::vec2& size, const ref<Texture2D>& texture,
 			const glm::vec4& color, float tilingFactor);
+		static void drawQuad(const glm::vec2& position, const glm::vec2& size, const ref<SubTexture2D>& subtexture,
+			const glm::vec4& color, float tilingFactor);
+		static void drawQuad(const glm::vec3& position, const glm::vec2& size, const ref<SubTexture2D>& subtexture,
+			const glm::vec4& color, float tilingFactor);
 		
 		static void drawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color);
 		static void drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color);
@@ -29,9 +34,15 @@ namespace rvn {
 			const glm::vec4& color, float tilingFactor);
 		static void drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const ref<Texture2D>& texture,
 			const glm::vec4& color, float tilingFactor);
+		static void drawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const ref<SubTexture2D>& subtexture,
+			const glm::vec4& color, float tilingFactor);
+		static void drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const ref<SubTexture2D>& subtexture,
+			const glm::vec4& color, float tilingFactor);
 
 		static void drawQuad(const glm::mat4& transform, const glm::vec4& color);
 		static void drawQuad(const glm::mat4& transform, const ref<Texture2D>& texture,
+			const glm::vec4& color, float tilingFactor);
+		static void drawQuad(const glm::mat4& transform, const ref<SubTexture2D>& subtexture,
 			const glm::vec4& color, float tilingFactor);
 
 
