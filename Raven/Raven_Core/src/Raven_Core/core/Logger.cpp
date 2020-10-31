@@ -22,11 +22,11 @@ namespace rvn {
 		std::vector<spdlog::sink_ptr> sinks;
 		sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
 		// Generating name for logfile
-		std::time_t t = std::time(0);
-		std::tm now = *std::localtime(&t);
-		std::string filename = "Raven-" + std::to_string(now.tm_mon + 1) + std::to_string(now.tm_mday) + std::to_string(now.tm_year + 1900) + "-" +
-			std::to_string(now.tm_hour) + "-" + std::to_string(now.tm_min) + ".log";
-		sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(std::string(filename), false));
+		//std::time_t t = std::time(0);
+		//std::tm now = *std::localtime(&t);
+		//std::string filename = "Raven-" + std::to_string(now.tm_mon + 1) + std::to_string(now.tm_mday) + std::to_string(now.tm_year + 1900) + "-" +
+		//	std::to_string(now.tm_hour) + "-" + std::to_string(now.tm_min) + ".log";
+		sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Raven.log", false));
 
 		// Pattern for console output
 		sinks[0]->set_pattern("[%T][%^%l%$] %n: %v");
