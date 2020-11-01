@@ -14,6 +14,8 @@ namespace rvn {
 
 		virtual void setData(void* data, std::uint32_t size) override;
 
+		virtual std::uint32_t getRendererID() const override { return _id; }
+
 		virtual void bind(std::uint32_t slot = 0) const override;
 	private:
 		std::uint32_t _width, _height;

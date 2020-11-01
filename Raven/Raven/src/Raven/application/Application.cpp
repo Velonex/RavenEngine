@@ -43,12 +43,9 @@ namespace rvn {
 		std::chrono::time_point<clock> now;
 
 		Timer timer;
-		int lastFPS = 0;
+		//int lastFPS = 0;
 
 		while (_running) {
-			// Clear screen
-			RenderCommand::setClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
-			RenderCommand::clear();
 			// Calculate time passed
 			now = std::chrono::steady_clock::now();
 			std::chrono::duration<float, std::micro> duration(now - lastFrame);
@@ -60,12 +57,12 @@ namespace rvn {
 			}
 			_imGuiLayer->beginFrame();
 			{
-				ImGui::Begin("Renderer");
-				if (timer.hasReached(100)) {
-					lastFPS = (int)(1 / timestep.getSeconds());
-				}
-				ImGui::Text("FPS: %d", lastFPS);
-				ImGui::End();
+				//ImGui::Begin("Renderer");
+				//if (timer.hasReached(100)) {
+				//	lastFPS = (int)(1 / timestep.getSeconds());
+				//}
+				//ImGui::Text("FPS: %d", lastFPS);
+				//ImGui::End();
 			}
 			{
 				for (auto it = _layerStack->rbegin(); it < _layerStack->rend(); it++) {

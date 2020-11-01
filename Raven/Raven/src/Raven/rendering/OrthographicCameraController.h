@@ -20,6 +20,8 @@ namespace rvn {
 
 		void setZoomLevel(float zoomLevel) { _zoomLevel = zoomLevel; }
 		float getZoomLevel() const { return _zoomLevel; }
+
+		void onResize(float width, float height);
 	private:
 		void onWindowResize(WindowResizeEvent* e);
 		void onMouseScrolled(MouseScrolledEvent* e);

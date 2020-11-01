@@ -33,7 +33,9 @@
 #include <Raven/rendering/Buffer.h>
 #include <Raven/rendering/Shader.h>
 #include <Raven/rendering/Texture.h>
+#include <Raven/rendering/SubTexture2D.h>
 #include <Raven/rendering/OrthographicCamera.h>
 #include <Raven/rendering/OrthographicCameraController.h>
 #include <Raven/rendering/Renderer.h>
 #include <Raven/rendering/Renderer2D.h>
+#include <Raven/rendering/Framebuffer.h>

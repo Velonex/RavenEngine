@@ -11,6 +11,8 @@ namespace rvn {
 
 		virtual void setData(void* data, std::uint32_t size) = 0;
 
+		virtual std::uint32_t getRendererID() const = 0;
+
 		virtual void bind(std::uint32_t slot = 0) const = 0;
 	};
 	

@@ -6,6 +6,7 @@
 #include <Raven_Core/core/Logger.h>
 #include <Raven_Core/core/Platform.h>
 #include <Raven_Core/core/Assert.h>
+#include <Raven_Core/core/DebugBreak.h>
 
 // Datatypes
 #include <Raven_Core/datatypes/Memory.h>

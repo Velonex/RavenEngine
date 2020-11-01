@@ -66,10 +66,15 @@ namespace rvn {
 		}
 	}
 
+	void OrthographicCameraController::onResize(float width, float height)
+	{
+		_aspectRatio = width / height;
+		_camera.setProjection(-_aspectRatio * _zoomLevel, _aspectRatio * _zoomLevel, -_zoomLevel, _zoomLevel);
+	}
+
 	void OrthographicCameraController::onWindowResize(WindowResizeEvent* e)
 	{
-		_aspectRatio = (float)e->getWidth() / (float)e->getHeight();
-		_camera.setProjection(-_aspectRatio * _zoomLevel, _aspectRatio * _zoomLevel, -_zoomLevel, _zoomLevel);
+		onResize((float)e->getWidth(), (float)e->getHeight());
 	}
 
 	void OrthographicCameraController::onMouseScrolled(MouseScrolledEvent* e)
