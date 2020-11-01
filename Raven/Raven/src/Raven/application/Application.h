@@ -20,6 +20,8 @@ namespace rvn {
 		Window& getWindow() const { return *_window; }
 		LayerStack& getLayerStack() const { return *_layerStack; }
 		virtual void onEvent(Event* e) override;
+		void close();
+		static Application& get() { return *_instance; }
 	private:
 		void onWindowResize(WindowResizeEvent* e);
 	private:
@@ -29,6 +31,7 @@ namespace rvn {
 		scope<Window> _window;
 		scope<LayerStack> _layerStack;
 		ImGuiLayer* _imGuiLayer;
+		static Application* _instance;
 	};
 
 }

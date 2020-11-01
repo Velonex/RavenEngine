@@ -51,3 +51,49 @@ project "Sandbox"
 		defines "DIST"
 		optimize "on"
 		runtime "Release"
+-- Editor project for Raven
+project "RavenEdit"
+	location "RavenEdit"
+	kind "ConsoleApp"
+	
+	language (raven_language)
+	cppdialect (raven_cppdialect)
+	staticruntime "on"
+	
+	objdir (raven_objprefix .. raven_outputdir .. "/%{prj.name}")
+	targetdir (raven_binprefix .. raven_outputdir .. "/%{prj.name}")
+	
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+	
+	includedirs
+	{
+		raven_include_directories,
+		"%{prj.name}/src"
+	}
+	
+	links
+	{
+		"Raven"
+	}
+	
+	filter "system:windows"
+		systemversion "latest"
+	
+	filter "configurations:Debug"
+		defines "DEBUG"
+		symbols "on"
+		runtime "Debug"
+
+	filter "configurations:Release"
+		defines "RELEASE"
+		optimize "on"
+		runtime "Release"
+
+	filter "configurations:Distribution"
+		defines "DIST"
+		optimize "on"
+		runtime "Release"

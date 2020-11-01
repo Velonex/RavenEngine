@@ -9,6 +9,9 @@
 #include <Raven/rendering/Renderer2D.h>
 
 namespace rvn {
+	
+	Application* Application::_instance = nullptr;
+
 	Application::Application(std::string name)
 	{
 		if (_initialized) {
@@ -20,12 +23,12 @@ namespace rvn {
 		_eventHandler->subscribe(this, EventType::ALL);
 		WindowProps props(1280, 720, name);
 		_window.reset(Window::createWindow(props, this));
-		Input::setInstance(Input::createInput(this));
 		Renderer::init();
 		Renderer2D::init();
 		_layerStack = createScope<LayerStack>();
 		LOG_ENGINE_INFO("Initialized.");
 		_initialized = true;
+		_instance = this;
 	}
 	void Application::run()
 	{
@@ -77,6 +80,7 @@ namespace rvn {
 	Application::~Application()
 	{
 		LOG_ENGINE_TRACE("Stopping...");
+		if (_instance == this) _instance = nullptr;
 		for (auto it = _layerStack->rbegin(); it < _layerStack->rend(); it++) {
 			(*it)->onDetach();
 			delete (*it);
@@ -102,6 +106,10 @@ namespace rvn {
 			}
 
 		}
+	}
+	void Application::close()
+	{
+		_running = false;
 	}
 	void Application::onWindowResize(WindowResizeEvent* e)
 	{

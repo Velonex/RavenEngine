@@ -1,32 +1,29 @@
-#include "TestLayer2D.h"
-#include <string>
-#include <Raven/rendering/Renderer.h>
+#include "EditorLayer.h"
 #include <imgui.h>
+#include <Raven/application/Application.h>
 
-void TestLayer2D::onAttach()
-{
-	camera = rvn::OrthographicCameraController(16.f / 9.f, true);
-	chess = rvn::Texture2D::create("assets/textures/chess.png");
-	check = rvn::Texture2D::create("assets/textures/check.png");
-	atlas = rvn::Texture2D::create("assets/textures/atlas.png");
-	fence = rvn::SubTexture2D::createFromCoords(atlas, { 6.0f, 0.0f }, { 128.0f, 128.0f });
-}
-
-void TestLayer2D::onUpdate(rvn::Timestep timestep)
-{
-	camera.onUpdate(timestep);
-	rvn::Renderer2D::beginScene(camera.getCamera());
-	rvn::Renderer2D::drawQuad({ -1.0f, 0.0f, -0.1f }, { 0.8f, 0.8f }, chess, { 1.0f, 0.0f, 0.0f, 1.0f }, 1.0f);
-	rvn::Renderer2D::drawQuad({ 1.0f, 0.0f, -0.05f }, { 0.8f, 0.8f }, check, { 0.0f, 0.8f, 0.0f, 1.0f }, 1.0f);
-	rvn::Renderer2D::drawQuad({ 0.0f, 0.0f, 0.0f }, { 0.8f, 0.8f }, fence, { 1.0f, 1.0f, 1.0f, 1.0f }, 1.0f);
-	rvn::Renderer2D::endScene();
-}
-
-void TestLayer2D::onDetach()
+EditorLayer::EditorLayer()
+	: rvn::Layer("Editor Layer")
 {
 }
 
-void TestLayer2D::onImGuiRender()
+void EditorLayer::onAttach()
+{
+}
+
+void EditorLayer::onDetach()
+{
+}
+
+void EditorLayer::onUpdate(rvn::Timestep ts)
+{
+}
+
+void EditorLayer::onEvent(rvn::Event* e)
+{
+}
+
+void EditorLayer::onImGuiRender()
 {
     bool dockspaceOpened = true;
     static bool opt_fullscreen_persistant = true;
@@ -59,7 +56,7 @@ void TestLayer2D::onImGuiRender()
     // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
     // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-    ImGui::Begin("DockSpace Demo", &dockspaceOpened, window_flags);
+    ImGui::Begin("DockSpace", &dockspaceOpened, window_flags);
     ImGui::PopStyleVar();
 
     if (opt_fullscreen)
@@ -67,6 +64,9 @@ void TestLayer2D::onImGuiRender()
 
     // DockSpace
     ImGuiIO& io = ImGui::GetIO();
+    ImGuiStyle& style = ImGui::GetStyle();
+    float minWinSizeX = style.WindowMinSize.x;
+    style.WindowMinSize.x = 370.0f;
     if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
     {
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -75,7 +75,7 @@ void TestLayer2D::onImGuiRender()
 
     if (ImGui::BeginMenuBar())
     {
-        if (ImGui::BeginMenu("Docking"))
+        if (ImGui::BeginMenu("File"))
         {
             // Disabling fullscreen would allow the window to be moved to the front of other windows,
             // which we can't undo at the moment without finer window depth/z control.
@@ -88,9 +88,4 @@ void TestLayer2D::onImGuiRender()
     }
 
     ImGui::End();
-}
-
-void TestLayer2D::onEvent(rvn::Event * e)
-{
-	camera.onEvent(e);
 }

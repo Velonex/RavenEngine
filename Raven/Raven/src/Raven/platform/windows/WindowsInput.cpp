@@ -1,48 +1,30 @@
 #include <pch.h>
-#include "WindowsInput.h"
-
+#include "Raven/application/Input.h"
 #if defined(PLATFORM_WINDOWS)
+#include <GLFW/glfw3.h>
+
 namespace rvn {
-	scope<Input> Input::_instance;
-	WindowsInput::WindowsInput(Application* appPtr)
-	{
-		_window = (GLFWwindow*)(appPtr->getWindow().getNativeWindow());
-	}
 
-	WindowsInput::~WindowsInput()
-	{
+	bool Input::isKeyPressed(KeyCode key) {
+		return glfwGetKey(static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow()), (int)key) == GLFW_PRESS;
 	}
-
-	bool WindowsInput::_isKeyPressed(KeyCode keyCode)
-	{
-		return glfwGetKey(_window, (int)keyCode) == GLFW_PRESS;
+	bool Input::isMousePressed(MouseCode button) {
+		return glfwGetMouseButton(static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow()), (int)button) == GLFW_PRESS;
 	}
-
-	bool WindowsInput::_isMousePressed(MouseCode mouseCode)
-	{
-		return glfwGetMouseButton(_window, (int)mouseCode) == GLFW_PRESS;
-	}
-
-	float WindowsInput::_getMouseX()
-	{
+	float Input::getMouseX() {
 		double x, y;
-		glfwGetCursorPos(_window, &x, &y);
+		glfwGetCursorPos(static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow()), &x, &y);
 		return (float)x;
 	}
-
-	float WindowsInput::_getMouseY()
-	{
+	float Input::getMouseY() {
 		double x, y;
-		glfwGetCursorPos(_window, &x, &y);
+		glfwGetCursorPos(static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow()), &x, &y);
 		return (float)y;
 	}
-
-	std::pair<float, float> WindowsInput::_getMousePos()
-	{
+	std::pair<float, float> Input::getMousePos() {
 		double x, y;
-		glfwGetCursorPos(_window, &x, &y);
+		glfwGetCursorPos(static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow()), &x, &y);
 		return { (float)x, (float)y };
 	}
-
 }
 #endif

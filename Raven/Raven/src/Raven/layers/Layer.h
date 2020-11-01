@@ -3,7 +3,6 @@
 #include <Raven/application/Timestep.h>
 
 namespace rvn {
-
 	class Layer {
 	public:
 		Layer(std::string name = "Layer") : _name(name) {}
