@@ -5,9 +5,8 @@
 namespace rvn {
 
     EditorLayer::EditorLayer()
-        : Layer("Editor Layer"), _cameraController(1280.0f / 720.0f, true)
+        : Layer("Editor Layer") , _cameraController(1280.0f / 720.0f, true)
     {
-
     }
 
     void EditorLayer::onAttach()
@@ -18,6 +17,17 @@ namespace rvn {
         fbSpec.width = 1280;
         fbSpec.height = 720;
         _framebuffer = Framebuffer::create(fbSpec);
+
+        _activeScene = createRef<Scene>();
+
+        _testEntity = _activeScene->createEntity("Test");
+        _testEntity.addComponent<SpriteRendererComponent>(glm::vec4( 1.0f, 1.f, 0.f, 1.0f ));
+        if (_testEntity.hasComponent<TransformComponent>()) {
+            _testEntity.getComponent<TransformComponent>().scale.x = 2.0f;
+        }
+
+        _cameraEntity = _activeScene->createEntity("Camera");
+        auto& camController = _cameraEntity.addComponent<CameraComponent>();
     }
 
     void EditorLayer::onDetach()
@@ -26,26 +36,34 @@ namespace rvn {
 
     void EditorLayer::onUpdate(Timestep ts)
     {
-        if (auto spec = _framebuffer->getSpecification(); _viewportSize.x > 0 && _viewportSize.y > 0.0f &&
+        if (auto spec = _framebuffer->getSpecification(); _viewportSize.x > 0.0f && _viewportSize.y > 0.0f &&
             (spec.width != _viewportSize.x || spec.height != _viewportSize.y)) {
             _framebuffer->resize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
             _cameraController.onResize(_viewportSize.x, _viewportSize.y);
+
+            _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
         }
 
-        _cameraController.onUpdate(ts);
+        //_cameraController.onUpdate(ts);
+      
         _framebuffer->bind();
+
         RenderCommand::setClearColor({ 0.8f, 0.8f, 0.8f, 0.8f });
         RenderCommand::clear();
-        rvn::Renderer2D::beginScene(_cameraController.getCamera());
-        rvn::Renderer2D::drawQuad({ 0.0f, 0.0f }, { 0.5f, 0.5f }, { 0.2f, 0.8f, 0.3f, 1.0f });
-        rvn::Renderer2D::drawQuad({ -1.0f, 0.0f, -0.1f }, { 0.8f, 0.8f }, _chess, { 1.0f, 0.0f, 0.0f, 1.0f }, 1.0f);
-        rvn::Renderer2D::endScene();
+
+        //rvn::Renderer2D::beginScene(_cameraController.getCamera());
+        //rvn::Renderer2D::drawQuad({ 0.0f, 0.0f }, { 0.5f, 0.5f }, { 0.2f, 0.8f, 0.3f, 1.0f });
+        //rvn::Renderer2D::drawQuad({ -1.0f, 0.0f, -0.1f }, { 0.8f, 0.8f }, _chess, { 1.0f, 0.0f, 0.0f, 1.0f }, 1.0f);
+        //rvn::Renderer2D::endScene();
+
+        _activeScene->onUpdate(ts);
+
         _framebuffer->unbind();
     }
 
     void EditorLayer::onEvent(Event* e)
     {
-        _cameraController.onEvent(e);
+        //_cameraController.onEvent(e);
     }
 
     void EditorLayer::onImGuiRender()
@@ -118,7 +136,7 @@ namespace rvn {
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         _viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
         std::uint32_t texID = _framebuffer->getColorAttachmentID();
-        ImGui::Image((void*)texID, ImVec2{ _viewportSize.x, _viewportSize.y }, { 0, 1 }, { 1,0 });
+        ImGui::Image(reinterpret_cast<void*>(texID), ImVec2{ _viewportSize.x, _viewportSize.y }, { 0, 1 }, { 1,0 });
         ImGui::End();
         ImGui::PopStyleVar();
 

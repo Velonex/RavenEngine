@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef NOMINMAX
+	#define NOMINMAX
+#endif
 #include <Raven_Core/core/Platform.h>
 
 #include <iostream>
@@ -21,5 +24,5 @@
 #include <Raven_Core/core/Platform.h>
 
 #if defined(PLATFORM_WINDOWS) 
-	#include <Windows.h>
+#include <Windows.h>
 #endif

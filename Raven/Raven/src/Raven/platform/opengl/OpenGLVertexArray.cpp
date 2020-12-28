@@ -86,7 +86,7 @@ namespace rvn {
 						shaderDataTypeToGLBaseType(element.type),
 						element.normalized,
 						layout.getStride(),
-						(const void*)(sizeof(float) * i * locationCount));
+						(const void*)(element.offset + sizeof(float) * i * locationCount));
 					glVertexAttribDivisor(index, 1);
 					index++;
 				}

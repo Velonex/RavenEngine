@@ -48,6 +48,7 @@ namespace rvn {
 	void Renderer2D::init()
 	{
 		s_data.vertexArray = VertexArray::create();
+
 		s_data.vertexBuffer = VertexBuffer::create(sizeof(QuadVertex) * s_data.maxVertices);
 		s_data.vertexBuffer->setLayout({
 			{ ShaderDataType::Float3, "a_Position" },
@@ -185,20 +186,54 @@ void main()
 		delete[] s_data.quadVertexBufferBase;
 	}
 
+	void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform)
+	{
+		glm::mat4 viewProj = camera.getProjection() * glm::inverse(transform);
+
+		s_data.shader->bind();
+		s_data.shader->setMat4("u_ViewProjectionMatrix", viewProj);
+
+		startBatch();
+	}
+
 	void Renderer2D::beginScene(const OrthographicCamera& camera)
 	{
 		s_data.shader->bind();
 		s_data.shader->setMat4("u_ViewProjectionMatrix", camera.getViewProjectionMatrix());
+
+		startBatch();
+	}
+	void Renderer2D::startBatch()
+	{
 		s_data.quadIndexCount = 0;
 		s_data.textureIndex = 1;
 		s_data.quadVertexBufferPtr = s_data.quadVertexBufferBase;
 	}
 
-	void Renderer2D::endScene()
+	void Renderer2D::nextBatch()
 	{
+		flush();
+		startBatch();
+	}
+
+	void Renderer2D::flush()
+	{
+		if (s_data.quadIndexCount == 0)
+			return; // Nothing to be rendered
+
 		std::uint32_t dataSize = (std::uint32_t)((std::uint8_t*)s_data.quadVertexBufferPtr - (std::uint8_t*)s_data.quadVertexBufferBase);
 		s_data.vertexBuffer->setData(s_data.quadVertexBufferBase, dataSize);
 
+		// Bind textures
+		s_data.shader->bind();
+		for (std::uint32_t i = 0; i < s_data.textureIndex; i++)
+			s_data.textures[i]->bind(i);
+
+		RenderCommand::draw(s_data.vertexArray, s_data.quadIndexCount);
+	}
+
+	void Renderer2D::endScene()
+	{
 		flush();
 	}
 
@@ -282,7 +317,7 @@ void main()
 	void Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color)
 	{
 		if (s_data.quadIndexCount >= s_data.maxIndices)
-			flushAndReset();
+			nextBatch();
 
 		constexpr int vertexCount = 4;
 		for (int i = 0; i < vertexCount; i++) {
@@ -298,10 +333,10 @@ void main()
 	void Renderer2D::drawQuad(const glm::mat4& transform, const ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor)
 	{
 		if (s_data.quadIndexCount >= s_data.maxIndices)
-			flushAndReset();
+			nextBatch();
 
 		if (s_data.textureIndex >= s_data.maxTexSlots)
-			flushAndReset();
+			nextBatch();
 		
 		int texIndex = 0;
 		for (std::uint32_t i = 1; i < s_data.textureIndex; i++) {
@@ -327,10 +362,10 @@ void main()
 	void Renderer2D::drawQuad(const glm::mat4& transform, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor)
 	{
 		if (s_data.quadIndexCount >= s_data.maxIndices)
-			flushAndReset();
+			nextBatch();
 
 		if (s_data.textureIndex >= s_data.maxTexSlots)
-			flushAndReset();
+			nextBatch();
 
 		int texIndex = 0;
 		for (std::uint32_t i = 1; i < s_data.textureIndex; i++) {
@@ -353,23 +388,7 @@ void main()
 		}
 		s_data.quadIndexCount += 6;
 	}
-	void Renderer2D::flush()
-	{
-		if (s_data.quadIndexCount == 0)
-			return; // Nothing to be rendered
-		s_data.shader->bind();
-		for (std::uint32_t i = 0; i < s_data.textureIndex; i++)
-			s_data.textures[i]->bind(i);
-		RenderCommand::draw(s_data.vertexArray, s_data.quadIndexCount);
-	}
 
-	void Renderer2D::flushAndReset()
-	{
-		endScene();
 
-		s_data.quadIndexCount = 0;
-		s_data.textureIndex = 1;
-		s_data.quadVertexBufferPtr = s_data.quadVertexBufferBase;
-	}
 
 }

@@ -19,6 +19,10 @@ namespace rvn {
 		ref<Texture2D> _chess;
 		ref<Framebuffer> _framebuffer;
 
+		ref<Scene> _activeScene;
+		Entity _testEntity;
+		Entity _cameraEntity;
+
 		glm::vec2 _viewportSize = { 0.0f, 0.0f };
 	};
 }

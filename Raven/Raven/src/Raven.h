@@ -39,3 +39,9 @@
 #include <Raven/rendering/Renderer.h>
 #include <Raven/rendering/Renderer2D.h>
 #include <Raven/rendering/Framebuffer.h>
+#include <Raven/rendering/Camera.h>
+
+// Scene
+#include <Raven/scene/Scene.h>
+#include <Raven/scene/Components.h>
+#include <Raven/scene/Entity.h>
