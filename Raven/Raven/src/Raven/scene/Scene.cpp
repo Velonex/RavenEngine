@@ -10,6 +10,9 @@ namespace rvn {
 	}
 	Scene::~Scene()
 	{
+		_registry.each([this](auto entity) {
+			this->destroyEntity(entity);
+		});
 	}
 	Entity Scene::createEntity(const std::string& name)
 	{
@@ -21,7 +24,15 @@ namespace rvn {
 	}
 	void Scene::destroyEntity(Entity entity)
 	{
-		_registry.destroy(entity);
+		destroyEntity(entity);
+	}
+	void Scene::destroyEntity(entt::entity handle)
+	{
+		if (_registry.has<NativeScriptComponent>(handle)) {
+			auto& script = _registry.get<NativeScriptComponent>(handle);
+			script.destroyScript(&script);
+		}
+		_registry.destroy(handle);
 	}
 	void Scene::onUpdate(Timestep ts)
 	{
@@ -98,7 +109,7 @@ namespace rvn {
 		component.camera.setViewportSize(_viewportWidth, _viewportHeight);
 	}
 	template<>
-		void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component) {
+	void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component) {
 
 	}
 }

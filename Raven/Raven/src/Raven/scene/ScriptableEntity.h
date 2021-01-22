@@ -18,5 +18,6 @@ namespace rvn {
 	private:
 		Entity _entity;
 		friend class Scene;
+		friend struct NativeScriptComponent;
 	};
 }

@@ -1,5 +1,6 @@
 #include "EditorLayer.h"
 #include <imgui.h>
+#include <glm.hpp>
 
 namespace rvn {
 
@@ -8,23 +9,50 @@ namespace rvn {
     {
     }
 
+    glm::vec4 HSVtoRGB(float H, float S, float V) {
+        if (H > 360 || S > 100 || V > 100 || H < 0 || S < 0 || V < 0)
+            ASSERT(false, "Invalid HSV values");
+        float s = S / 100;
+        float v = V / 100;
+        float C = s * v;
+        float X = C * (1 - abs(fmod(H / 60.0, 2) - 1));
+        float m = v - C;
+        float r, g, b;
+        if (H >= 0 && H < 60) {
+            r = C, g = X, b = 0;
+        }
+        else if (H >= 60 && H < 120) {
+            r = X, g = C, b = 0;
+        }
+        else if (H >= 120 && H < 240) {
+            r = 0, g = C, b = X;
+        }
+        else if (H >= 240 && H < 300) {
+            r = X, g = 0, b = C;
+        }
+        else {
+            r = C, g = 0, b = X;
+        }
+        return glm::vec4(r, g, b, 1.0f);
+    }
+
     void EditorLayer::onAttach()
     {
         _chess = Texture2D::create("assets/textures/chess.png");
-
+        
         FramebufferSpecification fbSpec;
         fbSpec.width = 1280;
         fbSpec.height = 720;
         _framebuffer = Framebuffer::create(fbSpec);
-
+        
         _activeScene = createRef<Scene>();
-
+        
         _testEntity = _activeScene->createEntity("Test");
         _testEntity.addComponent<SpriteRendererComponent>(glm::vec4( 1.0f, 1.f, 0.f, 1.0f ));
         if (_testEntity.hasComponent<TransformComponent>()) {
             _testEntity.getComponent<TransformComponent>().scale.x = 2.0f;
         }
-
+        
         _cameraEntity = _activeScene->createEntity("Camera");
         auto& camController = _cameraEntity.addComponent<CameraComponent>();
         class NotCameraController : public ScriptableEntity
@@ -33,19 +61,19 @@ namespace rvn {
             virtual void onCreate() override
             {
                 auto& translation = getComponent<TransformComponent>().translation;
-                translation.x = rand() % 10 - 5.0f;
+                translation.x = rand() % 10 - 1.0f;
             }
-
+        
             virtual void onDestroy() override
             {
             }
-
+        
             virtual void onUpdate(Timestep ts) override
             {
                 auto& translation = getComponent<TransformComponent>().translation;
-
+        
                 float speed = 5.0f;
-
+        
                 if (Input::isKeyPressed(KEY_A))
                     translation.x -= speed * ts;
                 if (Input::isKeyPressed(KEY_D))
@@ -56,11 +84,31 @@ namespace rvn {
                     translation.y -= speed * ts;
             }
         };
-        _testEntity.addComponent<NativeScriptComponent>().bind<NotCameraController>();
+        _cameraEntity.addComponent<NativeScriptComponent>().bind<NotCameraController>();
+        class ExampleScript : public ScriptableEntity {
+        public:
+            virtual void onCreate() override {
+                LOG_INFO("Created ExampleScript");
+            }
+            virtual void onUpdate(Timestep ts) override {
+                auto& color = getComponent<SpriteRendererComponent>().color;
+                hue += 60.0f * ts;
+                if (hue >= 360.0f) hue = 0.0f;
+                color = HSVtoRGB(hue, 1.0f, 0.0f);
+            }
+            virtual void onDestroy() override {
+                LOG_WARN("Destroyed ExampleScript");
+            }
+        private:
+            float hue = 0.0f;
+        };
+        _testEntity.addComponent<NativeScriptComponent>().bind<ExampleScript>();
     }
 
     void EditorLayer::onDetach()
     {
+        _activeScene->destroyEntity(_testEntity);
+        _activeScene->destroyEntity(_cameraEntity);
     }
 
     void EditorLayer::onUpdate(Timestep ts)
@@ -69,24 +117,24 @@ namespace rvn {
             (spec.width != _viewportSize.x || spec.height != _viewportSize.y)) {
             _framebuffer->resize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
             _cameraController.onResize(_viewportSize.x, _viewportSize.y);
-
+        
             _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
         }
-
+        
         //_cameraController.onUpdate(ts);
-      
+        
         _framebuffer->bind();
-
+        
         RenderCommand::setClearColor({ 0.8f, 0.8f, 0.8f, 0.8f });
         RenderCommand::clear();
-
+        
         //rvn::Renderer2D::beginScene(_cameraController.getCamera());
         //rvn::Renderer2D::drawQuad({ 0.0f, 0.0f }, { 0.5f, 0.5f }, { 0.2f, 0.8f, 0.3f, 1.0f });
         //rvn::Renderer2D::drawQuad({ -1.0f, 0.0f, -0.1f }, { 0.8f, 0.8f }, _chess, { 1.0f, 0.0f, 0.0f, 1.0f }, 1.0f);
         //rvn::Renderer2D::endScene();
-
+        
         _activeScene->onUpdate(ts);
-
+        
         _framebuffer->unbind();
     }
 
@@ -101,7 +149,7 @@ namespace rvn {
         static bool opt_fullscreen_persistant = true;
         bool opt_fullscreen = opt_fullscreen_persistant;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-
+        
         // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
         // because it would be confusing to have two docking targets within each others.
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
@@ -116,12 +164,12 @@ namespace rvn {
             window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
             window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
         }
-
+        
         // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
         // and handle the pass-thru hole, so we ask Begin() to not render a background.
         if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
             window_flags |= ImGuiWindowFlags_NoBackground;
-
+        
         // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
         // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
         // all active windows docked into it will lose their parent and become undocked.
@@ -130,10 +178,10 @@ namespace rvn {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("DockSpace", &dockspaceOpened, window_flags);
         ImGui::PopStyleVar();
-
+        
         if (opt_fullscreen)
             ImGui::PopStyleVar(2);
-
+        
         // DockSpace
         ImGuiIO& io = ImGui::GetIO();
         ImGuiStyle& style = ImGui::GetStyle();
@@ -144,7 +192,7 @@ namespace rvn {
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
-
+        
         if (ImGui::BeginMenuBar())
         {
             if (ImGui::BeginMenu("File"))
@@ -155,10 +203,10 @@ namespace rvn {
                 if (ImGui::MenuItem("Exit")) { Application::get().close(); }
                 ImGui::EndMenu();
             }
-
+        
             ImGui::EndMenuBar();
         }
-
+        
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
         
         ImGui::Begin("Viewport");
@@ -168,7 +216,7 @@ namespace rvn {
         ImGui::Image(reinterpret_cast<void*>(texID), ImVec2{ _viewportSize.x, _viewportSize.y }, { 0, 1 }, { 1,0 });
         ImGui::End();
         ImGui::PopStyleVar();
-
+        
         ImGui::End();
     }
 

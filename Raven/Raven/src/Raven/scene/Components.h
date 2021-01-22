@@ -64,7 +64,7 @@ namespace rvn {
 		template<typename T>
 		void bind() {
 			instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
-			destroyScript = [](NativeScriptComponent* nsc) { delete nsc->instance; nsc->instance = nullptr; };
+			destroyScript = [](NativeScriptComponent* nsc) { nsc->instance->onDestroy(); delete nsc->instance; nsc->instance = nullptr; };
 		}
 	};
 }
