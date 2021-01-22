@@ -45,3 +45,5 @@
 #include <Raven/scene/Scene.h>
 #include <Raven/scene/Components.h>
 #include <Raven/scene/Entity.h>
+#include <Raven/scene/ScriptableEntity.h>
+#include <Raven/scene/SceneCamera.h>

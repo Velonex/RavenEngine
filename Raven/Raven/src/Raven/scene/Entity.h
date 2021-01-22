@@ -44,7 +44,7 @@ namespace rvn {
 		bool operator!=(const Entity& other) const {
 			return !(other == *this);
 		}
-	private:
+	protected:
 		entt::entity _handle = entt::null;
 		Scene* _scene = nullptr;
 	};

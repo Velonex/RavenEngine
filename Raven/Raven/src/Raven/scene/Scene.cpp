@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Entity.h"
 #include <Raven/rendering/Renderer2D.h>
+#include "Components.h"
 
 namespace rvn {
 	Scene::Scene()
@@ -24,6 +25,18 @@ namespace rvn {
 	}
 	void Scene::onUpdate(Timestep ts)
 	{
+		// Update scripts
+		{
+			_registry.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc) {
+				if (!nsc.instance) {
+					nsc.instance = nsc.instantiateScript();
+					nsc.instance->_entity = Entity(entity, this);
+					nsc.instance->onCreate();
+				}
+				nsc.instance->onUpdate(ts);
+			});
+		}
+
 		Camera* mainCam = nullptr;
 		glm::mat4 cameraTransform;
 		{
@@ -83,5 +96,9 @@ namespace rvn {
 	template<>
 	void Scene::onComponentAdded<CameraComponent>(Entity entity, CameraComponent& component) {
 		component.camera.setViewportSize(_viewportWidth, _viewportHeight);
+	}
+	template<>
+		void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component) {
+
 	}
 }

@@ -1,6 +1,5 @@
 #include "EditorLayer.h"
 #include <imgui.h>
-#include <Raven/application/Application.h>
 
 namespace rvn {
 
@@ -28,6 +27,36 @@ namespace rvn {
 
         _cameraEntity = _activeScene->createEntity("Camera");
         auto& camController = _cameraEntity.addComponent<CameraComponent>();
+        class NotCameraController : public ScriptableEntity
+        {
+        public:
+            virtual void onCreate() override
+            {
+                auto& translation = getComponent<TransformComponent>().translation;
+                translation.x = rand() % 10 - 5.0f;
+            }
+
+            virtual void onDestroy() override
+            {
+            }
+
+            virtual void onUpdate(Timestep ts) override
+            {
+                auto& translation = getComponent<TransformComponent>().translation;
+
+                float speed = 5.0f;
+
+                if (Input::isKeyPressed(KEY_A))
+                    translation.x -= speed * ts;
+                if (Input::isKeyPressed(KEY_D))
+                    translation.x += speed * ts;
+                if (Input::isKeyPressed(KEY_W))
+                    translation.y += speed * ts;
+                if (Input::isKeyPressed(KEY_S))
+                    translation.y -= speed * ts;
+            }
+        };
+        _testEntity.addComponent<NativeScriptComponent>().bind<NotCameraController>();
     }
 
     void EditorLayer::onDetach()
