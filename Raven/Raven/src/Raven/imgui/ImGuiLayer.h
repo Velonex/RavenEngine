@@ -12,14 +12,18 @@ namespace rvn {
 		~ImGuiLayer();
 		virtual void onAttach() override;
 		virtual void onDetach() override;
+		virtual void onEvent(Event* e) override;
 		virtual void onImGuiRender() override;
 
 		void beginFrame();
 		void endFrame();
 
 		void setDarkColorTheme();
+
+		void blockEvents(bool block) { _blockEvents = block; }
 	private:
 		Window* _window;
+		bool _blockEvents = true;
 	};
 
 }

@@ -46,9 +46,9 @@ namespace rvn {
             {
                 if (hasComponent<TransformComponent>()) {
                     auto& translation = getComponent<TransformComponent>().translation;
-
+        
                     float speed = 5.0f;
-
+        
                     if (Input::isKeyPressed(Key::A))
                         translation.x -= speed * ts;
                     if (Input::isKeyPressed(Key::D))
@@ -79,8 +79,9 @@ namespace rvn {
             _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
         }
         
-        //_cameraController.onUpdate(ts);
-        
+        //if(_viewportFocused)
+        //    _cameraController.onUpdate(ts);
+
         _framebuffer->bind();
         
         RenderCommand::setClearColor({ 0.8f, 0.8f, 0.8f, 0.8f });
@@ -172,6 +173,11 @@ namespace rvn {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
         
         ImGui::Begin("Viewport");
+
+        _viewportFocused = ImGui::IsWindowFocused();
+        _viewportHovered = ImGui::IsWindowHovered();
+        Application::get().getImGuiLayer()->blockEvents(!_viewportFocused || !_viewportHovered);
+
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         _viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
         std::uint64_t texID = _framebuffer->getColorAttachmentID();

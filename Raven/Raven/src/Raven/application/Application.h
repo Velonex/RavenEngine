@@ -19,6 +19,7 @@ namespace rvn {
 		EventHandler& getEventHandler() const { return *_eventHandler; }
 		Window& getWindow() const { return *_window; }
 		LayerStack& getLayerStack() const { return *_layerStack; }
+		ImGuiLayer* getImGuiLayer() { return _imGuiLayer; }
 		virtual void onEvent(Event* e) override;
 		void close();
 		static Application& get() { return *_instance; }

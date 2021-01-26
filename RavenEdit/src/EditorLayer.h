@@ -24,6 +24,8 @@ namespace rvn {
 		Entity _testEntity;
 		Entity _cameraEntity;
 
+		bool _viewportFocused = false, _viewportHovered = false;
+
 		glm::vec2 _viewportSize = { 0.0f, 0.0f };
 
 		SceneEntitiesPanel _sceneEntitiesPanel;
