@@ -11,23 +11,23 @@ namespace rvn {
 
 	void OrthographicCameraController::onUpdate(Timestep ts)
 	{
-		if (Input::isKeyPressed(KEY_A))
+		if (Input::isKeyPressed(Key::A))
 		{
 			_position.x -= cos(glm::radians(_rotation)) * _translationSpeed * ts;
 			_position.y -= sin(glm::radians(_rotation)) * _translationSpeed * ts;
 		}
-		else if (Input::isKeyPressed(KEY_D))
+		else if (Input::isKeyPressed(Key::D))
 		{
 			_position.x += cos(glm::radians(_rotation)) * _translationSpeed * ts;
 			_position.y += sin(glm::radians(_rotation)) * _translationSpeed * ts;
 		}
 
-		if (Input::isKeyPressed(KEY_W))
+		if (Input::isKeyPressed(Key::W))
 		{
 			_position.x += -sin(glm::radians(_rotation)) * _translationSpeed * ts;
 			_position.y += cos(glm::radians(_rotation)) * _translationSpeed * ts;
 		}
-		else if (Input::isKeyPressed(KEY_S))
+		else if (Input::isKeyPressed(Key::S))
 		{
 			_position.x -= -sin(glm::radians(_rotation)) * _translationSpeed * ts;
 			_position.y -= cos(glm::radians(_rotation)) * _translationSpeed * ts;
@@ -35,9 +35,9 @@ namespace rvn {
 
 		if (_allowRotation)
 		{
-			if (Input::isKeyPressed(KEY_Q))
+			if (Input::isKeyPressed(Key::Q))
 				_rotation += _rotationSpeed * ts;
-			if (Input::isKeyPressed(KEY_E))
+			if (Input::isKeyPressed(Key::E))
 				_rotation -= _rotationSpeed * ts;
 
 			if (_rotation > 180.0f)

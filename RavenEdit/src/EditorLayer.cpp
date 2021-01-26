@@ -8,34 +8,6 @@ namespace rvn {
         : Layer("Editor Layer") , _cameraController(1280.0f / 720.0f, true)
     {
     }
-
-    glm::vec4 HSVtoRGB(float H, float S, float V) {
-        if (H > 360 || S > 100 || V > 100 || H < 0 || S < 0 || V < 0)
-            ASSERT(false, "Invalid HSV values");
-        float s = S / 100;
-        float v = V / 100;
-        float C = s * v;
-        float X = C * (1 - abs(fmod(H / 60.0, 2) - 1));
-        float m = v - C;
-        float r, g, b;
-        if (H >= 0 && H < 60) {
-            r = C, g = X, b = 0;
-        }
-        else if (H >= 60 && H < 120) {
-            r = X, g = C, b = 0;
-        }
-        else if (H >= 120 && H < 240) {
-            r = 0, g = C, b = X;
-        }
-        else if (H >= 240 && H < 300) {
-            r = X, g = 0, b = C;
-        }
-        else {
-            r = C, g = 0, b = X;
-        }
-        return glm::vec4(r, g, b, 1.0f);
-    }
-
     void EditorLayer::onAttach()
     {
         _chess = Texture2D::create("assets/textures/chess.png");
@@ -74,13 +46,13 @@ namespace rvn {
         
                 float speed = 5.0f;
         
-                if (Input::isKeyPressed(KEY_A))
+                if (Input::isKeyPressed(Key::A))
                     translation.x -= speed * ts;
-                if (Input::isKeyPressed(KEY_D))
+                if (Input::isKeyPressed(Key::D))
                     translation.x += speed * ts;
-                if (Input::isKeyPressed(KEY_W))
+                if (Input::isKeyPressed(Key::W))
                     translation.y += speed * ts;
-                if (Input::isKeyPressed(KEY_S))
+                if (Input::isKeyPressed(Key::S))
                     translation.y -= speed * ts;
             }
         };
@@ -93,8 +65,8 @@ namespace rvn {
             virtual void onUpdate(Timestep ts) override {
                 auto& color = getComponent<SpriteRendererComponent>().color;
                 hue += 60.0f * ts;
-                if (hue >= 360.0f) hue = 0.0f;
-                color = HSVtoRGB(hue, 1.0f, 0.0f);
+                while (hue >= 360.0f) { hue = hue - 360.0f; }
+                color = glm::vec4(0.9f, 0.2f, 0.3f, 1.0f);
             }
             virtual void onDestroy() override {
                 LOG_WARN("Destroyed ExampleScript");
@@ -103,12 +75,13 @@ namespace rvn {
             float hue = 0.0f;
         };
         _testEntity.addComponent<NativeScriptComponent>().bind<ExampleScript>();
+        _sceneEntitiesPanel.setContext(_activeScene);
     }
 
     void EditorLayer::onDetach()
     {
-        _activeScene->destroyEntity(_testEntity);
-        _activeScene->destroyEntity(_cameraEntity);
+        //_activeScene->destroyEntity(_testEntity);
+        //_activeScene->destroyEntity(_cameraEntity);
     }
 
     void EditorLayer::onUpdate(Timestep ts)
@@ -207,13 +180,15 @@ namespace rvn {
             ImGui::EndMenuBar();
         }
         
+        _sceneEntitiesPanel.onImGuiRender();
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
         
         ImGui::Begin("Viewport");
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         _viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-        std::uint32_t texID = _framebuffer->getColorAttachmentID();
-        ImGui::Image(reinterpret_cast<void*>(texID), ImVec2{ _viewportSize.x, _viewportSize.y }, { 0, 1 }, { 1,0 });
+        std::uint64_t texID = _framebuffer->getColorAttachmentID();
+        ImGui::Image(reinterpret_cast<void*>(texID), ImVec2{ _viewportSize.x, _viewportSize.y }, { 0, 1 }, { 1, 0 });
         ImGui::End();
         ImGui::PopStyleVar();
         

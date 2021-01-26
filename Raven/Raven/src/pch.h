@@ -1,9 +1,11 @@
 #pragma once
 
-#ifndef NOMINMAX
-	#define NOMINMAX
-#endif
 #include <Raven_Core/core/Platform.h>
+#ifdef PLATFORM_WINDOWS
+	#ifndef NOMINMAX
+		#define NOMINMAX
+	#endif
+#endif
 
 #include <iostream>
 #include <memory>

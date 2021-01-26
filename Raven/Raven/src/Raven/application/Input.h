@@ -4,6 +4,7 @@
 #include <Raven/application/MouseCodes.h>
 #include <Raven/application/KeyCodes.h>
 #include <Raven_Core/core/Platform.h>
+#include <glm.hpp>
 
 namespace rvn {
 	class Input {
@@ -13,6 +14,6 @@ namespace rvn {
 		static bool isMousePressed(MouseCode button);
 		static float getMouseX();
 		static float getMouseY();
-		static std::pair<float, float> getMousePos();
+		static glm::vec2 getMousePos();
 	};
 }

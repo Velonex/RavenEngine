@@ -1,5 +1,6 @@
 #pragma once
 #include <Raven.h>
+#include <panels/SceneEntitiesPanel.h>
 
 namespace rvn {
 	class EditorLayer : public Layer {
@@ -24,5 +25,7 @@ namespace rvn {
 		Entity _cameraEntity;
 
 		glm::vec2 _viewportSize = { 0.0f, 0.0f };
+
+		SceneEntitiesPanel _sceneEntitiesPanel;
 	};
 }

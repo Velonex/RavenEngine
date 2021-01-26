@@ -9,6 +9,7 @@ namespace rvn {
 
 	class Scene {
 		friend class Entity;
+		friend class SceneEntitiesPanel;
 	public:
 		Scene();
 		~Scene();
@@ -21,7 +22,7 @@ namespace rvn {
 	private:
 		template <typename T>
 		void onComponentAdded(Entity entity, T& component);
-		void destroyEntity(entt::entity handle);
+		void destroyEntityImpl(entt::entity handle);
 	private:
 		entt::registry _registry;
 		std::uint32_t _viewportWidth = 0, _viewportHeight = 0;

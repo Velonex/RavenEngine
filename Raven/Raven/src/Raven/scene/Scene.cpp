@@ -11,7 +11,7 @@ namespace rvn {
 	Scene::~Scene()
 	{
 		_registry.each([this](auto entity) {
-			this->destroyEntity(entity);
+			this->destroyEntityImpl(entity);
 		});
 	}
 	Entity Scene::createEntity(const std::string& name)
@@ -24,9 +24,9 @@ namespace rvn {
 	}
 	void Scene::destroyEntity(Entity entity)
 	{
-		destroyEntity(entity);
+		destroyEntityImpl(entity);
 	}
-	void Scene::destroyEntity(entt::entity handle)
+	void Scene::destroyEntityImpl(entt::entity handle)
 	{
 		if (_registry.has<NativeScriptComponent>(handle)) {
 			auto& script = _registry.get<NativeScriptComponent>(handle);

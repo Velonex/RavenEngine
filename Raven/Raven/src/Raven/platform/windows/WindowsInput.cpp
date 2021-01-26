@@ -21,7 +21,7 @@ namespace rvn {
 		glfwGetCursorPos(static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow()), &x, &y);
 		return (float)y;
 	}
-	std::pair<float, float> Input::getMousePos() {
+	glm::vec2 Input::getMousePos() {
 		double x, y;
 		glfwGetCursorPos(static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow()), &x, &y);
 		return { (float)x, (float)y };

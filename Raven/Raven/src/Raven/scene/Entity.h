@@ -1,6 +1,7 @@
 #pragma once
 #include <entt.hpp>
 #include "Scene.h"
+#include <Raven_Core/core/Assert.h>
 
 namespace rvn {
 
