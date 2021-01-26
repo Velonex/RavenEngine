@@ -16,8 +16,9 @@ namespace rvn {
 
 		void beginFrame();
 		void endFrame();
+
+		void setDarkColorTheme();
 	private:
-		float _time;
 		Window* _window;
 	};
 

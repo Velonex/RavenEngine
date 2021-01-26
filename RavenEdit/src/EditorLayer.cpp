@@ -32,8 +32,10 @@ namespace rvn {
         public:
             virtual void onCreate() override
             {
-                auto& translation = getComponent<TransformComponent>().translation;
-                translation.x = rand() % 10 - 1.0f;
+                if (hasComponent<TransformComponent>()) {
+                    auto& translation = getComponent<TransformComponent>().translation;
+                    translation.x = rand() % 10 - 1.0f;
+                }
             }
         
             virtual void onDestroy() override
@@ -42,46 +44,29 @@ namespace rvn {
         
             virtual void onUpdate(Timestep ts) override
             {
-                auto& translation = getComponent<TransformComponent>().translation;
-        
-                float speed = 5.0f;
-        
-                if (Input::isKeyPressed(Key::A))
-                    translation.x -= speed * ts;
-                if (Input::isKeyPressed(Key::D))
-                    translation.x += speed * ts;
-                if (Input::isKeyPressed(Key::W))
-                    translation.y += speed * ts;
-                if (Input::isKeyPressed(Key::S))
-                    translation.y -= speed * ts;
+                if (hasComponent<TransformComponent>()) {
+                    auto& translation = getComponent<TransformComponent>().translation;
+
+                    float speed = 5.0f;
+
+                    if (Input::isKeyPressed(Key::A))
+                        translation.x -= speed * ts;
+                    if (Input::isKeyPressed(Key::D))
+                        translation.x += speed * ts;
+                    if (Input::isKeyPressed(Key::W))
+                        translation.y += speed * ts;
+                    if (Input::isKeyPressed(Key::S))
+                        translation.y -= speed * ts;
+                }
             }
         };
         _cameraEntity.addComponent<NativeScriptComponent>().bind<NotCameraController>();
-        class ExampleScript : public ScriptableEntity {
-        public:
-            virtual void onCreate() override {
-                LOG_INFO("Created ExampleScript");
-            }
-            virtual void onUpdate(Timestep ts) override {
-                auto& color = getComponent<SpriteRendererComponent>().color;
-                hue += 60.0f * ts;
-                while (hue >= 360.0f) { hue = hue - 360.0f; }
-                color = glm::vec4(0.9f, 0.2f, 0.3f, 1.0f);
-            }
-            virtual void onDestroy() override {
-                LOG_WARN("Destroyed ExampleScript");
-            }
-        private:
-            float hue = 0.0f;
-        };
-        _testEntity.addComponent<NativeScriptComponent>().bind<ExampleScript>();
+
         _sceneEntitiesPanel.setContext(_activeScene);
     }
 
     void EditorLayer::onDetach()
     {
-        //_activeScene->destroyEntity(_testEntity);
-        //_activeScene->destroyEntity(_cameraEntity);
     }
 
     void EditorLayer::onUpdate(Timestep ts)
@@ -165,6 +150,8 @@ namespace rvn {
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
+
+        style.WindowMinSize.x = minWinSizeX;
         
         if (ImGui::BeginMenuBar())
         {
@@ -191,7 +178,6 @@ namespace rvn {
         ImGui::Image(reinterpret_cast<void*>(texID), ImVec2{ _viewportSize.x, _viewportSize.y }, { 0, 1 }, { 1, 0 });
         ImGui::End();
         ImGui::PopStyleVar();
-        
         ImGui::End();
     }
 

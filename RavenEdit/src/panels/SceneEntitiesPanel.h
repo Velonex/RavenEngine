@@ -16,6 +16,7 @@ namespace rvn {
 		void onImGuiRender();
 	private:
 		void drawEntityNode(Entity entity);
+		void drawPropertiesPanel(Entity entity);
 	private:
 		ref<Scene> _context;
 		Entity _selectionContext;

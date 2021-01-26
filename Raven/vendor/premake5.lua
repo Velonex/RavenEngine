@@ -19,6 +19,17 @@ project "GLFW"
 		"glfw/src/window.c"
 	}
 	
+	filter "configurations:Debug"
+		symbols "on"
+		runtime "Debug"
+
+	filter "configurations:Release"
+		optimize "on"
+		runtime "Release"
+
+	filter "configurations:Distribution"
+		optimize "on"
+		runtime "Release"
 	filter "system:windows"
 		systemversion "latest"
 		
@@ -60,6 +71,17 @@ project "glad"
 		"glad/include"
 	}
 	
+	filter "configurations:Debug"
+		symbols "on"
+		runtime "Debug"
+
+	filter "configurations:Release"
+		optimize "on"
+		runtime "Release"
+
+	filter "configurations:Distribution"
+		optimize "on"
+		runtime "Release"
 	filter "system:windows"
 		systemversion "latest"
 project "ImGui"
@@ -85,5 +107,16 @@ project "ImGui"
 		"imgui/imgui_demo.cpp"
 	}
 
+	filter "configurations:Debug"
+		symbols "on"
+		runtime "Debug"
+
+	filter "configurations:Release"
+		optimize "on"
+		runtime "Release"
+
+	filter "configurations:Distribution"
+		optimize "on"
+		runtime "Release"
 	filter "system:windows"
 		systemversion "latest"

@@ -11,6 +11,10 @@ namespace rvn {
 		T& getComponent() {
 			return _entity.getComponent<T>();
 		}
+		template<typename T>
+		bool hasComponent() {
+			return _entity.hasComponent<T>();
+		}
 	protected:
 		virtual void onCreate() {}
 		virtual void onDestroy() {}

@@ -20,7 +20,6 @@
 
 // ImGui
 #include <Raven/imgui/ImGuiLayer.h>
-
 // Layers
 #include <Raven/layers/Layer.h>
 #include <Raven/layers/LayerStack.h>
