@@ -26,10 +26,7 @@ project "GLFW"
 	filter "configurations:Release"
 		optimize "on"
 		runtime "Release"
-
-	filter "configurations:Distribution"
-		optimize "on"
-		runtime "Release"
+		
 	filter "system:windows"
 		systemversion "latest"
 		
@@ -78,10 +75,7 @@ project "glad"
 	filter "configurations:Release"
 		optimize "on"
 		runtime "Release"
-
-	filter "configurations:Distribution"
-		optimize "on"
-		runtime "Release"
+		
 	filter "system:windows"
 		systemversion "latest"
 project "ImGui"
@@ -114,9 +108,45 @@ project "ImGui"
 	filter "configurations:Release"
 		optimize "on"
 		runtime "Release"
-
-	filter "configurations:Distribution"
-		optimize "on"
-		runtime "Release"
+		
 	filter "system:windows"
 		systemversion "latest"
+		
+project "yaml_cpp"
+	kind "StaticLib"
+	language "C++"
+
+	targetdir (raven_binprefix .. raven_outputdir .. "/%{prj.name}")
+	objdir (raven_objprefix .. raven_outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"yaml-cpp/src/**.h",
+		"yaml-cpp/src/**.cpp",
+		
+		"yaml-cpp/include/**.h"
+	}
+
+	includedirs
+	{
+		"yaml-cpp/include"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+		cppdialect "C++17"
+		staticruntime "On"
+
+	filter "system:linux"
+		pic "On"
+		systemversion "latest"
+		cppdialect "C++17"
+		staticruntime "On"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"

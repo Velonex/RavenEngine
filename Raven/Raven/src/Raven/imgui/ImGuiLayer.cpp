@@ -61,7 +61,6 @@ namespace rvn {
 			ImGuiIO& io = ImGui::GetIO();
 			e->handled |= (e->getType() == EventType::EVENT_KEY_PRESSED || e->getType() == EventType::EVENT_KEY_RELEASED || e->getType() == EventType::EVENT_KEY_TYPED) & io.WantCaptureKeyboard;
 			e->handled |= (e->getType() == EventType::EVENT_MOUSE_BUTTON_PRESSED || e->getType() == EventType::EVENT_MOUSE_BUTTON_RELEASED || e->getType() == EventType::EVENT_MOUSE_MOVED || e->getType() == EventType::EVENT_MOUSE_SCROLLED)  & io.WantCaptureKeyboard;
-			LOG_ENGINE_TRACE("{}", e->handled);
 		}
 	}
 	void ImGuiLayer::onImGuiRender()

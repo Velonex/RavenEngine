@@ -2,6 +2,7 @@
 #include <entt.hpp>
 #include <Raven/application/Timestep.h>
 #include <Raven/rendering/OrthographicCamera.h>
+#include <string>
 
 namespace rvn {
 
@@ -10,8 +11,9 @@ namespace rvn {
 	class Scene {
 		friend class Entity;
 		friend class SceneEntitiesPanel;
+		friend class SceneSerializer;
 	public:
-		Scene();
+		Scene(const std::string& name = "Untitled scene");
 		~Scene();
 
 		Entity createEntity(const std::string& name = std::string());
@@ -19,6 +21,9 @@ namespace rvn {
 
 		void onUpdate(Timestep ts);
 		void onViewportResize(std::uint32_t width, std::uint32_t height);
+
+		const std::string& getName() const { return _name; }
+		void setName(const std::string& name) { _name = name; }
 	private:
 		template <typename T>
 		void onComponentAdded(Entity entity, T& component);
@@ -26,5 +31,7 @@ namespace rvn {
 	private:
 		entt::registry _registry;
 		std::uint32_t _viewportWidth = 0, _viewportHeight = 0;
+	private:
+		std::string _name = "";
 	};
 }

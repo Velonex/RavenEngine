@@ -10,6 +10,7 @@
 
 // Datatypes
 #include <Raven_Core/datatypes/Memory.h>
+#include <Raven_Core/datatypes/RavenUniqueID.h>
 
 // Events
 #include <Raven_Core/event/EventSystem.h>

@@ -10,15 +10,14 @@ namespace rvn {
     }
     void EditorLayer::onAttach()
     {
-        _chess = Texture2D::create("assets/textures/chess.png");
+        //_chess = Texture2D::create("assets/textures/chess.png");
         
         FramebufferSpecification fbSpec;
         fbSpec.width = 1280;
         fbSpec.height = 720;
         _framebuffer = Framebuffer::create(fbSpec);
-        
-        _activeScene = createRef<Scene>();
-        
+
+#if 0
         _testEntity = _activeScene->createEntity("Test");
         _testEntity.addComponent<SpriteRendererComponent>(glm::vec4( 1.0f, 1.f, 0.f, 1.0f ));
         if (_testEntity.hasComponent<TransformComponent>()) {
@@ -61,12 +60,15 @@ namespace rvn {
             }
         };
         _cameraEntity.addComponent<NativeScriptComponent>().bind<NotCameraController>();
+#endif
+        _activeScene = createRef<Scene>();
 
         _sceneEntitiesPanel.setContext(_activeScene);
     }
 
     void EditorLayer::onDetach()
     {
+        SceneSerializer::serialize(_activeScene, "assets/scenes/example.rsc");
     }
 
     void EditorLayer::onUpdate(Timestep ts)
@@ -77,6 +79,10 @@ namespace rvn {
             _cameraController.onResize(_viewportSize.x, _viewportSize.y);
         
             _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
+            if (firstTime) {
+                SceneSerializer::deserialize(_activeScene, "assets/scenes/welcome.rsc");
+                firstTime = false;
+            }
         }
         
         //if(_viewportFocused)

@@ -5,7 +5,8 @@
 #include "Components.h"
 
 namespace rvn {
-	Scene::Scene()
+	Scene::Scene(const std::string& name)
+		: _name(name)
 	{
 	}
 	Scene::~Scene()
@@ -20,6 +21,7 @@ namespace rvn {
 		std::string tag = name.empty() ? "Entity" : name;
 		entity.addComponent<TagComponent>(tag);
 		entity.addComponent<TransformComponent>();
+		entity.addComponent<RUIDComponent>(RUID::generateRUID());
 		return entity;
 	}
 	void Scene::destroyEntity(Entity entity)
@@ -110,6 +112,10 @@ namespace rvn {
 	}
 	template<>
 	void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component) {
+
+	}
+	template<>
+	void Scene::onComponentAdded<RUIDComponent>(Entity entity, RUIDComponent& component) {
 
 	}
 }

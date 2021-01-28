@@ -10,6 +10,14 @@
 
 namespace rvn {
 
+	struct RUIDComponent {
+		RUID ruid;
+
+		RUIDComponent() = default;
+		RUIDComponent(const RUIDComponent&) = default;
+		RUIDComponent(RUID ruid)
+			: ruid(ruid) {}
+	};
 	struct TagComponent {
 		std::string tag;
 

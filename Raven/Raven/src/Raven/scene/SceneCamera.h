@@ -47,6 +47,6 @@ namespace rvn {
 		float _orthographicSize = 10.0f;
 		float _orthographicNear = -1.0f, _orthographicFar = 1.0f;
 
-		float _aspectRatio = 0.0f;
+		float _aspectRatio = 16.f/9.f;
 	};
 }

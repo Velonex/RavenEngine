@@ -27,7 +27,7 @@ namespace rvn {
 		_context->_registry.each([&](auto entityID) {
 			Entity entity = { entityID, _context.get() };
 			drawEntityNode(entity);
-			});
+		});
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 			_selectionContext = {};
 		if (ImGui::BeginPopupContextWindow(0, 1, false))
@@ -57,6 +57,11 @@ namespace rvn {
 		if (ImGui::IsItemClicked()) {
 			_selectionContext = entity;
 		}
+		bool shouldBeDeleted = false;
+		if (ImGui::BeginPopupContextItem()) {
+			if (ImGui::MenuItem("Delete entity")) shouldBeDeleted = true;
+			ImGui::EndPopup();
+		}
 		if (opened)
 		{
 			ImGuiViewportFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
@@ -66,6 +71,8 @@ namespace rvn {
 			ImGui::TreePop();
 		}
 		ImGui::PopStyleColor(1);
+		if(shouldBeDeleted)
+			_context->destroyEntity(entity);
 	}
 
 	template<typename Component, typename UIFunc>

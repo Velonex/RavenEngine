@@ -4,10 +4,12 @@
 #pragma warning(pop)
 #include "Scene.h"
 #include <Raven_Core/core/Assert.h>
+#include <Raven_Core/datatypes/RavenUniqueID.h>
 
 namespace rvn {
 
 	class Entity {
+		friend class SceneSerializer;
 	public:
 		Entity() = default;
 		Entity(entt::entity handle, Scene* scene);

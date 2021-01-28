@@ -17,6 +17,8 @@ namespace rvn {
 	private:
 		OrthographicCameraController _cameraController;
 
+		bool firstTime = true;
+
 		ref<Texture2D> _chess;
 		ref<Framebuffer> _framebuffer;
 

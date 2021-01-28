@@ -18,6 +18,7 @@ raven_internal_include_directories["ImGui"] = "vendor/imgui"
 raven_internal_include_directories["glm"] = "vendor/glm/glm"
 raven_internal_include_directories["stb_image"] = "vendor/stb_image"
 raven_internal_include_directories["entt"] = "vendor/entt/include"
+raven_internal_include_directories["yaml_cpp"] = "vendor/yaml-cpp/include"
 
 
 for key,value in pairs(raven_internal_include_directories) do
@@ -86,7 +87,8 @@ project "Raven"
 		"Raven_Core",
 		"GLFW",
 		"glad",
-		"ImGui"
+		"ImGui",
+		"yaml_cpp"
 	}
 	
 	filter "system:windows"
