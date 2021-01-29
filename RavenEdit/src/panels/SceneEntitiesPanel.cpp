@@ -45,6 +45,9 @@ namespace rvn {
 			ImGui::Text("No entity selected.");
 		}
 		ImGui::End();
+		ImGui::Begin("Scene Settings");
+		drawSceneSettings();
+		ImGui::End();
 	}
 
 	void SceneEntitiesPanel::drawEntityNode(Entity entity)
@@ -139,14 +142,16 @@ namespace rvn {
 				}
 			ImGui::EndPopup();
 		}
-
 		// Draw components
 		drawComponent<TransformComponent>("Transform", entity, [&](TransformComponent& transform) {
-			ImGui::DragFloat3("Translation", glm::value_ptr(transform.translation), 0.01f);
+			ImGui::Text("Translation"); ImGui::SameLine(ImGui::GetContentRegionAvailWidth() / 3);
+			ImGui::DragFloat3("##Translation", glm::value_ptr(transform.translation), 0.01f);
 			glm::vec3 rotation = glm::degrees(transform.rotation);
-			ImGui::DragFloat3("Rotation", glm::value_ptr(rotation), 1.0f);
+			ImGui::Text("Rotation"); ImGui::SameLine(ImGui::GetContentRegionAvailWidth() / 3);
+			ImGui::DragFloat3("##Rotation", glm::value_ptr(rotation), 1.0f);
 			transform.rotation = glm::radians(rotation);
-			ImGui::DragFloat3("Scale", glm::value_ptr(transform.scale), 0.01f);
+			ImGui::Text("Scale"); ImGui::SameLine(ImGui::GetContentRegionAvailWidth() / 3);
+			ImGui::DragFloat3("##Scale", glm::value_ptr(transform.scale), 0.01f);
 		});
 		drawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [&](SpriteRendererComponent& component) {
 			ImGui::ColorEdit4("Color##SRPicker", glm::value_ptr(component.color));
@@ -202,5 +207,18 @@ namespace rvn {
 					cam.setPerspectiveFarClip(perspectiveFar);
 			}
 		});
+	}
+	void SceneEntitiesPanel::drawSceneSettings()
+	{
+		float spacing = ImGui::GetContentRegionAvailWidth() / 3;
+		ImGui::Text("Scene Name"); ImGui::SameLine(spacing);
+		char buf[128];
+		strncpy_s(buf, _context->_name.c_str(), _context->_name.length());
+		if (ImGui::InputText("##SceneNameInput", buf, sizeof(buf)))
+		{
+			 _context->_name = buf;
+		}
+		ImGui::Text("Clear Color"); ImGui::SameLine(spacing);
+		ImGui::ColorEdit4("##ClearColorEdit", glm::value_ptr(_context->_clearColor));
 	}
 }

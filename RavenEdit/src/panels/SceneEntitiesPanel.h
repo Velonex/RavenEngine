@@ -17,6 +17,7 @@ namespace rvn {
 	private:
 		void drawEntityNode(Entity entity);
 		void drawPropertiesPanel(Entity entity);
+		void drawSceneSettings();
 	private:
 		ref<Scene> _context;
 		Entity _selectionContext;

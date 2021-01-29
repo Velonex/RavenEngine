@@ -12,6 +12,7 @@ namespace rvn {
 		friend class Entity;
 		friend class SceneEntitiesPanel;
 		friend class SceneSerializer;
+		friend class EditorLayer;
 	public:
 		Scene(const std::string& name = "Untitled scene");
 		~Scene();
@@ -24,6 +25,8 @@ namespace rvn {
 
 		const std::string& getName() const { return _name; }
 		void setName(const std::string& name) { _name = name; }
+
+		const glm::vec4& getClearColor() const { return _clearColor; }
 	private:
 		template <typename T>
 		void onComponentAdded(Entity entity, T& component);
@@ -33,5 +36,6 @@ namespace rvn {
 		std::uint32_t _viewportWidth = 0, _viewportHeight = 0;
 	private:
 		std::string _name = "";
+		glm::vec4 _clearColor = { 0.7f, 0.7f, 0.7f, 1.0f };
 	};
 }

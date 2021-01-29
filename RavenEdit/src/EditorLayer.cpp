@@ -90,7 +90,7 @@ namespace rvn {
 
         _framebuffer->bind();
         
-        RenderCommand::setClearColor({ 0.8f, 0.8f, 0.8f, 0.8f });
+        RenderCommand::setClearColor(_activeScene->getClearColor());
         RenderCommand::clear();
         
         //rvn::Renderer2D::beginScene(_cameraController.getCamera());

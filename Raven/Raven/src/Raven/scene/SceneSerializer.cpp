@@ -97,7 +97,8 @@ namespace rvn {
 	{
 		YAML::Emitter out;
 		out << YAML::BeginMap;
-		out << YAML::Key << "Scene" << YAML::Value << scene->getName(); // TODO: Change
+		out << YAML::Key << "Scene" << YAML::Value << scene->getName();
+		out << YAML::Key << "ClearColor" << YAML::Value << scene->getClearColor();
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		scene->_registry.each([&](auto entityID) {
 			Entity entity(entityID, scene.get());
@@ -118,6 +119,9 @@ namespace rvn {
 
 		scene->_name = data["Scene"].as<std::string>();
 		LOG_ENGINE_TRACE("Deserializing scene '{0}'", scene->_name);
+
+		auto clearColor = data["ClearColor"];
+		if (clearColor) scene->_clearColor = clearColor.as<glm::vec4>();
 
 		auto entities = data["Entities"];
 		if (entities) {
