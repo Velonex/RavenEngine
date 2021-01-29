@@ -87,7 +87,7 @@ namespace rvn {
 		// TODO: Move to file
 		const char* vertexShaderSource =
 			R"(
-#version 330 core
+#version 450 core
 
 layout(location = 0) in vec3  a_Position;
 layout(location = 1) in vec4  a_TintColor;
@@ -98,7 +98,7 @@ layout(location = 4) in float a_TilingFactor;
 out vec4  v_Color;
 out vec2  v_TexCoord;
 out float v_TilingFactor;
-out float v_TexIndex;
+out flat float v_TexIndex;
 
 uniform mat4 u_ViewProjectionMatrix;
 
@@ -115,14 +115,14 @@ void main()
 
 		const char* fragmentShaderSource =
 			R"(
-#version 330 core
+#version 450 core
 
 layout(location = 0) out vec4 color;
 
 in vec4 v_Color;
 in vec2 v_TexCoord;
 in float v_TilingFactor;
-in float v_TexIndex;
+in flat float v_TexIndex;
 
 uniform sampler2D u_Textures[16];
 

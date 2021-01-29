@@ -16,6 +16,7 @@ namespace rvn {
 	{
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
+		CHAR currentDir[256] = { 0 };
 		ZeroMemory(&ofn, sizeof(OPENFILENAMEA));
 		ofn.lStructSize = sizeof(OPENFILENAMEA);
 		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
@@ -24,7 +25,8 @@ namespace rvn {
 		ofn.lpstrFilter = filter;
 		ofn.nFilterIndex = 1;
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-		ofn.lpstrInitialDir = "assets/scenes/";
+		if (GetCurrentDirectoryA(256, currentDir));
+			ofn.lpstrInitialDir = currentDir;
 		if (GetOpenFileNameA(&ofn) == TRUE)
 			return ofn.lpstrFile;
 		return std::nullopt;
@@ -33,6 +35,7 @@ namespace rvn {
 	{
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
+		CHAR currentDir[256] = { 0 };
 		ZeroMemory(&ofn, sizeof(OPENFILENAMEA));
 		ofn.lStructSize = sizeof(OPENFILENAMEA);
 		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
@@ -41,7 +44,8 @@ namespace rvn {
 		ofn.lpstrFilter = filter;
 		ofn.nFilterIndex = 1;
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
-		ofn.lpstrInitialDir = "assets/scenes/";
+		if (GetCurrentDirectoryA(256, currentDir));
+			ofn.lpstrInitialDir = currentDir;
 		ofn.lpstrDefExt = std::strchr(filter, '\0') + 1;
 
 		if (GetSaveFileNameA(&ofn) == TRUE)
