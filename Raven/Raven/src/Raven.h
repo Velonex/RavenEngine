@@ -47,3 +47,6 @@
 #include <Raven/scene/ScriptableEntity.h>
 #include <Raven/scene/SceneCamera.h>
 #include <Raven/scene/SceneSerializer.h>
+
+// Utils
+#include <Raven/utils/PlatformUtils.h>

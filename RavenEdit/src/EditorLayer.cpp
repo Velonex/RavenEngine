@@ -1,6 +1,7 @@
 #include "EditorLayer.h"
 #include <imgui.h>
 #include <glm.hpp>
+#include <Raven/utils/PlatformUtils.h>
 
 namespace rvn {
 
@@ -68,7 +69,6 @@ namespace rvn {
 
     void EditorLayer::onDetach()
     {
-        SceneSerializer::serialize(_activeScene, "assets/scenes/example.rsc");
     }
 
     void EditorLayer::onUpdate(Timestep ts)
@@ -106,6 +106,12 @@ namespace rvn {
     void EditorLayer::onEvent(Event* e)
     {
         //_cameraController.onEvent(e);
+        switch (e->getType()) {
+        case EventType::EVENT_KEY_PRESSED: {
+            onKeyPressed((KeyPressedEvent*)e);
+            break;
+        }
+        }
     }
 
     void EditorLayer::onImGuiRender()
@@ -167,6 +173,9 @@ namespace rvn {
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
                 //ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+                if (ImGui::MenuItem("New Scene", "Ctrl+N")) { newScene(); }
+                if (ImGui::MenuItem("Open Scene...", "Ctrl+O")) { openScene(); }
+                if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S")) { saveSceneAs(); }
                 if (ImGui::MenuItem("Exit")) { Application::get().close(); }
                 ImGui::EndMenu();
             }
@@ -191,6 +200,54 @@ namespace rvn {
         ImGui::End();
         ImGui::PopStyleVar();
         ImGui::End();
+    }
+
+    void EditorLayer::onKeyPressed(KeyPressedEvent* e)
+    {
+        if (e->getRepeatCount() > 0) return;
+
+        bool ctrl = Input::isKeyPressed(Key::LeftControl) || Input::isKeyPressed(Key::RightControl);
+        bool shift = Input::isKeyPressed(Key::LeftShift) || Input::isKeyPressed(Key::RightShift);
+
+        switch (e->getKeyCode()) {
+        case Key::N: {
+            if (ctrl) newScene();
+            break;
+        }
+        case Key::S: {
+            if (ctrl && shift) saveSceneAs();
+            break;
+        }
+        case Key::O: {
+            if (ctrl) openScene();
+            break;
+        }
+        }
+    }
+
+    void EditorLayer::newScene()
+    {
+        _activeScene = createRef<Scene>();
+        _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
+        _sceneEntitiesPanel.setContext(_activeScene);
+    }
+
+    void EditorLayer::openScene()
+    {
+        std::optional<std::string> filepath = FileDialogs::openFile("Raven Scene (*.rsc)\0*.rsc\0");
+        if (filepath) {
+            newScene();
+
+            SceneSerializer::deserialize(_activeScene, filepath.value());
+        }
+    }
+
+    void EditorLayer::saveSceneAs()
+    {
+        std::optional<std::string> filepath = FileDialogs::saveFile("Raven Scene (*.rsc)\0*.rsc\0");
+        if (filepath) {
+            SceneSerializer::serialize(_activeScene, filepath.value());
+        }
     }
 
 }

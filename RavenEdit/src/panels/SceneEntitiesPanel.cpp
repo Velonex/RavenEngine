@@ -19,6 +19,7 @@ namespace rvn {
 	void SceneEntitiesPanel::setContext(const ref<Scene>& scene)
 	{
 		_context = scene;
+		_selectionContext = {};
 	}
 
 	void SceneEntitiesPanel::onImGuiRender()
@@ -71,8 +72,10 @@ namespace rvn {
 			ImGui::TreePop();
 		}
 		ImGui::PopStyleColor(1);
-		if(shouldBeDeleted)
+		if (shouldBeDeleted) {
 			_context->destroyEntity(entity);
+			_selectionContext = {};
+		}
 	}
 
 	template<typename Component, typename UIFunc>

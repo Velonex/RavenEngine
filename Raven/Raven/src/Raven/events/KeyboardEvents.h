@@ -12,6 +12,7 @@ namespace rvn {
 	};
 	class KeyPressedEvent : public KeyEvent {
 	public:
+		inline int getRepeatCount() { return _repeatCount; }
 		KeyPressedEvent(KeyCode key, int repeats) : KeyEvent(key, EventType::EVENT_KEY_PRESSED, "KeyPressedEvent"), _repeatCount(repeats) {}
 	private:
 		int _repeatCount;

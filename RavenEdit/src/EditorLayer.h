@@ -15,6 +15,12 @@ namespace rvn {
 		virtual void onEvent(Event* e) override;
 		virtual void onImGuiRender() override;
 	private:
+		void onKeyPressed(KeyPressedEvent* e);
+
+		void newScene();
+		void openScene();
+		void saveSceneAs();
+	private:
 		OrthographicCameraController _cameraController;
 
 		bool firstTime = true;
