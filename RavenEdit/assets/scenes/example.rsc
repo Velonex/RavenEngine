@@ -1,12 +1,12 @@
-Scene: Example Scene
+Scene: Example
 ClearColor: [0.392156869, 0.392156869, 0.392156869, 1]
 Entities:
-  - RUID: 545064385637976591
+  - RUID: 545061814968847908
     TagComponent:
-      Tag: PlusHorizontal
+      Tag: PlusVertical
     TransformComponent:
       Translation: [0, 0, 0]
-      Rotation: [0, 0, 1.57079637]
+      Rotation: [0, 0, 0]
       Scale: [1, 3, 1]
     SpriteRendererComponent:
       Color: [0.0784313753, 0.196078435, 0.588235319, 1]
@@ -28,12 +28,12 @@ Entities:
         OrthographicSize: 10
         OrthographicNear: -1
         OrthographicFar: 1
-  - RUID: 545061814968847908
+  - RUID: 545064385637976591
     TagComponent:
-      Tag: PlusVertical
+      Tag: PlusHorizontal
     TransformComponent:
       Translation: [0, 0, 0]
-      Rotation: [0, 0, 0]
+      Rotation: [0, 0, 1.57079637]
       Scale: [1, 3, 1]
     SpriteRendererComponent:
       Color: [0.0784313753, 0.196078435, 0.588235319, 1]

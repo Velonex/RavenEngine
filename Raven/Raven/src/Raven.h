@@ -50,3 +50,4 @@
 
 // Utils
 #include <Raven/utils/PlatformUtils.h>
+#include <Raven/utils/NumByteConversion.h>

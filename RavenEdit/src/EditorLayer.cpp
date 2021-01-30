@@ -2,6 +2,7 @@
 #include <imgui.h>
 #include <glm.hpp>
 #include <Raven/utils/PlatformUtils.h>
+#include <filesystem>
 
 namespace rvn {
 
@@ -234,19 +235,20 @@ namespace rvn {
 
     void EditorLayer::openScene()
     {
-        std::optional<std::string> filepath = FileDialogs::openFile("Raven Scene (*.rsc)\0*.rsc\0");
+        std::optional<std::string> filepath = FileDialogs::openFile("All Raven Scene Files\0*.rsc;*.rrsc\0Raven Scene (*.rsc)\0*.rsc\0Raven Runtime Scene (*.rrsc)\0*.rrsc");
         if (filepath) {
             newScene();
-
-            SceneSerializer::deserialize(_activeScene, filepath.value());
+            if (std::filesystem::path(filepath.value()).extension() == ".rrsc") SceneSerializer::deserializeRuntime(_activeScene, filepath.value());
+            else SceneSerializer::deserialize(_activeScene, filepath.value());
         }
     }
 
     void EditorLayer::saveSceneAs()
     {
-        std::optional<std::string> filepath = FileDialogs::saveFile("Raven Scene (*.rsc)\0*.rsc\0");
+        std::optional<std::string> filepath = FileDialogs::saveFile("Raven Scene (*.rsc)\0*.rsc\0Raven Runtime Scene (*.rrsc)\0*.rrsc");
         if (filepath) {
-            SceneSerializer::serialize(_activeScene, filepath.value());
+            if (std::filesystem::path(filepath.value()).extension() == ".rrsc") SceneSerializer::serializeRuntime(_activeScene, filepath.value());
+            else SceneSerializer::serialize(_activeScene, filepath.value());
         }
     }
 
