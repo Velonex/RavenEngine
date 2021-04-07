@@ -54,7 +54,7 @@ namespace rvn {
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float4, "a_TintColor" },
 			{ ShaderDataType::Float2, "a_TexCoords" },
-			{ ShaderDataType::Float, "a_TexIndex" },
+			{ ShaderDataType::Int, "a_TexIndex" },
 			{ ShaderDataType::Float, "a_TilingFactor" },
 			});
 		s_data.vertexArray->addVertexBuffer(s_data.vertexBuffer);
@@ -92,13 +92,13 @@ namespace rvn {
 layout(location = 0) in vec3  a_Position;
 layout(location = 1) in vec4  a_TintColor;
 layout(location = 2) in vec2  a_TexCoords;
-layout(location = 3) in float a_TexIndex;
+layout(location = 3) in int a_TexIndex;
 layout(location = 4) in float a_TilingFactor;
 
 out vec4  v_Color;
 out vec2  v_TexCoord;
 out float v_TilingFactor;
-out flat float v_TexIndex;
+out flat int v_TexIndex;
 
 uniform mat4 u_ViewProjectionMatrix;
 
@@ -122,7 +122,7 @@ layout(location = 0) out vec4 color;
 in vec4 v_Color;
 in vec2 v_TexCoord;
 in float v_TilingFactor;
-in flat float v_TexIndex;
+in flat int v_TexIndex;
 
 uniform sampler2D u_Textures[16];
 
