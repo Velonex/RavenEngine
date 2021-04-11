@@ -14,7 +14,7 @@ void TestLayer2D::onAttach()
 
 void TestLayer2D::onUpdate(rvn::Timestep timestep)
 {
-	rvn::RenderCommand::setClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
+	rvn::RenderCommand::setClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 	rvn::RenderCommand::clear();
 	camera.onUpdate(timestep);
 	rvn::Renderer2D::beginScene(camera.getCamera());
@@ -32,7 +32,7 @@ void TestLayer2D::onImGuiRender()
 {
 }
 
-void TestLayer2D::onEvent(rvn::Event * e)
+void TestLayer2D::onEvent(rvn::Event* e)
 {
 	camera.onEvent(e);
 }

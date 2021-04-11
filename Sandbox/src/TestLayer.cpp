@@ -1,10 +1,12 @@
 #include "TestLayer.h"
 #include <string>
 #include <Raven/rendering/Renderer.h>
+#include <Raven/rendering/RenderCommand.h>
 
 struct Vertex {
 	float position[3];
 	float tex_coords[2];
+	float color[4];
 };
 
 void TestLayer::onAttach()
@@ -15,10 +17,10 @@ void TestLayer::onAttach()
 
 	// Vertex positions
 	Vertex vertices[4] = {
-		{-0.5f, -0.5f,  0.0f,  0.0f,  0.0f, },
-		{ 0.5f, -0.5f,  0.0f,  1.0f,  0.0f, },
-		{ 0.5f,  0.5f,  0.0f,  1.0f,  1.0f, },
-		{-0.5f,  0.5f,  0.0f,  0.0f,  1.0f  }
+		{-0.5f, -0.5f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f },
+		{ 0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f },
+		{ 0.5f,  0.5f,  0.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f,  1.0f },
+		{-0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f }
 	};
 
 	// Create and bind vertex buffer
@@ -27,7 +29,8 @@ void TestLayer::onAttach()
 	// Set Layout
 	vbo->setLayout({
 		{ rvn::ShaderDataType::Float3, "a_Position" },
-		{ rvn::ShaderDataType::Float2, "a_TexCoords" }
+		{ rvn::ShaderDataType::Float2, "a_TexCoords" },
+		{ rvn::ShaderDataType::Float4, "a_Color" }
 		});
 
 	vao->addVertexBuffer(vbo);
@@ -44,13 +47,15 @@ void TestLayer::onAttach()
 
 	// Create shaders
 	const char* vertexShaderSource =
-R"(
+		R"(
 #version 330 core
 
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec2 a_TexCoord;
+layout(location = 2) in vec4 a_Color;
 
 out vec2 v_TexCoord;
+out vec4 v_Color;
 
 uniform mat4 u_ViewProjectionMatrix;
 uniform mat4 u_Transform;
@@ -58,24 +63,25 @@ uniform mat4 u_Transform;
 void main()
 {
 	v_TexCoord = a_TexCoord;
+	v_Color = a_Color;
 	gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0);
 }
-
 )";
 
 	const char* fragmentShaderSource =
-R"(
+		R"(
 #version 330 core
 
 layout(location = 0) out vec4 color;
 
 in vec2 v_TexCoord;
+in vec4 v_Color;
 
 uniform sampler2D u_Texture;
 
 void main()
 {
-	color = texture(u_Texture, v_TexCoord);
+	color = texture(u_Texture, v_TexCoord) * v_Color;
 }
 )";
 
@@ -88,6 +94,9 @@ void main()
 
 void TestLayer::onUpdate(rvn::Timestep timestep)
 {
+	rvn::RenderCommand::setClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
+	rvn::RenderCommand::clear();
+
 	camera.onUpdate(timestep);
 	rvn::Renderer::beginScene(camera.getCamera());
 	shader->bind();
