@@ -25,7 +25,7 @@ namespace rvn {
 		ofn.lpstrFilter = filter;
 		ofn.nFilterIndex = 1;
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-		if (GetCurrentDirectoryA(256, currentDir));
+		if (GetCurrentDirectoryA(256, currentDir))
 			ofn.lpstrInitialDir = currentDir;
 		if (GetOpenFileNameA(&ofn) == TRUE)
 			return ofn.lpstrFile;
@@ -44,7 +44,7 @@ namespace rvn {
 		ofn.lpstrFilter = filter;
 		ofn.nFilterIndex = 1;
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
-		if (GetCurrentDirectoryA(256, currentDir));
+		if (GetCurrentDirectoryA(256, currentDir))
 			ofn.lpstrInitialDir = currentDir;
 		ofn.lpstrDefExt = std::strchr(filter, '\0') + 1;
 

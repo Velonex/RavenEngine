@@ -1,7 +1,7 @@
 #pragma once
 
 namespace rvn {
-	enum Configuration {
+	enum class Configuration {
 		Debug, Release, Distribution
 	};
 

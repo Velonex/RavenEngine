@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include <Raven/rendering/Renderer2D.h>
 #include "Components.h"
+#include <Raven/assets/AssetManager.h>
 
 namespace rvn {
 	Scene::Scene(const std::string& name)
@@ -69,9 +70,20 @@ namespace rvn {
 			auto view = _registry.view<TransformComponent, SpriteRendererComponent>();
 			for (auto entity : view) {
 				TransformComponent transform = view.get<TransformComponent>(entity);
-				SpriteRendererComponent spritecomp = view.get<SpriteRendererComponent>(entity);
+				SpriteRendererComponent& spritecomp = view.get<SpriteRendererComponent>(entity);
 
-				Renderer2D::drawQuad(transform.getTransform(), spritecomp.color);
+				if (spritecomp.id != 0) {
+					if (!spritecomp.texture || spritecomp.updateTexture) {
+						spritecomp.texture = AssetManager::loadTexture(spritecomp.id);
+						if (!spritecomp.texture) {
+							ASSERT(false, "Invalid ID");
+						}
+					}
+					Renderer2D::drawQuad(transform.getTransform(), spritecomp.texture, spritecomp.color, spritecomp.tilingFactor);
+				}
+				else {
+					Renderer2D::drawQuad(transform.getTransform(), spritecomp.color);
+				}
 			}
 			Renderer2D::endScene();
 		}

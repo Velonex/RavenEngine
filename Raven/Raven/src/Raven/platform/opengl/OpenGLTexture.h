@@ -6,6 +6,7 @@ namespace rvn {
 	class OpenGLTexture2D : public Texture2D {
 	public:
 		OpenGLTexture2D(const std::string& path);
+		OpenGLTexture2D(const ref<std::string>& file);
 		OpenGLTexture2D(std::uint32_t width, std::uint32_t height);
 		virtual ~OpenGLTexture2D();
 
@@ -17,6 +18,8 @@ namespace rvn {
 		virtual std::uint32_t getRendererID() const override { return _id; }
 
 		virtual void bind(std::uint32_t slot = 0) const override;
+	private:
+		void create(unsigned char* data, int channels);
 	private:
 		std::uint32_t _width, _height;
 		std::uint32_t _id;

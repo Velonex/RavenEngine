@@ -7,6 +7,7 @@
 #include <Raven/rendering/RenderCommand.h>
 #include <Raven/rendering/Renderer.h>
 #include <Raven/rendering/Renderer2D.h>
+#include <Raven/assets/IdLookup.h>
 
 namespace rvn {
 	
@@ -25,6 +26,7 @@ namespace rvn {
 		_window.reset(Window::createWindow(props, this));
 		Renderer::init();
 		Renderer2D::init();
+		IdLookup::loadLookup("assets");
 		_layerStack = createScope<LayerStack>();
 		LOG_ENGINE_INFO("Initialized.");
 		_initialized = true;
@@ -84,6 +86,7 @@ namespace rvn {
 		}
 		Renderer::shutdown();
 		Renderer2D::shutdown();
+		IdLookup::saveLookup();
 		LOG_ENGINE_INFO("Stopped.");
 	}
 	void Application::onEvent(Event* e)

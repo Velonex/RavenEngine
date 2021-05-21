@@ -103,6 +103,8 @@ namespace rvn {
 		if (entity.hasComponent<SpriteRendererComponent>()) {
 			out << YAML::Key << "SpriteRendererComponent" << YAML::Value << YAML::BeginMap;
 			out << YAML::Key << "Color" << YAML::Value << entity.getComponent<SpriteRendererComponent>().color;
+			out << YAML::Key << "TextureID" << YAML::Value << entity.getComponent<SpriteRendererComponent>().id;
+			out << YAML::Key << "TilingFactor" << YAML::Value << entity.getComponent<SpriteRendererComponent>().tilingFactor;
 			out << YAML::EndMap;
 		}
 		if (entity.hasComponent<CameraComponent>()) {
@@ -183,7 +185,11 @@ namespace rvn {
 			auto& comp = entity.getComponent<SpriteRendererComponent>();
 			std::string data = "";
 			length += sizeof(glm::vec4); // Clear Color
+			length += sizeof(RUID); // ID
+			length += sizeof(float); // Tiling Factor
 			data += comp.color;// Clear Color
+			data.append(Converter::toBytes<std::uint64_t>(comp.id).chars, 8); // ID
+			data.append(Converter::toBytes<float>(comp.tilingFactor).chars, 4); // Tiling Factor
 			components.push_back({ ComponentID::SPRITE_RENDERER_COMPONENT, data });
 		}
 		if (entity.hasComponent<CameraComponent>()) {
@@ -291,6 +297,8 @@ namespace rvn {
 				if (spriteRendererComponent) {
 					auto& src = curEntity.addComponent<SpriteRendererComponent>();
 					src.color = spriteRendererComponent["Color"].as<glm::vec4>();
+					src.id = spriteRendererComponent["TextureID"].as<std::uint64_t>();
+					src.tilingFactor = spriteRendererComponent["TilingFactor"].as<float>();
 				}
 
 				auto cameraComponent = entity["CameraComponent"];
@@ -421,10 +429,25 @@ namespace rvn {
 						in.read(&buf[0], buf.length());
 						color[ci] = Converter::toNum<float>(buf);
 					}
+					// Texture ID
+					buf.resize(sizeof(RUID), 0);
+					in.read(&buf[0], buf.length());
+					std::uint64_t id = Converter::toNum<std::uint64_t>(buf);
+					// Tiling Factor
+					buf.resize(sizeof(float), 0);
+					in.read(&buf[0], buf.length());
+					float tilingFactor = Converter::toNum<float>(buf);
+
 					if (!entity.hasComponent<SpriteRendererComponent>()) {
 						entity.addComponent<SpriteRendererComponent>().color = color;
+						entity.getComponent<SpriteRendererComponent>().id = id;
+						entity.getComponent<SpriteRendererComponent>().tilingFactor = tilingFactor;
 					}
-					else entity.getComponent<SpriteRendererComponent>().color = color;
+					else {
+						entity.getComponent<SpriteRendererComponent>().color = color;
+						entity.getComponent<SpriteRendererComponent>().id = id;
+						entity.getComponent<SpriteRendererComponent>().tilingFactor = tilingFactor;
+					}
 					break;
 				}
 				case ComponentID::CAMERA_COMPONENT: {

@@ -6,6 +6,8 @@
 
 namespace rvn {
 
+	struct SpriteRendererComponent;
+
 	class SceneEntitiesPanel {
 	public:
 		SceneEntitiesPanel() = default;
@@ -18,8 +20,10 @@ namespace rvn {
 		void drawEntityNode(Entity entity);
 		void drawPropertiesPanel(Entity entity);
 		void drawSceneSettings();
+		void drawTextureSelection(SpriteRendererComponent& component);
 	private:
 		ref<Scene> _context;
 		Entity _selectionContext;
+		bool _textureSelectionOpened = false;
 	};
 }

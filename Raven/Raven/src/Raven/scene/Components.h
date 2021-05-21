@@ -8,6 +8,8 @@
 #include "SceneCamera.h"
 #include "ScriptableEntity.h"
 
+#include <Raven/rendering/Texture.h>
+
 namespace rvn {
 
 	struct RUIDComponent {
@@ -48,11 +50,17 @@ namespace rvn {
 	};
 	struct SpriteRendererComponent {
 		glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		std::uint64_t id = 0;
+		float tilingFactor = 1.0f;
+		ref<Texture2D> texture;
+		bool updateTexture = false;
 
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(glm::vec4 color)
 			: color(color) {}
+		SpriteRendererComponent(glm::vec4 color, std::uint64_t id, float tilingFactor)
+			: color(color), id(id), tilingFactor(tilingFactor) {}
 	};
 	struct CameraComponent {
 		SceneCamera camera;

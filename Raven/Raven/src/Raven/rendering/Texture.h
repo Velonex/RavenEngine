@@ -19,6 +19,7 @@ namespace rvn {
 	class Texture2D : public Texture {
 	public:
 		static ref<Texture2D> create(const std::string& path);
+		static ref<Texture2D> create(const ref<std::string>& file);
 		static ref<Texture2D> create(std::uint32_t width, std::uint32_t height);
 	};
 }

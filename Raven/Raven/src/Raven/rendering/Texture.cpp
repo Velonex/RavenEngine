@@ -12,6 +12,15 @@ namespace rvn {
 		ASSERT(false, "Unsupported RendererAPI");
 		return nullptr;
 	}
+	ref<Texture2D> Texture2D::create(const ref<std::string>& file)
+	{
+		switch (RendererAPI::getRendererApi()) {
+		case RendererAPI::API::OpenGL:
+			return createRef<OpenGLTexture2D>(file);
+		}
+		ASSERT(false, "Unsupported RendererAPI");
+		return nullptr;
+	}
 	ref<Texture2D> Texture2D::create(std::uint32_t width, std::uint32_t height)
 	{
 		switch (RendererAPI::getRendererApi()) {

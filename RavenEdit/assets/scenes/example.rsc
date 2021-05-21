@@ -10,6 +10,8 @@ Entities:
       Scale: [1, 3, 1]
     SpriteRendererComponent:
       Color: [0.0784313753, 0.196078435, 0.588235319, 1]
+      TextureID: 0
+      TilingFactor: 1.0
   - RUID: 545064382883825923
     TagComponent:
       Tag: Cam
@@ -37,3 +39,5 @@ Entities:
       Scale: [1, 3, 1]
     SpriteRendererComponent:
       Color: [0.0784313753, 0.196078435, 0.588235319, 1]
+      TextureID: 0
+      TilingFactor: 1.0

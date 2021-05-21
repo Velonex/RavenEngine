@@ -21,9 +21,7 @@
 #include <unordered_set>
 
 #include <Raven/rendering/RendererAPI.h>
-#include <Raven_Core/core/Logger.h>
-#include <Raven_Core/core/Assert.h>
-#include <Raven_Core/core/Platform.h>
+#include <Raven_Core.h>
 
 #if defined(PLATFORM_WINDOWS) 
 #include <Windows.h>

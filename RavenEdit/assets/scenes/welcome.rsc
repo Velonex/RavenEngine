@@ -9,6 +9,8 @@ Entities:
       Scale: [1, 3, 1]
     SpriteRendererComponent:
       Color: [0.0784313753, 0.196078435, 0.588235319, 1]
+      TextureID: 0
+      TilingFactor: 1.0
   - RUID: 545061808789327171
     TagComponent:
       Tag: Excl_down
@@ -18,6 +20,8 @@ Entities:
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [0.0784313753, 0.196078435, 0.588235319, 1]
+      TextureID: 0
+      TilingFactor: 1.0
   - RUID: 545061803079765204
     TagComponent:
       Tag: I
@@ -27,6 +31,8 @@ Entities:
       Scale: [1, 5, 1]
     SpriteRendererComponent:
       Color: [0.0784313753, 0.196078435, 0.588235319, 1]
+      TextureID: 0
+      TilingFactor: 1.0
   - RUID: 545061800393050931
     TagComponent:
       Tag: H_right
@@ -36,6 +42,8 @@ Entities:
       Scale: [1, 5, 1]
     SpriteRendererComponent:
       Color: [0.0784313753, 0.196078435, 0.588235319, 1]
+      TextureID: 0
+      TilingFactor: 1.0
   - RUID: 545061786757433404
     TagComponent:
       Tag: H_left
@@ -45,6 +53,8 @@ Entities:
       Scale: [1, 5, 1]
     SpriteRendererComponent:
       Color: [0.0784313753, 0.196078435, 0.588235319, 1]
+      TextureID: 0
+      TilingFactor: 1.0
   - RUID: 545061788638054785
     TagComponent:
       Tag: Cam
@@ -72,3 +82,5 @@ Entities:
       Scale: [1.5, 1, 1]
     SpriteRendererComponent:
       Color: [0.0784313753, 0.196078435, 0.588235319, 1]
+      TextureID: 0
+      TilingFactor: 1.0

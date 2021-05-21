@@ -7,7 +7,12 @@
 #include <gtc/type_ptr.hpp>
 
 #include <Raven/scene/Components.h>
+#include <Raven/assets/Filesystem.h>
+#include <Raven/utils/PlatformUtils.h>
+#include <Raven/assets/IdLookup.h>
+
 #include <cstring>
+#include <filesystem>
 
 namespace rvn {
 
@@ -155,6 +160,37 @@ namespace rvn {
 		});
 		drawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [&](SpriteRendererComponent& component) {
 			ImGui::ColorEdit4("Color##SRPicker", glm::value_ptr(component.color));
+			/*static bool s_setTextureOpen;
+			static std::filesystem::path s_currentPath;
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, { 200, ImGui::GetTextLineHeightWithSpacing() * 7 });*/
+			if (ImGui::Button("Set Texture")) {
+				std::optional<std::string> path = FileDialogs::openFile("Image File (PNG, JPG, BMP, TGA, GIF)\0*.png;*.jpg;*.jpe;*.jif;*.jfif;*.tga;*.tpic;*.bmp;*.dip;*.gif");
+				if (path) {
+					component.id = IdLookup::getID(path.value());
+					component.updateTexture = true;
+				}
+				/*ImGui::OpenPopup("Select Texture");
+				s_setTextureOpen = true;
+				s_currentPath = */
+			}
+			ImGui::SameLine();
+			ImGui::Text(component.id == 0 ? "Default texture" : IdLookup::getPath(component.id).c_str());
+			ImGui::Text("Tiling factor"); ImGui::SameLine();
+			ImGui::DragFloat("##Tiling Factor", &component.tilingFactor, 0.01f, 0.01f, 10.0f);
+			/*
+			if (ImGui::BeginPopupModal("Select Texture", &s_setTextureOpen)) {
+				ImGui::Text("Textures");
+
+				// Cancel / Set
+				float offset = ImGui::GetWindowSize().y - ImGui::GetTextLineHeightWithSpacing() * 2;
+				ImGui::SetCursorPosY(offset);
+				ImGui::Separator();
+				ImGui::Button("Select Texture##Button");
+				ImGui::SameLine();
+				if (ImGui::Button("Cancel")) s_setTextureOpen = false;
+				ImGui::EndPopup();
+			}
+			ImGui::PopStyleVar();*/
 		});
 		drawComponent<CameraComponent>("Camera", entity, [&](CameraComponent& component) {
 			ImGui::Checkbox("Primary camera", &component.primary);
@@ -220,5 +256,8 @@ namespace rvn {
 		}
 		ImGui::Text("Clear Color"); ImGui::SameLine(spacing);
 		ImGui::ColorEdit4("##ClearColorEdit", glm::value_ptr(_context->_clearColor));
+	}
+	void SceneEntitiesPanel::drawTextureSelection(SpriteRendererComponent& component)
+	{
 	}
 }

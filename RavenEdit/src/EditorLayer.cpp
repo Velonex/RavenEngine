@@ -12,8 +12,6 @@ namespace rvn {
     }
     void EditorLayer::onAttach()
     {
-        //_chess = Texture2D::create("assets/textures/chess.png");
-        
         FramebufferSpecification fbSpec;
         fbSpec.width = 1280;
         fbSpec.height = 720;
@@ -85,7 +83,7 @@ namespace rvn {
                 firstTime = false;
             }
         }
-        
+
         //if(_viewportFocused)
         //    _cameraController.onUpdate(ts);
 
@@ -93,12 +91,12 @@ namespace rvn {
         
         RenderCommand::setClearColor(_activeScene->getClearColor());
         RenderCommand::clear();
-        
+
         //rvn::Renderer2D::beginScene(_cameraController.getCamera());
         //rvn::Renderer2D::drawQuad({ 0.0f, 0.0f }, { 0.5f, 0.5f }, { 0.2f, 0.8f, 0.3f, 1.0f });
         //rvn::Renderer2D::drawQuad({ -1.0f, 0.0f, -0.1f }, { 0.8f, 0.8f }, _chess, { 1.0f, 0.0f, 0.0f, 1.0f }, 1.0f);
         //rvn::Renderer2D::endScene();
-        
+
         _activeScene->onUpdate(ts);
         
         _framebuffer->unbind();
