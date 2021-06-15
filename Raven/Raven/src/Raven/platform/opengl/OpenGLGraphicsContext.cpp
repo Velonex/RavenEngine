@@ -14,8 +14,8 @@ namespace rvn {
 		glfwMakeContextCurrent(_window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		ASSERT(status, "Couldn't initialize Glad");
-		LOG_ENGINE_TRACE("Renderer: OpenGL {0}", glGetString(GL_VERSION));
-		LOG_ENGINE_TRACE("GPU: {0}, {1}", glGetString(GL_VENDOR), glGetString(GL_RENDERER));
+		LOG_ENGINE_INFO("Renderer: OpenGL {0}", glGetString(GL_VERSION));
+		LOG_ENGINE_INFO("GPU: {0}, {1}", glGetString(GL_VENDOR), glGetString(GL_RENDERER));
 	}
 
 	void OpenGLGraphicsContext::swapBuffers()

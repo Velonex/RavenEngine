@@ -19,7 +19,7 @@ namespace rvn {
 			LOG_ENGINE_WARN("The app \"{0}\" is already initialized", name);
 		}
 		Logger::init(name);
-		LOG_ENGINE_TRACE("Initializing...");
+		LOG_ENGINE_INFO("Initializing...");
 		_eventHandler = createScope<EventHandler>();
 		_eventHandler->subscribe(this, EventType::ALL);
 		WindowProps props(1280, 720, name);
@@ -78,7 +78,7 @@ namespace rvn {
 	}
 	Application::~Application()
 	{
-		LOG_ENGINE_TRACE("Stopping...");
+		LOG_ENGINE_INFO("Stopping...");
 		if (_instance == this) _instance = nullptr;
 		for (auto it = _layerStack->rbegin(); it < _layerStack->rend(); it++) {
 			(*it)->onDetach();

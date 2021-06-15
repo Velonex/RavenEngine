@@ -28,7 +28,7 @@ namespace rvn {
 		//std::tm now = *std::localtime(&t);
 		//std::string filename = "Raven-" + std::to_string(now.tm_mon + 1) + std::to_string(now.tm_mday) + std::to_string(now.tm_year + 1900) + "-" +
 		//	std::to_string(now.tm_hour) + "-" + std::to_string(now.tm_min) + ".log";
-		sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Raven.log", false));
+		sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Raven.log", true));
 
 		// Pattern for console output
 		sinks[0]->set_pattern("[%T][%^%l%$] %n: %v");

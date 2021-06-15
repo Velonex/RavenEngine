@@ -38,7 +38,7 @@ namespace rvn {
 		LOG_ENGINE_INFO("Creating Window: \"{0}\" ({1}, {2})", props.title, props.width, props.height);
 
 		if (s_glfwWindowCount == 0) {
-			LOG_ENGINE_TRACE("Initializing GLFW...");
+			LOG_ENGINE_INFO("Initializing GLFW...");
 			int success = glfwInit();
 			ASSERT(success, "Couldn't initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
