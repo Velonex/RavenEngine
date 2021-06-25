@@ -37,5 +37,8 @@ namespace rvn {
 		glm::vec2 _viewportSize = { 0.0f, 0.0f };
 
 		SceneEntitiesPanel _sceneEntitiesPanel;
+
+		CircularBuffer<float> _frametimes;
+		float _frametimesArray[100];
 	};
 }

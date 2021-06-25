@@ -7,8 +7,10 @@
 namespace rvn {
 
     EditorLayer::EditorLayer()
-        : Layer("Editor Layer") , _cameraController(1280.0f / 720.0f, true)
+        : Layer("Editor Layer"), _cameraController(1280.0f / 720.0f, true), _frametimes(100)
     {
+        for (int i = 0; i < _frametimes.capacity(); i++)
+            _frametimes.push_back(0.0f);
     }
     void EditorLayer::onAttach()
     {
@@ -100,6 +102,8 @@ namespace rvn {
         _activeScene->onUpdate(ts);
         
         _framebuffer->unbind();
+        
+        _frametimes.push_back(ts.getSeconds());
     }
 
     void EditorLayer::onEvent(Event* e)
@@ -197,6 +201,15 @@ namespace rvn {
         std::uint64_t texID = _framebuffer->getColorAttachmentID();
         ImGui::Image(reinterpret_cast<void*>(texID), ImVec2{ _viewportSize.x, _viewportSize.y }, { 0, 1 }, { 1, 0 });
         ImGui::End();
+
+        // Debug Info
+        ImGui::Begin("Renderer Info");
+        ImGui::Text("Last FPS: %f", 1 / _frametimes[99]);
+        _frametimes.put_to_array(_frametimesArray, 100);
+        ImGui::PlotHistogram("Frametimes", _frametimesArray, 100);
+        ImGui::End();
+
+
         ImGui::PopStyleVar();
         ImGui::End();
     }

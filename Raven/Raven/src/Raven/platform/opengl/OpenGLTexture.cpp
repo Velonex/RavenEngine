@@ -60,7 +60,7 @@ namespace rvn {
 	}
 	void OpenGLTexture2D::create(unsigned char* data, int channels)
 	{
-
+		glCreateTextures(GL_TEXTURE_2D, 1, &_id);
 		GLenum internalFormat = 0, format = 0;
 		if (channels == 4) {
 			internalFormat = GL_RGBA8;
@@ -70,10 +70,17 @@ namespace rvn {
 			internalFormat = GL_RGB8;
 			format = GL_RGB;
 		}
+		else if (channels == 2) {
+			internalFormat = GL_RG8;
+			format = GL_RG;
+		}
+		else if (channels == 1) {
+			internalFormat = GL_R8;
+			format = GL_RED;
+		}
 		else {
 			ASSERT(false, "Unsupported channel count of {0}", channels);
 		}
-		glCreateTextures(GL_TEXTURE_2D, 1, &_id);
 		glTextureStorage2D(_id, 1, internalFormat, _width, _height);
 
 		glTextureParameteri(_id, GL_TEXTURE_WRAP_S, GL_REPEAT);

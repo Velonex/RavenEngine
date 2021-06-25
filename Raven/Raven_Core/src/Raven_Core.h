@@ -12,6 +12,7 @@
 // Datatypes
 #include <Raven_Core/datatypes/Memory.h>
 #include <Raven_Core/datatypes/RavenUniqueID.h>
+#include <Raven_Core/datatypes/CircularBuffer.h>
 
 // Events
 #include <Raven_Core/event/EventSystem.h>

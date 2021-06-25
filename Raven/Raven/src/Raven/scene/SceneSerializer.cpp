@@ -1,7 +1,11 @@
 #include <pch.h>
 #include "SceneSerializer.h"
+
 #include <yaml-cpp/yaml.h>
+
 #include <fstream>
+#include <filesystem>
+
 #include <Raven/scene/Entity.h>
 #include <Raven/scene/Components.h>
 #include <Raven/utils/NumByteConversion.h>
@@ -254,6 +258,10 @@ namespace rvn {
 	}
 	bool SceneSerializer::deserialize(const ref<Scene>& scene, const std::string& filepath)
 	{
+		if (!std::filesystem::exists(filepath)) {
+			LOG_ENGINE_WARN("Scene '{0}' doesn't exist", filepath);
+			return false;
+		}
 		YAML::Node data = YAML::LoadFile(filepath);
 		if (!data["Scene"])
 			return false;
