@@ -1,6 +1,7 @@
 #pragma once
 #include <Raven.h>
 #include <panels/SceneEntitiesPanel.h>
+#include <panels/SceneSettingsPanel.h>
 
 namespace rvn {
 	class EditorLayer : public Layer {
@@ -37,6 +38,7 @@ namespace rvn {
 		glm::vec2 _viewportSize = { 0.0f, 0.0f };
 
 		SceneEntitiesPanel _sceneEntitiesPanel;
+		SceneSettingsPanel _sceneSettingsPanel;
 
 		CircularBuffer<float> _frametimes;
 		float _frametimesArray[100];

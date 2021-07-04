@@ -3,15 +3,15 @@
 #include <fstream>
 #include <Raven_Core/utility/Split.h>
 #include <Raven_Core/datatypes/RavenUniqueID.h>
-#include <filesystem>
 
 namespace rvn {
-	std::unordered_map<std::uint64_t, std::string> IdLookup::_lookup = std::unordered_map<std::uint64_t, std::string>();
-	std::string IdLookup::_base = "";
+	std::unordered_map<std::uint64_t, std::filesystem::path> IdLookup::_lookup = std::unordered_map<std::uint64_t, std::filesystem::path>();
+	std::filesystem::path IdLookup::_base = "";
+
 	void IdLookup::loadLookup(const std::string& base)
 	{
-		_base = base + "/";
-		std::ifstream in(base + "/assets");
+		_base = base;
+		std::ifstream in(base / std::filesystem::path("assets"));
 		if (in) {
 			std::string line;
 			std::vector<std::string> split;
@@ -31,12 +31,12 @@ namespace rvn {
 	void IdLookup::saveLookup()
 	{
 		for (auto& entry : _lookup) {
-			if (!std::filesystem::exists(_base + entry.second)) _lookup.erase(entry.first);
+			if (!std::filesystem::exists(_base / entry.second)) _lookup.erase(entry.first);
 		}
-		std::ofstream out(_base + "assets");
+		std::ofstream out(_base / std::filesystem::path("assets"));
 		if (out) {
 			for (auto& entry : _lookup) {
-				out << entry.first << ":" << entry.second << std::endl;
+				out << entry.first << ":" << entry.second.string() << std::endl;
 			}
 		}
 		else {
@@ -45,12 +45,12 @@ namespace rvn {
 	}
 	std::uint64_t IdLookup::getID(const std::string& path)
 	{
-		std::string& base = _base;
-		auto it = std::find_if(_lookup.begin(), _lookup.end(), [&, base](std::pair<std::uint64_t, std::string>&& p) {
-			return std::filesystem::path(p.second) == std::filesystem::relative(std::filesystem::path(path), std::filesystem::absolute(std::filesystem::path(base)));
+		std::filesystem::path& base = _base;
+		auto it = std::find_if(_lookup.begin(), _lookup.end(), [&, base](std::pair<std::uint64_t, std::filesystem::path>&& p) {
+			return p.second == std::filesystem::relative(path, std::filesystem::absolute(base));
 			});
 		if (it == _lookup.end()) {
-			if (std::filesystem::exists(std::filesystem::path(_base) / std::filesystem::path(path))) {
+			if (std::filesystem::exists(_base / path)) {
 				std::uint64_t id = RUID::generateRUID();
 				_lookup[id] = std::filesystem::relative(path, _base).string();
 				return id;
@@ -63,6 +63,10 @@ namespace rvn {
 	}
 	std::string IdLookup::getPath(std::uint64_t id)
 	{
-		return _base + _lookup.at(id);
+#ifdef DEBUG
+		if (_lookup.find(id) == _lookup.end()) 
+			return "ID missing!";
+#endif 
+		return (_base / _lookup.at(id)).string();
 	}
 }

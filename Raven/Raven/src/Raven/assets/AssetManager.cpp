@@ -26,7 +26,12 @@ namespace rvn {
 				return sp;
 			}
 			else {
-				ASSERT(false, "Couldn't open file");
+				// Set white texture instead
+				auto sp = s_textureCache[id].lock();
+				if (!sp) s_textureCache[id] = sp = Texture2D::create(1, 1);
+				std::uint32_t whiteData = 0xFFFFFFFF;
+				sp->setData(&whiteData, 4);
+				return sp;
 			}
 		}
 		return ref<Texture2D>();

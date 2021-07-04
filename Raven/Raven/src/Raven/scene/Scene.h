@@ -11,6 +11,7 @@ namespace rvn {
 	class Scene {
 		friend class Entity;
 		friend class SceneEntitiesPanel;
+		friend class SceneSettingsPanel;
 		friend class SceneSerializer;
 		friend class EditorLayer;
 	public:

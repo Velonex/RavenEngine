@@ -6,21 +6,18 @@
 
 namespace rvn {
 
-	struct SpriteRendererComponent;
-
-	class SceneEntitiesPanel {
+	class SceneSettingsPanel {
 	public:
-		SceneEntitiesPanel() = default;
-		SceneEntitiesPanel(const ref<Scene>& scene);
+		SceneSettingsPanel() = default;
+		SceneSettingsPanel(const ref<Scene>& scene);
 
 		void setContext(const ref<Scene>& scene);
 
 		void onImGuiRender();
 	private:
-		void drawEntityNode(Entity entity);
-		void drawPropertiesPanel(Entity entity);
+		void drawSceneSettings();
 	private:
 		ref<Scene> _context;
-		Entity _selectionContext;
 	};
+
 }

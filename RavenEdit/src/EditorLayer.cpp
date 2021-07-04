@@ -66,6 +66,7 @@ namespace rvn {
         _activeScene = createRef<Scene>();
 
         _sceneEntitiesPanel.setContext(_activeScene);
+        _sceneSettingsPanel.setContext(_activeScene);
     }
 
     void EditorLayer::onDetach()
@@ -187,6 +188,7 @@ namespace rvn {
         }
         
         _sceneEntitiesPanel.onImGuiRender();
+        _sceneSettingsPanel.onImGuiRender();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
         
@@ -242,6 +244,7 @@ namespace rvn {
         _activeScene = createRef<Scene>();
         _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
         _sceneEntitiesPanel.setContext(_activeScene);
+        _sceneSettingsPanel.setContext(_activeScene);
     }
 
     void EditorLayer::openScene()
