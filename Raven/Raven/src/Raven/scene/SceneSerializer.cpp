@@ -140,11 +140,15 @@ namespace rvn {
 		out << YAML::Key << "Scene" << YAML::Value << scene->getName();
 		out << YAML::Key << "ClearColor" << YAML::Value << scene->getClearColor();
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
+		std::vector<Entity> entities;
+		entities.reserve(scene->_registry.alive());
 		scene->_registry.each([&](auto entityID) {
 			Entity entity(entityID, scene.get());
 			if (!entity) return;
-			serializeEntity(out, entity);
-		});
+			entities.push_back(entity);
+			});
+		for (auto it = entities.rbegin(); it != entities.rend(); ++it)
+			serializeEntity(out, (*it));
 		out << YAML::EndSeq;
 		out << YAML::EndMap;
 
@@ -250,11 +254,15 @@ namespace rvn {
 		// Entities
 		std::uint64_t entityCount = (std::uint64_t)scene->_registry.alive();
 		out.write(Converter::toBytes(entityCount).chars, sizeof(std::uint64_t));
+		std::vector<Entity> entities;
+		entities.reserve(scene->_registry.alive());
 		scene->_registry.each([&](auto entityID) {
 			Entity entity(entityID, scene.get());
 			if (!entity) return;
-			serializeEntityRuntime(out, entity);
-		});
+			entities.push_back(entity);
+			});
+		for (auto it = entities.rbegin(); it != entities.rend(); ++it)
+			serializeEntityRuntime(out, (*it));
 	}
 	bool SceneSerializer::deserialize(const ref<Scene>& scene, const std::string& filepath)
 	{
