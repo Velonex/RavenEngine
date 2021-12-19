@@ -11,6 +11,9 @@ namespace rvn {
 		virtual void setClearColor(const glm::vec4& color) override;
 		virtual void clear() override;
 
+		virtual void enableDepthTest() override;
+		virtual void disableDepthTest() override;
+
 		virtual void draw(const ref<VertexArray> vertexArray, std::uint32_t count) override;
 
 		virtual void setViewport(std::uint32_t x, std::uint32_t y, std::uint32_t width, std::uint32_t height) override;

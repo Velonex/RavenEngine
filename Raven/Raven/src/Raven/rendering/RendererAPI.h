@@ -19,6 +19,9 @@ namespace rvn {
 		virtual void setClearColor(const glm::vec4& color) = 0;
 		virtual void clear() = 0;
 
+		virtual void enableDepthTest() = 0;
+		virtual void disableDepthTest() = 0;
+
 		virtual void draw(const ref<VertexArray> vertexArray, std::uint32_t count) = 0;
 
 		virtual void setViewport(std::uint32_t x, std::uint32_t y, std::uint32_t width, std::uint32_t height) = 0;

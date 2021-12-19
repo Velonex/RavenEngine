@@ -30,8 +30,11 @@ namespace rvn {
 	}
 	void IdLookup::saveLookup()
 	{
-		for (auto& entry : _lookup) {
-			if (!std::filesystem::exists(_base / entry.second)) _lookup.erase(entry.first);
+		for (auto it = _lookup.begin(); it != _lookup.end();) {
+			if (!std::filesystem::exists(_base / (*it).second))
+				it = _lookup.erase(it);
+			else
+				it++;
 		}
 		std::ofstream out(_base / std::filesystem::path("assets"));
 		if (out) {

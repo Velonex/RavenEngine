@@ -30,6 +30,14 @@ namespace rvn {
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
+	void OpenGLRendererAPI::enableDepthTest()
+	{
+		glDepthFunc(GL_LESS);
+	}
+	void OpenGLRendererAPI::disableDepthTest()
+	{
+		glDepthFunc(GL_ALWAYS);
+	}
 	void OpenGLRendererAPI::draw(const ref<VertexArray> vertexArray, std::uint32_t indexCount)
 	{
 		std::uint32_t count = indexCount ? indexCount : vertexArray->getIndexBuffer()->getCount();

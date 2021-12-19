@@ -81,10 +81,6 @@ namespace rvn {
             _cameraController.onResize(_viewportSize.x, _viewportSize.y);
         
             _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
-            if (firstTime) {
-                SceneSerializer::deserialize(_activeScene, "assets/scenes/welcome.rsc");
-                firstTime = false;
-            }
         }
 
         //if(_viewportFocused)
