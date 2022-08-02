@@ -11,6 +11,7 @@ namespace rvn {
 		glm::vec2 texCoord;
 		float texIndex;
 		float tilingFactor;
+		std::uint32_t entityID;
 	};
 
 	struct Renderer2DData {
@@ -56,6 +57,7 @@ namespace rvn {
 			{ ShaderDataType::Float2, "a_TexCoords" },
 			{ ShaderDataType::Float, "a_TexIndex" },
 			{ ShaderDataType::Float, "a_TilingFactor" },
+			{ ShaderDataType::Uint, "a_EntityID" }
 			});
 		s_data.vertexArray->addVertexBuffer(s_data.vertexBuffer);
 
@@ -93,11 +95,13 @@ layout(location = 1) in vec4  a_TintColor;
 layout(location = 2) in vec2  a_TexCoords;
 layout(location = 3) in float a_TexIndex;
 layout(location = 4) in float a_TilingFactor;
+layout(location = 5) in uint a_EntityID;
 
 out vec4  v_Color;
 out vec2  v_TexCoord;
 out float v_TilingFactor;
 out flat float v_TexIndex;
+out flat uint v_EntityID;
 
 uniform mat4 u_ViewProjectionMatrix;
 
@@ -107,6 +111,7 @@ void main()
 	v_TexCoord = a_TexCoords;
 	v_TilingFactor = a_TilingFactor;
 	v_TexIndex = a_TexIndex;
+	v_EntityID = a_EntityID;
 	gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
 }
 )";
@@ -116,11 +121,13 @@ void main()
 #version 450 core
 
 layout(location = 0) out vec4 color;
+layout(location = 1) out uint entityID;
 
 in vec4 v_Color;
 in vec2 v_TexCoord;
 in float v_TilingFactor;
 in flat float v_TexIndex;
+in flat uint v_EntityID;
 
 uniform sampler2D u_Textures[16];
 
@@ -161,6 +168,7 @@ void main()
 		//case 30: color = col *= texture(u_Textures[30], v_TexCoord * v_TilingFactor); break;
 		//case 31: color = col *= texture(u_Textures[31], v_TexCoord * v_TilingFactor); break;
 	}
+	entityID = v_EntityID;
 }
 )";
 
@@ -312,7 +320,7 @@ void main()
 
 		drawQuad(transform, subtexture, color, tilingFactor);
 	}
-	void Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color)
+	void Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color, std::uint32_t entityID)
 	{
 		if (s_data.quadIndexCount >= s_data.maxIndices)
 			nextBatch();
@@ -324,11 +332,12 @@ void main()
 			s_data.quadVertexBufferPtr->texCoord = s_data.quadTexCoords[i];
 			s_data.quadVertexBufferPtr->texIndex = 0.0f;
 			s_data.quadVertexBufferPtr->tilingFactor = 1.0f;
+			s_data.quadVertexBufferPtr->entityID = entityID;
 			s_data.quadVertexBufferPtr++;
 		}
 		s_data.quadIndexCount += 6;
 	}
-	void Renderer2D::drawQuad(const glm::mat4& transform, const ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor)
+	void Renderer2D::drawQuad(const glm::mat4& transform, const ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor, std::uint32_t entityID)
 	{
 		if (s_data.quadIndexCount >= s_data.maxIndices)
 			nextBatch();
@@ -353,6 +362,7 @@ void main()
 			s_data.quadVertexBufferPtr->texCoord = s_data.quadTexCoords[i];
 			s_data.quadVertexBufferPtr->texIndex = (float)texIndex;
 			s_data.quadVertexBufferPtr->tilingFactor = tilingFactor;
+			s_data.quadVertexBufferPtr->entityID = entityID;
 			s_data.quadVertexBufferPtr++;
 		}
 		s_data.quadIndexCount += 6;
@@ -382,6 +392,7 @@ void main()
 			s_data.quadVertexBufferPtr->texCoord = subtexture->getTexCoords()[i];
 			s_data.quadVertexBufferPtr->texIndex = (float)texIndex;
 			s_data.quadVertexBufferPtr->tilingFactor = tilingFactor;
+			s_data.quadVertexBufferPtr->entityID = -1;
 			s_data.quadVertexBufferPtr++;
 		}
 		s_data.quadIndexCount += 6;

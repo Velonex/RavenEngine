@@ -23,7 +23,7 @@ namespace rvn {
 		void blockEvents(bool block) { _blockEvents = block; }
 	private:
 		Window* _window;
-		bool _blockEvents = true;
+		bool _blockEvents = false;
 	};
 
 }

@@ -17,6 +17,7 @@ namespace rvn {
 		virtual void onImGuiRender() override;
 	private:
 		void onKeyPressed(KeyPressedEvent* e);
+		void onMouseLeft();
 
 		void newScene();
 		void openScene();
@@ -36,11 +37,15 @@ namespace rvn {
 		bool _viewportFocused = false, _viewportHovered = false;
 
 		glm::vec2 _viewportSize = { 0.0f, 0.0f };
+		glm::vec<2, int> _mousePosInViewport;
+		std::uint32_t _hoveredID = -1;
 
 		SceneEntitiesPanel _sceneEntitiesPanel;
 		SceneSettingsPanel _sceneSettingsPanel;
 
 		CircularBuffer<float> _frametimes;
 		float _frametimesArray[100];
+
+		bool _mouseDownLast = false;
 	};
 }

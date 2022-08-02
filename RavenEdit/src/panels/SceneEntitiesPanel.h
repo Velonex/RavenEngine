@@ -14,6 +14,7 @@ namespace rvn {
 		SceneEntitiesPanel(const ref<Scene>& scene);
 
 		void setContext(const ref<Scene>& scene);
+		void setSelectedEntity(Entity entity);
 
 		void onImGuiRender();
 	private:

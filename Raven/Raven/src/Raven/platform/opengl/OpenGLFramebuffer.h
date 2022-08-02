@@ -17,10 +17,18 @@ namespace rvn {
 
 		virtual const FramebufferSpecification& getSpecification() const override;
 
-		virtual std::uint32_t getColorAttachmentID() const override { return _colorAttachment; }
+		virtual std::uint32_t getColorAttachmentID(std::uint32_t index) const override;
+		virtual std::uint32_t pixelAt(std::uint32_t index, int x, int y) override;
+
+		virtual void clearAttachment(std::uint32_t index, std::uint32_t value) override;
 	private:
 		std::uint32_t _id = 0;
-		std::uint32_t _colorAttachment = 0, _depthAttachment = 0; // Color / depth part of framebuffer
 		FramebufferSpecification _spec;
+
+		std::vector<AttachmentSpecification> _colorSpecs;
+		std::vector<AttachmentSpecification> _depthSpecs;
+
+		std::vector<uint32_t> _colorAttachments;
+		std::vector<uint32_t> _depthAttachments;
 	};
 }

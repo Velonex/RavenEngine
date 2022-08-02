@@ -29,6 +29,10 @@ namespace rvn {
 	{
 		destroyEntityImpl(entity);
 	}
+	Entity Scene::getEntityByID(std::uint32_t id)
+	{
+		return Entity((entt::entity)id, this);
+	}
 	void Scene::destroyEntityImpl(entt::entity handle)
 	{
 		if (_registry.has<NativeScriptComponent>(handle)) {
@@ -69,6 +73,7 @@ namespace rvn {
 			Renderer2D::beginScene(*mainCam, cameraTransform);
 			auto view = _registry.view<TransformComponent, SpriteRendererComponent>();
 			for (auto entity : view) {
+
 				TransformComponent transform = view.get<TransformComponent>(entity);
 				SpriteRendererComponent& spritecomp = view.get<SpriteRendererComponent>(entity);
 
@@ -79,10 +84,10 @@ namespace rvn {
 							ASSERT(false, "Invalid ID");
 						}
 					}
-					Renderer2D::drawQuad(transform.getTransform(), spritecomp.texture, spritecomp.color, spritecomp.tilingFactor);
+					Renderer2D::drawQuad(transform.getTransform(), spritecomp.texture, spritecomp.color, spritecomp.tilingFactor, (std::uint32_t)entity);
 				}
 				else {
-					Renderer2D::drawQuad(transform.getTransform(), spritecomp.color);
+					Renderer2D::drawQuad(transform.getTransform(), spritecomp.color, (std::uint32_t)entity);
 				}
 			}
 			Renderer2D::endScene();

@@ -27,6 +27,11 @@ namespace rvn {
 		_selectionContext = {};
 	}
 
+	void SceneEntitiesPanel::setSelectedEntity(Entity entity)
+	{
+		_selectionContext = entity;
+	}
+
 	void SceneEntitiesPanel::onImGuiRender()
 	{
 		ImGui::Begin("Scene Entities");

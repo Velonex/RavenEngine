@@ -17,8 +17,13 @@ namespace rvn {
         FramebufferSpecification fbSpec;
         fbSpec.width = 1280;
         fbSpec.height = 720;
-        _framebuffer = Framebuffer::create(fbSpec);
-
+		AttachmentSpecification defaultColor;
+		defaultColor.layout = AttachmentLayout::RGBA8;
+		fbSpec.attachments.push_back(defaultColor);
+		AttachmentSpecification id;
+		id.layout = AttachmentLayout::RED_UINT;
+		fbSpec.attachments.push_back(id);
+		_framebuffer = Framebuffer::create(fbSpec);
 #if 0
         _testEntity = _activeScene->createEntity("Test");
         _testEntity.addComponent<SpriteRendererComponent>(glm::vec4( 1.0f, 1.f, 0.f, 1.0f ));
@@ -83,6 +88,8 @@ namespace rvn {
             _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
         }
 
+
+
         //if(_viewportFocused)
         //    _cameraController.onUpdate(ts);
 
@@ -91,13 +98,30 @@ namespace rvn {
         RenderCommand::setClearColor(_activeScene->getClearColor());
         RenderCommand::clear();
 
+		// Clear id attachment of framebuffer after it is cleared with the clear color to avoid the clear color being an entity id
+		_framebuffer->clearAttachment(1, -1);
+
         //rvn::Renderer2D::beginScene(_cameraController.getCamera());
         //rvn::Renderer2D::drawQuad({ 0.0f, 0.0f }, { 0.5f, 0.5f }, { 0.2f, 0.8f, 0.3f, 1.0f });
         //rvn::Renderer2D::drawQuad({ -1.0f, 0.0f, -0.1f }, { 0.8f, 0.8f }, _chess, { 1.0f, 0.0f, 0.0f, 1.0f }, 1.0f);
         //rvn::Renderer2D::endScene();
 
+
         _activeScene->onUpdate(ts);
+
+		if (_viewportHovered)
+			_hoveredID = _framebuffer->pixelAt(1, _mousePosInViewport.x, _mousePosInViewport.y);
+		else
+			_hoveredID = -1;
         
+		// A click on the viewport is blocked by ImGui because the viewport window is focused, therefore you would have to click on an entity twice to select it
+		// Here's a workaround that lets you select an entity on the first click
+		if (Input::isMousePressed(Mouse::Button0)) {
+			if (!_mouseDownLast) onMouseLeft();
+			_mouseDownLast = true;
+		}
+		else _mouseDownLast = false;
+
         _framebuffer->unbind();
         
         _frametimes.push_back(ts.getSeconds());
@@ -194,21 +218,34 @@ namespace rvn {
         _viewportHovered = ImGui::IsWindowHovered();
         Application::get().getImGuiLayer()->blockEvents(!_viewportFocused || !_viewportHovered);
 
+		if (_viewportHovered) {
+			auto [mouseX, mouseY] = ImGui::GetMousePos();
+			auto [viewportX, viewportY] = ImGui::GetCursorScreenPos();
+			int posX = (int)mouseX - (int)viewportX;
+			int posY = (int)mouseY - (int)viewportY;
+			_mousePosInViewport.x = posX;
+			_mousePosInViewport.y = posY;
+		}
+
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         _viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
         std::uint64_t texID = _framebuffer->getColorAttachmentID();
         ImGui::Image(reinterpret_cast<void*>(texID), ImVec2{ _viewportSize.x, _viewportSize.y }, { 0, 1 }, { 1, 0 });
         ImGui::End();
+		ImGui::PopStyleVar();
 
         // Debug Info
-        ImGui::Begin("Renderer Info");
+        ImGui::Begin("Debug Info");
         ImGui::Text("Last FPS: %f", 1 / _frametimes[99]);
         _frametimes.put_to_array(_frametimesArray, 100);
         ImGui::PlotHistogram("Frametimes", _frametimesArray, 100);
-        ImGui::End();
+		ImGui::Text("Mouse position in viewport: %i, %i", _mousePosInViewport.x, _mousePosInViewport.y);
+		std::string hoveredEntityName = "None";
+		if (_hoveredID != -1) 
+			hoveredEntityName = _activeScene->getEntityByID(_hoveredID).getComponent<TagComponent>().tag;
+		ImGui::Text("Hovered entity: %s", hoveredEntityName.c_str());
+		ImGui::End();
 
-
-        ImGui::PopStyleVar();
         ImGui::End();
     }
 
@@ -234,6 +271,14 @@ namespace rvn {
         }
         }
     }
+
+	void EditorLayer::onMouseLeft()
+	{
+		// Select entity if hovered
+		if (_hoveredID != -1) {
+			_sceneEntitiesPanel.setSelectedEntity(_activeScene->getEntityByID(_hoveredID));
+		}
+	}
 
     void EditorLayer::newScene()
     {

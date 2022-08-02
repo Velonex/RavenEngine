@@ -17,6 +17,7 @@ namespace rvn {
 		case ShaderDataType::Int2:		return GL_INT;
 		case ShaderDataType::Int3:		return GL_INT;
 		case ShaderDataType::Int4:		return GL_INT;
+		case ShaderDataType::Uint:		return GL_UNSIGNED_INT;
 		}
 		ASSERT(false, "Unknown ShaderDataType");
 		return 0;
@@ -58,10 +59,6 @@ namespace rvn {
 			case ShaderDataType::Float2:
 			case ShaderDataType::Float3:
 			case ShaderDataType::Float4:
-			case ShaderDataType::Int:
-			case ShaderDataType::Int2:
-			case ShaderDataType::Int3:
-			case ShaderDataType::Int4:
 			{
 				glEnableVertexAttribArray(index);
 				glVertexAttribPointer(
@@ -69,6 +66,22 @@ namespace rvn {
 					element.getComponentCount(),
 					shaderDataTypeToGLBaseType(element.type),
 					element.normalized,
+					layout.getStride(),
+					(const void*)element.offset);
+				index++;
+				break;
+			}
+			case ShaderDataType::Int:
+			case ShaderDataType::Int2:
+			case ShaderDataType::Int3:
+			case ShaderDataType::Int4:
+			case ShaderDataType::Uint:
+			{
+				glEnableVertexAttribArray(index);
+				glVertexAttribIPointer(
+					index,
+					element.getComponentCount(),
+					shaderDataTypeToGLBaseType(element.type),
 					layout.getStride(),
 					(const void*)element.offset);
 				index++;

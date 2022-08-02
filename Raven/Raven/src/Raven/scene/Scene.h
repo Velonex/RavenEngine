@@ -21,6 +21,8 @@ namespace rvn {
 		Entity createEntity(const std::string& name = std::string());
 		void destroyEntity(Entity entity);
 
+		Entity getEntityByID(std::uint32_t id);
+
 		void onUpdate(Timestep ts);
 		void onViewportResize(std::uint32_t width, std::uint32_t height);
 
