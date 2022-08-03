@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <filesystem>
 
 namespace rvn {
 
@@ -13,7 +14,7 @@ namespace rvn {
 		virtual const std::string& getName() const = 0;
 
 		static ref<Shader> create(const std::string& vertexShaderSource, const std::string& fragmentShaderSource, const std::string& name);
-		//TODO: Create Shader from file
+		static ref<Shader> create(const std::filesystem::path& path);
 		
 		virtual void setInt(const std::string& name, int value) const = 0;
 		virtual void setIntArray(const std::string& name, int* values, uint32_t count) const = 0;

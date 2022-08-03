@@ -12,6 +12,15 @@ namespace rvn {
 		ASSERT(false, "Unsupported RendererAPI");
 		return nullptr;
 	}
+	ref<Shader> Shader::create(const std::filesystem::path& path)
+	{
+		switch (RendererAPI::getRendererApi()) {
+		case RendererAPI::API::OpenGL:
+			return createRef<OpenGLShader>(path);
+		}
+		ASSERT(false, "Unsupported RendererAPI");
+		return nullptr;
+	}
 	void ShaderLib::add(ref<Shader> shader)
 	{
 		add(shader->getName(), shader);

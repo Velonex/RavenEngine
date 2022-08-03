@@ -6,6 +6,7 @@ namespace rvn {
 	class OpenGLShader : public Shader {
 	public:
 		OpenGLShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource, const std::string& name);
+		OpenGLShader(const std::filesystem::path& path);
 		virtual ~OpenGLShader();
 
 		virtual void bind() const override;
@@ -35,7 +36,7 @@ namespace rvn {
 		virtual void setMat3(const std::string& name, const glm::mat3& value) const override;
 		virtual void setMat4(const std::string& name, const glm::mat4& value) const override;
 	private:
-		void compileShaders(std::unordered_map<std::string, std::string> shaderSources);
+		void compileShaders(const std::unordered_map<std::string, std::string>& shaderSources);
 	private:
 		std::uint32_t _id = 0;
 		std::string _name;

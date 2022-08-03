@@ -2,6 +2,8 @@
 #include "OpenGLShader.h"
 #include <glad/glad.h>
 #include <gtc/type_ptr.hpp>
+#include <Raven/assets/Filesystem.h>
+#include <fstream>
 
 namespace rvn {
 	OpenGLShader::OpenGLShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource, const std::string& name)
@@ -11,6 +13,28 @@ namespace rvn {
 		sources["vert"] = vertexShaderSource;
 		sources["frag"] = fragmentShaderSource;
 		compileShaders(sources);
+	}
+	OpenGLShader::OpenGLShader(const std::filesystem::path& path)
+	{
+		_name = path.filename().string();
+		ASSERT(Filesystem::exists(path.string()), "Shader at path '{}' doesn't exist", path.string());
+		std::ifstream in(path, std::ios::ate);
+		if (in) {
+			std::size_t length = in.tellg(); in.seekg(0);
+			std::string code(length, 0);
+			in.read(&code[0], length);
+			auto parts = util::split(code, "#shader ");
+			std::unordered_map<std::string, std::string> sources;
+			for (const auto& part : parts) {
+				if (part.find_first_of("frag") == 0) sources["frag"] = part.substr(4);
+				else if (part.find_first_of("vert") == 0) sources["vert"] = part.substr(4);
+			}
+			if (sources.find("frag") != sources.end() && sources.find("vert") != sources.end()) {
+				compileShaders(sources);
+			}
+			else ASSERT(false, "Shader at path '{}' needs to have a fragment and a vertex shader", path.string());
+		}
+		else ASSERT(false, "Couldn't open Shader at path '{}'", path.string());
 	}
 	OpenGLShader::~OpenGLShader()
 	{
@@ -106,7 +130,7 @@ namespace rvn {
 		ASSERT(false, "Unknown/Unsupported shader type");
 		return 0;
 	}
-	void OpenGLShader::compileShaders(std::unordered_map<std::string, std::string> shaderSources)
+	void OpenGLShader::compileShaders(const std::unordered_map<std::string, std::string>& shaderSources)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		for (auto s : shaderSources) {
