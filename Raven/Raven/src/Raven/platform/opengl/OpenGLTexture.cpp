@@ -24,7 +24,7 @@ namespace rvn {
 		_id = 0;
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
-		stbi_uc* data = stbi_load_from_memory((unsigned char*)file->c_str(), file->length(), &width, &height, &channels, 0);
+		stbi_uc* data = stbi_load_from_memory((unsigned char*)file->c_str(), (int)file->length(), &width, &height, &channels, 0);
 		ASSERT(data, "Failed to load image");
 		_width = width;
 		_height = height;

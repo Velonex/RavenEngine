@@ -12,6 +12,7 @@ namespace rvn {
 		else if (layout == AttachmentLayout::RED_UINT) return GL_R32UI;
 		else if (layout == AttachmentLayout::DEPTH24STENCIL8) return GL_DEPTH24_STENCIL8;
 		ASSERT(false, "Unknown attachment layout");
+		return 0;
 	}
 	static const GLuint attachmentLayoutToFormat(AttachmentLayout layout) {
 		if (layout == AttachmentLayout::RGBA8) return GL_RGBA;
@@ -19,6 +20,7 @@ namespace rvn {
 		else if (layout == AttachmentLayout::RED_UINT) return GL_RED_INTEGER;
 		else if (layout == AttachmentLayout::DEPTH24STENCIL8) return GL_DEPTH_STENCIL;
 		ASSERT(false, "Unknown attachment layout");
+		return 0;
 	}
 
 
@@ -46,15 +48,15 @@ namespace rvn {
 	OpenGLFramebuffer::~OpenGLFramebuffer()
 	{
 		glDeleteFramebuffers(1, &_id);
-		glDeleteTextures(_colorAttachments.size(), _colorAttachments.data());
-		glDeleteTextures(_depthAttachments.size(), _depthAttachments.data());
+		glDeleteTextures((GLsizei)_colorAttachments.size(), _colorAttachments.data());
+		glDeleteTextures((GLsizei)_depthAttachments.size(), _depthAttachments.data());
 	}
 	void OpenGLFramebuffer::invalidate()
 	{
 		if (_id) {
 			glDeleteFramebuffers(1, &_id);
-			glDeleteTextures(_colorAttachments.size(), _colorAttachments.data());
-			glDeleteTextures(_depthAttachments.size(), _depthAttachments.data());
+			glDeleteTextures((GLsizei)_colorAttachments.size(), _colorAttachments.data());
+			glDeleteTextures((GLsizei)_depthAttachments.size(), _depthAttachments.data());
 		}
 
 		glCreateFramebuffers(1, &_id);
@@ -63,7 +65,7 @@ namespace rvn {
 
 		// Create color attachments
 		_colorAttachments.resize(_colorSpecs.size());
-		if(_colorSpecs.size() >= 0) glCreateTextures(GL_TEXTURE_2D, _colorSpecs.size(), &_colorAttachments[0]);
+		if(_colorSpecs.size() >= 0) glCreateTextures(GL_TEXTURE_2D, (GLsizei)_colorSpecs.size(), &_colorAttachments[0]);
 		for (int i = 0; i < _colorSpecs.size(); i++) {
 			glBindTexture(GL_TEXTURE_2D, _colorAttachments[i]);
 			glTexImage2D(
@@ -83,7 +85,7 @@ namespace rvn {
 		}
 
 		_depthAttachments.resize(_depthSpecs.size());
-		if(_depthSpecs.size() > 0) glCreateTextures(GL_TEXTURE_2D, _depthSpecs.size(), &_depthAttachments[0]);
+		if(_depthSpecs.size() > 0) glCreateTextures(GL_TEXTURE_2D, (GLsizei)_depthSpecs.size(), &_depthAttachments[0]);
 		for (int i = 0; i < _depthSpecs.size(); i++) {
 			glBindTexture(GL_TEXTURE_2D, _depthAttachments[i]);
 			glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, _spec.width, _spec.height);
@@ -92,7 +94,7 @@ namespace rvn {
 
 		ASSERT(_colorSpecs.size() < 5, "The framebuffer can only draw to 4 color attachments yet");
 		const GLenum buffers[] { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-		glDrawBuffers(_colorSpecs.size(), buffers);
+		glDrawBuffers((GLsizei)_colorSpecs.size(), buffers);
 
 		ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete");
 

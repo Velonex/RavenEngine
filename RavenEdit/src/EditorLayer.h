@@ -42,7 +42,7 @@ namespace rvn {
 		SceneSettingsPanel _sceneSettingsPanel;
 
 		CircularBuffer<float> _frametimes;
-		float _frametimesArray[100];
+		float _frametimesArray[100] = { 0 };
 
 		bool _mouseDownLast = false;
 	};
