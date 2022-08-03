@@ -24,50 +24,7 @@ namespace rvn {
 		id.layout = AttachmentLayout::RED_UINT;
 		fbSpec.attachments.push_back(id);
 		_framebuffer = Framebuffer::create(fbSpec);
-#if 0
-        _testEntity = _activeScene->createEntity("Test");
-        _testEntity.addComponent<SpriteRendererComponent>(glm::vec4( 1.0f, 1.f, 0.f, 1.0f ));
-        if (_testEntity.hasComponent<TransformComponent>()) {
-            _testEntity.getComponent<TransformComponent>().scale.x = 2.0f;
-        }
-        
-        _cameraEntity = _activeScene->createEntity("Camera");
-        auto& camController = _cameraEntity.addComponent<CameraComponent>();
-        class NotCameraController : public ScriptableEntity
-        {
-        public:
-            virtual void onCreate() override
-            {
-                if (hasComponent<TransformComponent>()) {
-                    auto& translation = getComponent<TransformComponent>().translation;
-                    translation.x = rand() % 10 - 1.0f;
-                }
-            }
-        
-            virtual void onDestroy() override
-            {
-            }
-        
-            virtual void onUpdate(Timestep ts) override
-            {
-                if (hasComponent<TransformComponent>()) {
-                    auto& translation = getComponent<TransformComponent>().translation;
-        
-                    float speed = 5.0f;
-        
-                    if (Input::isKeyPressed(Key::A))
-                        translation.x -= speed * ts;
-                    if (Input::isKeyPressed(Key::D))
-                        translation.x += speed * ts;
-                    if (Input::isKeyPressed(Key::W))
-                        translation.y += speed * ts;
-                    if (Input::isKeyPressed(Key::S))
-                        translation.y -= speed * ts;
-                }
-            }
-        };
-        _cameraEntity.addComponent<NativeScriptComponent>().bind<NotCameraController>();
-#endif
+
         _activeScene = createRef<Scene>();
 
         _sceneEntitiesPanel.setContext(_activeScene);
@@ -88,11 +45,6 @@ namespace rvn {
             _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
         }
 
-
-
-        //if(_viewportFocused)
-        //    _cameraController.onUpdate(ts);
-
         _framebuffer->bind();
         
         RenderCommand::setClearColor(_activeScene->getClearColor());
@@ -100,12 +52,6 @@ namespace rvn {
 
 		// Clear id attachment of framebuffer after it is cleared with the clear color to avoid the clear color being an entity id
 		_framebuffer->clearAttachment(1, -1);
-
-        //rvn::Renderer2D::beginScene(_cameraController.getCamera());
-        //rvn::Renderer2D::drawQuad({ 0.0f, 0.0f }, { 0.5f, 0.5f }, { 0.2f, 0.8f, 0.3f, 1.0f });
-        //rvn::Renderer2D::drawQuad({ -1.0f, 0.0f, -0.1f }, { 0.8f, 0.8f }, _chess, { 1.0f, 0.0f, 0.0f, 1.0f }, 1.0f);
-        //rvn::Renderer2D::endScene();
-
 
         _activeScene->onUpdate(ts);
 
@@ -194,9 +140,6 @@ namespace rvn {
         {
             if (ImGui::BeginMenu("File"))
             {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                //ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
                 if (ImGui::MenuItem("New Scene", "Ctrl+N")) { newScene(); }
                 if (ImGui::MenuItem("Open Scene...", "Ctrl+O")) { openScene(); }
                 if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S")) { saveSceneAs(); }

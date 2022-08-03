@@ -31,8 +31,6 @@ namespace rvn {
 		ref<Framebuffer> _framebuffer;
 
 		ref<Scene> _activeScene;
-		Entity _testEntity;
-		Entity _cameraEntity;
 
 		bool _viewportFocused = false, _viewportHovered = false;
 
