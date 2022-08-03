@@ -54,7 +54,6 @@ namespace rvn {
 		const auto& layout = vertexBuffer->getLayout();
 		for (const auto& element : layout) {
 			switch (element.type) {
-			case ShaderDataType::Bool:
 			case ShaderDataType::Float:
 			case ShaderDataType::Float2:
 			case ShaderDataType::Float3:
@@ -71,6 +70,7 @@ namespace rvn {
 				index++;
 				break;
 			}
+			case ShaderDataType::Bool:
 			case ShaderDataType::Int:
 			case ShaderDataType::Int2:
 			case ShaderDataType::Int3:
