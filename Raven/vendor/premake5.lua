@@ -1,7 +1,7 @@
 project "GLFW"
 	kind "StaticLib"
 	language "C"
-	staticruntime "off"
+	staticruntime "on"
 	
 	targetdir (raven_binprefix .. raven_outputdir .. "/%{prj.name}")
 	objdir (raven_objprefix .. raven_outputdir .. "/%{prj.name}")
@@ -51,7 +51,7 @@ project "GLFW"
 project "glad"
 	kind "StaticLib"
 	language "C"
-	staticruntime "off"
+	staticruntime "on"
 	
 	targetdir (raven_binprefix .. raven_outputdir .. "/%{prj.name}")
 	objdir (raven_objprefix .. raven_outputdir .. "/%{prj.name}")
@@ -82,7 +82,7 @@ project "ImGui"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "off"
+	staticruntime "on"
 
 	targetdir (raven_binprefix .. raven_outputdir .. "/%{prj.name}")
 	objdir (raven_objprefix .. raven_outputdir .. "/%{prj.name}")
@@ -116,8 +116,8 @@ project "yaml_cpp"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "off"
-		systemversion "latest"
+	staticruntime "on"
+	systemversion "latest"
 
 	targetdir (raven_binprefix .. raven_outputdir .. "/%{prj.name}")
 	objdir (raven_objprefix .. raven_outputdir .. "/%{prj.name}")

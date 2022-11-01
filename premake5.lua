@@ -10,7 +10,7 @@ project "Sandbox"
 	-- The language and the C++ dialect are set using these variables to guarantee compatibility with Raven
 	language (raven_language)
 	cppdialect (raven_cppdialect)
-	staticruntime "off"
+	staticruntime "on"
 	
 	-- This redefines the output paths but isn't necessary
 	objdir (raven_objprefix .. raven_outputdir .. "/%{prj.name}")
@@ -58,7 +58,7 @@ project "RavenEdit"
 	
 	language (raven_language)
 	cppdialect (raven_cppdialect)
-	staticruntime "off"
+	staticruntime "on"
 	
 	objdir (raven_objprefix .. raven_outputdir .. "/%{prj.name}")
 	targetdir (raven_binprefix .. raven_outputdir .. "/%{prj.name}")

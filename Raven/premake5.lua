@@ -61,7 +61,7 @@ project "Raven"
 	kind "StaticLib"
 	language (raven_language)
 	cppdialect (raven_cppdialect)
-	staticruntime "off"
+	staticruntime "on"
 	
 	-- The build paths might be changeable in the future
 	objdir (raven_objprefix .. raven_outputdir .. "/%{prj.name}")
@@ -116,7 +116,7 @@ project "Raven_Core"
 	kind "StaticLib"
 	language (raven_language)
 	cppdialect (raven_cppdialect)
-	staticruntime "off"
+	staticruntime "on"
 	
 	-- The build paths might be changeable in the future
 	objdir (raven_objprefix .. raven_outputdir .. "/%{prj.name}")
