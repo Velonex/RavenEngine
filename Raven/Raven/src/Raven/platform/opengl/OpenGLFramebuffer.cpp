@@ -134,7 +134,7 @@ namespace rvn {
 		ASSERT(index < _colorSpecs.size(), "Attachment index out of range");
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + index);
 		std::uint32_t data;
-		glReadPixels(x, _spec.height - y, 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &data);
+		glReadPixels(x, _spec.height - (y + 1), 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &data);
 		return data;
 	}
 	void OpenGLFramebuffer::clearAttachment(std::uint32_t index, std::uint32_t value)
