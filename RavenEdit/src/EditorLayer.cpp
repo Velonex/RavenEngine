@@ -180,8 +180,8 @@ namespace rvn {
         // Debug Info
         ImGui::Begin("Debug Info");
         ImGui::Text("Last FPS: %f", 1 / _frametimes[99]);
-        _frametimes.put_to_array(_frametimesArray, 100);
-        ImGui::PlotHistogram("Frametimes", _frametimesArray, 100);
+        ImGui::PlotLines("Frametimes", [](void* data, int idx) -> float { return ((CircularBuffer<float>*)data)->operator[](idx); }, (void*)&_frametimes,
+            100, 0, 0, 0.0f);
 		ImGui::Text("Mouse position in viewport: %i, %i", _mousePosInViewport.x, _mousePosInViewport.y);
 		std::string hoveredEntityName = "None";
 		if (_hoveredID != -1) 
