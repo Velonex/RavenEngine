@@ -132,6 +132,7 @@ namespace rvn {
 	std::uint32_t OpenGLFramebuffer::pixelAt(std::uint32_t index, int x, int y)
 	{
 		ASSERT(index < _colorSpecs.size(), "Attachment index out of range");
+		if (x >= _spec.width || y >= _spec.height || x < 0 || y < 0) return -1;
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + index);
 		std::uint32_t data;
 		glReadPixels(x, _spec.height - (y + 1), 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &data);
