@@ -320,6 +320,7 @@ namespace rvn {
 				auto cameraComponent = entity["CameraComponent"];
 				if (cameraComponent) {
 					auto& cc = curEntity.addComponent<CameraComponent>();
+					cc.camera.setViewportSize(16, 9);
 					auto camera = cameraComponent["Camera"];
 					cc.camera.setOrthographic(camera["OrthographicSize"].as<float>(), camera["OrthographicNear"].as<float>(), camera["OrthographicFar"].as<float>());
 					cc.camera.setPerspective(camera["PerspectiveFOV"].as<float>(), camera["PerspectiveNear"].as<float>(), camera["PerspectiveFar"].as<float>());
