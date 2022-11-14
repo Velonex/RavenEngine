@@ -15,6 +15,7 @@ namespace rvn {
 
 		void setContext(const ref<Scene>& scene);
 		void setSelectedEntity(Entity entity);
+		Entity getSelectedEntity() const;
 
 		void onImGuiRender();
 	private:

@@ -3,6 +3,7 @@
 #include <Raven/application/Timestep.h>
 #include <Raven/rendering/OrthographicCamera.h>
 #include <string>
+#include <Raven/scene/SceneCamera.h>
 
 namespace rvn {
 
@@ -23,6 +24,9 @@ namespace rvn {
 
 		Entity getEntityByID(std::uint32_t id);
 
+		const SceneCamera* getMainCamera() const;
+		glm::mat4 getMainCameraTransform() const;
+
 		void onUpdate(Timestep ts);
 		void onViewportResize(std::uint32_t width, std::uint32_t height);
 
@@ -40,5 +44,8 @@ namespace rvn {
 	private:
 		std::string _name = "";
 		glm::vec4 _clearColor = { 0.7f, 0.7f, 0.7f, 1.0f };
+	private:
+		SceneCamera* _mainCam = nullptr;
+		glm::mat4 _mainCamTransform;
 	};
 }

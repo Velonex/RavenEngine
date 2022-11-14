@@ -144,12 +144,17 @@ namespace rvn {
 		std::uint32_t dataSize = (std::uint32_t)((std::uint8_t*)s_data.quadVertexBufferPtr - (std::uint8_t*)s_data.quadVertexBufferBase);
 		s_data.vertexBuffer->setData(s_data.quadVertexBufferBase, dataSize);
 
+		s_data.vertexArray->bind();
+
 		// Bind textures
-		s_data.shader->bind();
 		for (std::uint32_t i = 0; i < s_data.textureIndex; i++)
 			s_data.textures[i]->bind(i);
 
+		s_data.shader->bind();
 		RenderCommand::draw(s_data.vertexArray, s_data.quadIndexCount);
+		s_data.shader->unbind();
+
+		s_data.vertexArray->unbind();
 	}
 
 	void Renderer2D::endScene()

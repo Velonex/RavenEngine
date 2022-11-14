@@ -33,6 +33,14 @@ namespace rvn {
 	{
 		return Entity((entt::entity)id, this);
 	}
+	const SceneCamera* Scene::getMainCamera() const
+	{
+		return _mainCam;
+	}
+	glm::mat4 Scene::getMainCameraTransform() const
+	{
+		return _mainCamTransform;
+	}
 	void Scene::destroyEntityImpl(entt::entity handle)
 	{
 		if (_registry.has<NativeScriptComponent>(handle)) {
@@ -55,22 +63,21 @@ namespace rvn {
 			});
 		}
 
-		Camera* mainCam = nullptr;
-		glm::mat4 cameraTransform;
+		_mainCam = nullptr;
 		{
 			auto view = _registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view) {
 				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
 				if (camera.primary) {
-					mainCam = &camera.camera;
-					cameraTransform = transform.getTransform();
+					_mainCam = &camera.camera;
+					_mainCamTransform = transform.getTransform();
 					break;
 				}
 			}
 		}
-		if (mainCam) {
+		if (_mainCam) {
 			// Render Quads
-			Renderer2D::beginScene(*mainCam, cameraTransform);
+			Renderer2D::beginScene(*_mainCam, _mainCamTransform);
 			auto view = _registry.view<TransformComponent, SpriteRendererComponent>();
 			for (auto entity : view) {
 
