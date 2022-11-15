@@ -23,11 +23,8 @@ namespace rvn {
 		void openScene();
 		void saveSceneAs();
 	private:
-		OrthographicCameraController _cameraController;
-
 		bool firstTime = true;
 
-		ref<Texture2D> _chess;
 		ref<Framebuffer> _framebuffer;
 
 		ref<Scene> _activeScene;

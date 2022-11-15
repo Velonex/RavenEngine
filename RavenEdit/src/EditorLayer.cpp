@@ -7,7 +7,7 @@
 namespace rvn {
 
     EditorLayer::EditorLayer()
-        : Layer("Editor Layer"), _cameraController(1280.0f / 720.0f, true), _frametimes(100)
+        : Layer("Editor Layer"), _frametimes(100)
     {
         for (int i = 0; i < _frametimes.capacity(); i++)
             _frametimes.push_back(0.0f);
@@ -40,7 +40,6 @@ namespace rvn {
         if (auto spec = _framebuffer->getSpecification(); _viewportSize.x > 0.0f && _viewportSize.y > 0.0f &&
             (spec.width != _viewportSize.x || spec.height != _viewportSize.y)) {
             _framebuffer->resize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
-            _cameraController.onResize(_viewportSize.x, _viewportSize.y);
         
             _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
         }
