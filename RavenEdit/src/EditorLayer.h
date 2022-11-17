@@ -2,6 +2,7 @@
 #include <Raven.h>
 #include <panels/SceneEntitiesPanel.h>
 #include <panels/SceneSettingsPanel.h>
+#include "IconRenderer.h"
 
 namespace rvn {
 	class EditorLayer : public Layer {
@@ -18,6 +19,18 @@ namespace rvn {
 	private:
 		void onKeyPressed(KeyPressedEvent* e);
 		void onMouseLeft();
+
+		// ImGui
+		void beginDockspace();
+
+		void drawMenuBar();
+
+		// Viewport
+		void drawViewport();
+		void drawIcons();
+
+		void endDockspace();
+
 
 		void newScene();
 		void openScene();
@@ -37,6 +50,7 @@ namespace rvn {
 
 		SceneEntitiesPanel _sceneEntitiesPanel;
 		SceneSettingsPanel _sceneSettingsPanel;
+		IconRenderer _iconRenderer;
 
 		CircularBuffer<float> _frametimes;
 

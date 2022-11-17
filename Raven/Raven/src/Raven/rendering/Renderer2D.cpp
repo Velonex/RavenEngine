@@ -187,17 +187,17 @@ namespace rvn {
 
 		drawQuad(transform, texture, color, tilingFactor);
 	}
-	void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor)
+	void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor, std::uint32_t entityID)
 	{
-		drawQuad({ position.x, position.y, 0.0f }, size, subtexture, color, tilingFactor);
+		drawQuad({ position.x, position.y, 0.0f }, size, subtexture, color, tilingFactor, entityID);
 	}
 
-	void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor)
+	void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor, std::uint32_t entityID)
 	{
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
 			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-		drawQuad(transform, subtexture, color, tilingFactor);
+		drawQuad(transform, subtexture, color, tilingFactor, entityID);
 	}
 	void Renderer2D::drawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
@@ -286,7 +286,7 @@ namespace rvn {
 		}
 		s_data.quadIndexCount += 6;
 	}
-	void Renderer2D::drawQuad(const glm::mat4& transform, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor)
+	void Renderer2D::drawQuad(const glm::mat4& transform, const ref<SubTexture2D>& subtexture, const glm::vec4& color, float tilingFactor, std::uint32_t entityID)
 	{
 		if (s_data.quadIndexCount >= s_data.maxIndices)
 			nextBatch();
@@ -311,7 +311,7 @@ namespace rvn {
 			s_data.quadVertexBufferPtr->texCoord = subtexture->getTexCoords()[i];
 			s_data.quadVertexBufferPtr->texIndex = (float)texIndex;
 			s_data.quadVertexBufferPtr->tilingFactor = tilingFactor;
-			s_data.quadVertexBufferPtr->entityID = -1;
+			s_data.quadVertexBufferPtr->entityID = entityID;
 			s_data.quadVertexBufferPtr++;
 		}
 		s_data.quadIndexCount += 6;
