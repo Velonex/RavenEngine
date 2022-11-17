@@ -78,4 +78,5 @@ void main()
 		//case 31: color = col *= texture(u_Textures[31], v_TexCoord * v_TilingFactor); break;
 	}
 	entityID = v_EntityID;
+	if(col.a == 0.0) entityID = -1;
 }
