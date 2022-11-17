@@ -23,6 +23,9 @@ namespace rvn {
 		AttachmentSpecification id;
 		id.layout = AttachmentLayout::RED_UINT;
 		fbSpec.attachments.push_back(id);
+        AttachmentSpecification depth;
+        depth.layout = AttachmentLayout::DEPTH24STENCIL8;
+        fbSpec.attachments.push_back(depth);
 		_framebuffer = Framebuffer::create(fbSpec);
 
         _activeScene = createRef<Scene>();
