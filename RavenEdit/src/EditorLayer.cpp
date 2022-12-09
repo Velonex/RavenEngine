@@ -32,7 +32,9 @@ namespace rvn {
 
         _sceneEntitiesPanel.setContext(_activeScene);
         _sceneSettingsPanel.setContext(_activeScene);
+
         _iconRenderer.setContext(_activeScene);
+        _editorRenderer.setContext(_activeScene);
     }
 
     void EditorLayer::onDetach()
@@ -45,7 +47,7 @@ namespace rvn {
             (spec.width != _viewportSize.x || spec.height != _viewportSize.y)) {
             _framebuffer->resize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
         
-            _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
+            onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
         }
 
         _framebuffer->bind();
@@ -56,7 +58,14 @@ namespace rvn {
 		// Clear id attachment of framebuffer after it is cleared with the clear color to avoid the clear color being an entity id
 		_framebuffer->clearAttachment(1, -1);
 
-        _activeScene->onUpdate(ts);
+        if (_viewportFocused && !_isRunning) _editorRenderer.updateCamera(ts);
+
+        if (_isRunning) {
+            _activeScene->onUpdate(ts);
+        }
+        else {
+            _editorRenderer.onUpdate(ts);
+        }
 
         drawIcons();
 
@@ -81,6 +90,7 @@ namespace rvn {
     void EditorLayer::onEvent(Event* e)
     {
         //_cameraController.onEvent(e);
+        if (_viewportHovered) _editorRenderer.onEvent(e);
         switch (e->getType()) {
         case EventType::EVENT_KEY_PRESSED: {
             onKeyPressed((KeyPressedEvent*)e);
@@ -115,6 +125,7 @@ namespace rvn {
 		if (_hoveredID != -1) 
 			hoveredEntityName = _activeScene->getEntityByID(_hoveredID).getComponent<TagComponent>().tag;
 		ImGui::Text("Hovered entity: %s", hoveredEntityName.c_str());
+        ImGui::Checkbox("Is running", &_isRunning);
 		ImGui::End();
 
         endDockspace();
@@ -150,6 +161,12 @@ namespace rvn {
 			_sceneEntitiesPanel.setSelectedEntity(_activeScene->getEntityByID(_hoveredID));
 		}
 	}
+
+    void EditorLayer::onViewportResize(std::uint32_t width, std::uint32_t height)
+    {
+        _activeScene->onViewportResize(width, height);
+        _editorRenderer.onViewportResize(width, height);
+    }
 
     void EditorLayer::beginDockspace()
     {
@@ -257,10 +274,11 @@ namespace rvn {
     void EditorLayer::newScene()
     {
         _activeScene = createRef<Scene>();
-        _activeScene->onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
+        onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
         _sceneEntitiesPanel.setContext(_activeScene);
         _sceneSettingsPanel.setContext(_activeScene);
         _iconRenderer.setContext(_activeScene);
+        _editorRenderer.setContext(_activeScene);
     }
 
     void EditorLayer::openScene()

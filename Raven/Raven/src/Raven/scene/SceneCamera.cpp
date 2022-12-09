@@ -25,6 +25,8 @@ namespace rvn {
 	}
 	void SceneCamera::setViewportSize(std::uint32_t width, std::uint32_t height)
 	{
+		_width = width;
+		_height = height;
 		_aspectRatio = (float)width / (float)height;
 		recalculateProjection();
 	}

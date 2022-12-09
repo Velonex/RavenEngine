@@ -3,6 +3,7 @@
 #include <panels/SceneEntitiesPanel.h>
 #include <panels/SceneSettingsPanel.h>
 #include "IconRenderer.h"
+#include "EditorRenderer.h"
 
 namespace rvn {
 	class EditorLayer : public Layer {
@@ -19,6 +20,7 @@ namespace rvn {
 	private:
 		void onKeyPressed(KeyPressedEvent* e);
 		void onMouseLeft();
+		void onViewportResize(std::uint32_t width, std::uint32_t height);
 
 		// ImGui
 		void beginDockspace();
@@ -36,7 +38,11 @@ namespace rvn {
 		void openScene();
 		void saveSceneAs();
 	private:
-		bool firstTime = true;
+		bool _firstTime = true;
+
+		bool _isRunning = false;
+
+		EditorRenderer _editorRenderer;
 
 		ref<Framebuffer> _framebuffer;
 

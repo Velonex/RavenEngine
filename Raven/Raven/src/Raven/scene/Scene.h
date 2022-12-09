@@ -16,6 +16,7 @@ namespace rvn {
 		friend class SceneSerializer;
 		friend class IconRenderer;
 		friend class EditorLayer;
+		friend class EditorRenderer;
 	public:
 		Scene(const std::string& name = "Untitled scene");
 		~Scene();

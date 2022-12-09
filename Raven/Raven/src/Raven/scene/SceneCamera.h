@@ -48,5 +48,8 @@ namespace rvn {
 		float _orthographicNear = -1.0f, _orthographicFar = 1.0f;
 
 		float _aspectRatio = 16.f/9.f;
+
+	protected:
+		std::uint32_t _width, _height;
 	};
 }
