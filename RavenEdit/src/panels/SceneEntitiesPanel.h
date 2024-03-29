@@ -6,8 +6,6 @@
 
 namespace rvn {
 
-	struct SpriteRendererComponent;
-
 	class SceneEntitiesPanel {
 	public:
 		SceneEntitiesPanel() = default;
