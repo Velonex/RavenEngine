@@ -49,7 +49,10 @@ namespace rvn {
 			_selectionContext = {};
 		if (ImGui::BeginPopupContextWindow(0, 1, false))
 		{
-			if (ImGui::MenuItem("Create empty entity")) _context->createEntity("Empty Entity");
+			if (ImGui::MenuItem("Create empty entity")) {
+				auto newEntity = _context->createEntity("Empty Entity");
+				this->setSelectedEntity(newEntity);
+			}
 			ImGui::EndPopup();
 		}
 		ImGui::End();
