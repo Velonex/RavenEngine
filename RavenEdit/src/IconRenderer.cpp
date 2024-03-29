@@ -11,6 +11,7 @@ namespace rvn {
 		ASSERT(std::filesystem::exists(ICON_ATLAS_PATH), "Icon atlas is missing!");
 		_atlas = Texture2D::create(ICON_ATLAS_PATH);
 		_camera = SubTexture2D::createFromCoords(_atlas, { 0.0f, 15.0f }, { 64.0f, 64.0f });
+		_primaryCamera = SubTexture2D::createFromCoords(_atlas, { 1.0f, 15.0f }, { 64.0f, 64.0f });
 	}
 
 	void IconRenderer::setContext(const ref<Scene>& scene)
@@ -44,7 +45,7 @@ namespace rvn {
 
 	void IconRenderer::drawIconAt(const glm::vec3& position, const ref<SubTexture2D>& icon, std::uint32_t entityID)
 	{
-		auto rot = glm::toMat4(glm::quat(calcRot(position, _mainCamTransform->translation)));
+		auto rot = glm::toMat4(glm::quat(calcRot(position, _editorCamera->getPosition())));
 
 		glm::mat4 iconTransform = glm::translate(glm::mat4(1.0f), position)
 			* rot
@@ -52,41 +53,28 @@ namespace rvn {
 
 		Renderer2D::drawQuad(
 			iconTransform,
-			_camera,
+			icon,
 			glm::vec4(1.0f),
 			1.0f,
 			entityID);
 	}
 
-	void IconRenderer::drawIcons()
+	void IconRenderer::drawIcons(EditorCamera& camera)
 	{
+		_editorCamera = &camera;
 		// Get main cam -> TODO: use editor camera
-		_mainCam = nullptr;
 		{
+			Renderer2D::beginScene(camera, camera.getTransform());
 			auto view = _scene->_registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view) {
 				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
-				if (camera.primary) {
-					_mainCam = &camera.camera;
-					_mainCamTransform = &transform;
-					break;
-				}
+				if (camera.primary)
+					drawIconAt(transform.translation, _primaryCamera, (std::uint32_t)entity);
+				else
+					drawIconAt(transform.translation, _camera, (std::uint32_t)entity);
 			}
-		}
-		{
-			if (_mainCam) {
-				Renderer2D::beginScene(*_mainCam, _mainCamTransform->getTransform());
-				auto view = _scene->_registry.view<TransformComponent, CameraComponent>();
-				for (auto entity : view) {
-					auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
-					// Render all but the primary camera -> TODO: render primary camera as well when editor camera is added
-					if (!camera.primary) {
-						drawIconAt(transform.translation, _camera, (std::uint32_t)entity);
-					}
-				}
 
-				Renderer2D::endScene();
-			}
+			Renderer2D::endScene();
 		}
 	}
 

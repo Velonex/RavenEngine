@@ -1,5 +1,6 @@
 #pragma once
 #include <Raven.h>
+#include "EditorCamera.h"
 
 namespace rvn {
 
@@ -9,16 +10,18 @@ namespace rvn {
 
 		void setContext(const ref<Scene>& scene);
 
-		void drawIcons();
+		void drawIcons(EditorCamera& camera);
 	private:
 		void drawIconAt(const glm::vec3& position, const ref<SubTexture2D>& icon, std::uint32_t entityID);
 	private:
 		ref<Texture2D> _atlas;
+
 		ref<SubTexture2D> _camera;
+		ref<SubTexture2D> _primaryCamera;
+
 		ref<Scene> _scene;
 
-		SceneCamera* _mainCam = nullptr;
-		TransformComponent* _mainCamTransform;
+		EditorCamera* _editorCamera = nullptr;
 	};
 
 }

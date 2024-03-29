@@ -268,7 +268,7 @@ namespace rvn {
 
     void EditorLayer::drawIcons()
     {
-        _iconRenderer.drawIcons();
+        _iconRenderer.drawIcons(_editorRenderer.getCamera());
     }
 
     void EditorLayer::newScene()
