@@ -20,3 +20,4 @@
 // Utilities
 #include <Raven_Core/utility/Timer.h>
 #include <Raven_Core/utility/Split.h>
+#include <Raven_Core/utility/Hex.h>

@@ -11,6 +11,8 @@
 #include <Raven/utils/PlatformUtils.h>
 #include <Raven/assets/IdLookup.h>
 
+#include <Raven_Core/utility/Hex.h>
+
 #include <cstring>
 #include <filesystem>
 
@@ -158,6 +160,15 @@ namespace rvn {
 				}
 			ImGui::EndPopup();
 		}
+		// Draw RUID
+		ImGui::Text("RUID: ");
+		ImGui::SameLine();
+		ImGui::Text(Hex::toHexUpper(entity.getComponent<RUIDComponent>().ruid).c_str());
+		ImGui::SameLine();
+		if (ImGui::Button("Copy##RUID")) {
+			ImGui::SetClipboardText(std::to_string(entity.getComponent<RUIDComponent>().ruid).c_str());
+		}
+
 		// Draw components
 		drawComponent<TransformComponent>("Transform", entity, [&](TransformComponent& transform) {
 			ImGui::Text("Translation"); ImGui::SameLine(ImGui::GetContentRegionAvailWidth() / 3);
