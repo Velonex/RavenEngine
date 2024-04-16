@@ -85,6 +85,8 @@ namespace rvn {
         _framebuffer->unbind();
         
         _frametimes.push_back(ts.getSeconds());
+        _FPSAcc += ts;
+        _frameCount++;
     }
 
     void EditorLayer::onEvent(Event* e)
@@ -117,7 +119,12 @@ namespace rvn {
 
         // Debug Info
         ImGui::Begin("Debug Info");
-        ImGui::Text("Last FPS: %f", 1 / _frametimes[99]);
+        if (_FPSTimer.hasReached(250)) {
+            _lastFPS = 1 / (_FPSAcc / _frameCount);
+            _FPSAcc = 0.0f;
+            _frameCount = 0;
+        }
+        ImGui::Text("FPS: %.2f", _lastFPS);
         ImGui::PlotLines("Frametimes", [](void* data, int idx) -> float { return ((CircularBuffer<float>*)data)->operator[](idx); }, (void*)&_frametimes,
             100, 0, 0, 0.0f);
 		ImGui::Text("Mouse position in viewport: %i, %i", _mousePosInViewport.x, _mousePosInViewport.y);

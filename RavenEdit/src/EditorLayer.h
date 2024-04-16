@@ -58,7 +58,12 @@ namespace rvn {
 		SceneSettingsPanel _sceneSettingsPanel;
 		IconRenderer _iconRenderer;
 
+		// FPS
 		CircularBuffer<float> _frametimes;
+		Timer _FPSTimer;
+		float _lastFPS = 0.0f;
+		float _FPSAcc = 0.0f;
+		std::uint32_t _frameCount = 0;
 
 		bool _mouseDownLast = false;
 	};
