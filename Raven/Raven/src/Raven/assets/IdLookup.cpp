@@ -25,7 +25,15 @@ namespace rvn {
 			}
 		}
 		else {
-			ASSERT(false, "Couldn't open the asset lookup");
+			std::ofstream out(_base / std::filesystem::path("assets"));
+			if (out) {
+				for (auto& entry : _lookup) {
+					out << entry.first << ":" << entry.second.string() << std::endl;
+				}
+			}
+			else {
+				ASSERT(false, "Couldn't open the asset lookup");
+			}
 		}
 	}
 	void IdLookup::saveLookup()
