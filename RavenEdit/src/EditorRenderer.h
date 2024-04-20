@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EditorCamera.h"
+#include "IconRenderer.h"
 
 namespace rvn {
 
@@ -19,6 +20,7 @@ namespace rvn {
 		ref<Scene> _context;
 		EditorCamera _camera;
 		std::uint32_t _viewportWidth = 0, _viewportHeight = 0;
+		IconRenderer _iconRenderer;
 	};
 
 }

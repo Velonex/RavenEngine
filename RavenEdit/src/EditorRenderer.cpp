@@ -7,6 +7,7 @@ namespace rvn {
 	void EditorRenderer::setContext(const ref<Scene>& context)
 	{
 		_context = context;
+		_iconRenderer.setContext(context);
 	}
 
 	void EditorRenderer::updateCamera(Timestep ts)
@@ -45,6 +46,9 @@ namespace rvn {
 				Renderer2D::drawQuad(transform.getTransform(), spritecomp.color, (std::uint32_t)entity);
 			}
 		}
+		// Draw icons
+		_iconRenderer.drawIcons(_camera);
+
 		Renderer2D::endScene();
 	}
 

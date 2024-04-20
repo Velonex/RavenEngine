@@ -30,11 +30,7 @@ namespace rvn {
 
         _activeScene = createRef<Scene>();
 
-        _sceneEntitiesPanel.setContext(_activeScene);
-        _sceneSettingsPanel.setContext(_activeScene);
-
-        _iconRenderer.setContext(_activeScene);
-        _editorRenderer.setContext(_activeScene);
+        updateContexts(_activeScene);
     }
 
     void EditorLayer::onDetach()
@@ -66,8 +62,6 @@ namespace rvn {
         else {
             _editorRenderer.onUpdate(ts);
         }
-
-        drawIcons();
 
 		if (_viewportHovered)
 			_hoveredID = _framebuffer->pixelAt(1, _mousePosInViewport.x, _mousePosInViewport.y);
@@ -175,6 +169,13 @@ namespace rvn {
         _editorRenderer.onViewportResize(width, height);
     }
 
+    void EditorLayer::updateContexts(const ref<Scene>& scene)
+    {
+        _sceneEntitiesPanel.setContext(_activeScene);
+        _sceneSettingsPanel.setContext(_activeScene);
+        _editorRenderer.setContext(_activeScene);
+    }
+
     void EditorLayer::beginDockspace()
     {
         bool dockspaceOpened = true;
@@ -272,20 +273,12 @@ namespace rvn {
         ImGui::End();
         ImGui::PopStyleVar();
     }
-
-    void EditorLayer::drawIcons()
-    {
-        _iconRenderer.drawIcons(_editorRenderer.getCamera());
-    }
-
     void EditorLayer::newScene()
     {
         _activeScene = createRef<Scene>();
         onViewportResize((std::uint32_t)_viewportSize.x, (std::uint32_t)_viewportSize.y);
-        _sceneEntitiesPanel.setContext(_activeScene);
-        _sceneSettingsPanel.setContext(_activeScene);
-        _iconRenderer.setContext(_activeScene);
-        _editorRenderer.setContext(_activeScene);
+
+        updateContexts(_activeScene);
     }
 
     void EditorLayer::openScene()

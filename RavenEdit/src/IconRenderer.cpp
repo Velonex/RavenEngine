@@ -62,9 +62,7 @@ namespace rvn {
 	void IconRenderer::drawIcons(EditorCamera& camera)
 	{
 		_editorCamera = &camera;
-		// Get main cam -> TODO: use editor camera
 		{
-			Renderer2D::beginScene(camera, camera.getTransform());
 			auto view = _scene->_registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view) {
 				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
@@ -73,8 +71,6 @@ namespace rvn {
 				else
 					drawIconAt(transform.translation, _camera, (std::uint32_t)entity);
 			}
-
-			Renderer2D::endScene();
 		}
 	}
 

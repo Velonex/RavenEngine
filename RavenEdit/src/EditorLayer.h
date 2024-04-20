@@ -2,7 +2,6 @@
 #include <Raven.h>
 #include <panels/SceneEntitiesPanel.h>
 #include <panels/SceneSettingsPanel.h>
-#include "IconRenderer.h"
 #include "EditorRenderer.h"
 
 namespace rvn {
@@ -22,17 +21,16 @@ namespace rvn {
 		void onMouseLeft();
 		void onViewportResize(std::uint32_t width, std::uint32_t height);
 
+		void updateContexts(const ref<Scene>& scene);
+
 		// ImGui
 		void beginDockspace();
+		void endDockspace();
 
 		void drawMenuBar();
 
 		// Viewport
 		void drawViewport();
-		void drawIcons();
-
-		void endDockspace();
-
 
 		void newScene();
 		void openScene();
@@ -56,7 +54,6 @@ namespace rvn {
 
 		SceneEntitiesPanel _sceneEntitiesPanel;
 		SceneSettingsPanel _sceneSettingsPanel;
-		IconRenderer _iconRenderer;
 
 		// FPS
 		CircularBuffer<float> _frametimes;
