@@ -86,7 +86,7 @@ namespace rvn {
 		s_data.quadPositions[2] = {  0.5f,  0.5f,  0.0f,  1.0f };
 		s_data.quadPositions[3] = { -0.5f,  0.5f,  0.0f,  1.0f };
 
-		s_data.shader = Shader::create("assets/shaders/Renderer2D_Quad.glsl");
+		s_data.shader = Shader::create("assets/internal/shaders/Editor_Quad.glsl");
 		s_data.shader->bind();
 
 		s_data.whiteTexture = Texture2D::create(1, 1);

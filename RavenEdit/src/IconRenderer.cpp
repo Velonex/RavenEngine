@@ -4,7 +4,7 @@
 
 namespace rvn {
 
-	static const std::string ICON_ATLAS_PATH = "assets/textures/internal/icons/icon_atlas.png";
+	static const std::string ICON_ATLAS_PATH = "assets/internal/textures/icons/icon_atlas.png";
 
 	IconRenderer::IconRenderer()
 	{
