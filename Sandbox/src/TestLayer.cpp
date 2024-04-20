@@ -11,6 +11,8 @@ struct Vertex {
 
 void TestLayer::onAttach()
 {
+	mesh = rvn::Mesh::createFromFile("assets/models/arrow.obj", rvn::MeshFormat::OBJ);
+
 	// Create and bind vertex array
 	vao = rvn::VertexArray::create();
 	vao->bind();
@@ -44,7 +46,7 @@ void TestLayer::onAttach()
 	// Create and bind index buffer
 	ibo = rvn::IndexBuffer::create(indices, sizeof(indices) / sizeof(unsigned int));
 	vao->setIndexBuffer(ibo);
-
+	/*
 	// Create shaders
 	const char* vertexShaderSource =
 		R"(
@@ -84,6 +86,38 @@ void main()
 	color = texture(u_Texture, v_TexCoord) * v_Color;
 }
 )";
+*/
+// Create shaders
+
+	const char* vertexShaderSource =
+		R"(
+#version 330 core
+
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec2 a_Normal;
+
+uniform mat4 u_ViewProjectionMatrix;
+uniform mat4 u_Transform;
+
+void main()
+{
+	gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0);
+}
+)";
+
+	const char* fragmentShaderSource =
+		R"(
+#version 330 core
+
+layout(location = 0) out vec4 color;
+
+uniform sampler2D u_Texture;
+
+void main()
+{
+	color = vec4(1.0, 1.0, 1.0, 1.0);
+}
+)";
 
 	shader = rvn::Shader::create(vertexShaderSource, fragmentShaderSource, "test");
 
@@ -101,7 +135,7 @@ void TestLayer::onUpdate(rvn::Timestep timestep)
 	rvn::Renderer::beginScene(camera.getCamera());
 	shader->bind();
 	texture->bind();
-	rvn::Renderer::draw(vao, shader);
+	rvn::Renderer::draw(mesh, shader, glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), {0.0f, 1.0f, 0.0f}));
 	rvn::Renderer::endScene();
 }
 

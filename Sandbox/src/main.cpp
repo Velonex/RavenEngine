@@ -12,8 +12,9 @@
 #endif
 
 int main() {
+
 	rvn::Application app("Sandbox");
-	app.getLayerStack().pushLayer(new TestLayer2D());
+	app.getLayerStack().pushLayer(new TestLayer());
 	app.run();
 	DUMP_MEMORY_LEAKS();
 	return 0;

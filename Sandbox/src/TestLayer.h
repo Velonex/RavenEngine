@@ -12,6 +12,7 @@ public:
 	virtual void onImGuiRender() override;
 	virtual void onEvent(rvn::Event* e) override;
 private:
+	rvn::ref<rvn::Mesh> mesh;
 	rvn::ref<rvn::VertexArray> vao;
 	rvn::ref<rvn::VertexBuffer> vbo;
 	rvn::ref<rvn::IndexBuffer> ibo;

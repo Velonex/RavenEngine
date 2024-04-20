@@ -45,6 +45,7 @@
 #include <Raven/rendering/SubTexture2D.h>
 #include <Raven/rendering/Texture.h>
 #include <Raven/rendering/VertexArray.h>
+#include <Raven/rendering/Mesh.h>
 
 // Scene
 #include <Raven/scene/Components.h>
