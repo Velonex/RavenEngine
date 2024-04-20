@@ -28,7 +28,6 @@ namespace rvn {
 			return false;
 		}
 		std::string line;
-		float x, y, z;
 		std::vector<glm::vec3> normals;
 		struct Vertex {
 			glm::vec3 position = glm::vec3(0.0f);
