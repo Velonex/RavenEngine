@@ -1,4 +1,7 @@
 #pragma once
+#include <Raven_Core/datatypes/Memory.h>
+#include <Raven_Core/datatypes/Typedefs.h>
+#include <Raven/rendering/VertexArray.h>
 
 namespace rvn {
 
