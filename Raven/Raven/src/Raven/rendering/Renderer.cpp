@@ -17,6 +17,10 @@ namespace rvn {
 	{
 		s_sceneData->_viewProjectionMatrix = camera.getViewProjectionMatrix();
 	}
+	void Renderer::beginScene(const Camera& camera, const glm::mat4& transform)
+	{
+		s_sceneData->_viewProjectionMatrix = camera.getProjection() * glm::inverse(transform);
+	}
 	void Renderer::endScene()
 	{
 	}

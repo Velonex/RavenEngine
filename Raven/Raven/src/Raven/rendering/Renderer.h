@@ -1,5 +1,6 @@
 #pragma once
 #include <Raven/rendering/OrthographicCamera.h>
+#include <Raven/rendering/Camera.h>
 #include <Raven/rendering/Mesh.h>
 #include <Raven/rendering/VertexArray.h>
 #include <Raven/rendering/Shader.h>
@@ -13,6 +14,7 @@ namespace rvn {
 		static void shutdown();
 
 		static void beginScene(const OrthographicCamera& camera);
+		static void beginScene(const Camera& camera, const glm::mat4& transform);
 		static void endScene();
 
 		static void draw(const ref<VertexArray>& vertexArray, const ref<Shader>& shader, const glm::mat4& transform = glm::mat4(1.0f));
