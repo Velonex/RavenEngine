@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <filesystem>
+#include <Raven/rendering/Shader.h>
+#include <Raven_Core.h>
 
 namespace rvn {
 
@@ -17,6 +19,7 @@ namespace rvn {
 		static ref<Shader> create(const std::filesystem::path& path);
 		
 		virtual void setInt(const std::string& name, int value) const = 0;
+		virtual void setUInt(const std::string& name, std::uint32_t value) const = 0;
 		virtual void setIntArray(const std::string& name, int* values, uint32_t count) const = 0;
 
 		virtual void setFloat(const std::string& name, float value) const = 0;

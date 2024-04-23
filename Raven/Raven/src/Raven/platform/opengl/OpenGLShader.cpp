@@ -57,6 +57,11 @@ namespace rvn {
 		GLuint loc = glGetUniformLocation(_id, name.c_str());
 		glUniform1i(loc, value);
 	}
+	void OpenGLShader::uploadUniformUInt(const std::string& name, std::uint32_t value) const
+	{
+		GLuint loc = glGetUniformLocation(_id, name.c_str());
+		glUniform1ui(loc, value);
+	}
 	void OpenGLShader::uploadUniformIntArray(const std::string& name, int* values, uint32_t count) const
 	{
 		GLuint loc = glGetUniformLocation(_id, name.c_str());
@@ -95,6 +100,10 @@ namespace rvn {
 	void OpenGLShader::setInt(const std::string& name, int value) const
 	{
 		uploadUniformInt(name, value);
+	}
+	void OpenGLShader::setUInt(const std::string& name, std::uint32_t value) const
+	{
+		uploadUniformUInt(name, value);
 	}
 	void OpenGLShader::setIntArray(const std::string& name, int* values, uint32_t count) const
 	{
