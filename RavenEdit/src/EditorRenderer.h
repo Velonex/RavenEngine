@@ -7,6 +7,8 @@ namespace rvn {
 
 	class EditorRenderer {
 	public:
+		void init();
+
 		void setContext(const ref<Scene>& context);
 
 		void updateCamera(Timestep ts);
@@ -21,6 +23,9 @@ namespace rvn {
 		EditorCamera _camera;
 		std::uint32_t _viewportWidth = 0, _viewportHeight = 0;
 		IconRenderer _iconRenderer;
+
+		// 3d rendering
+		ref<Shader> _3dShader;
 	};
 
 }

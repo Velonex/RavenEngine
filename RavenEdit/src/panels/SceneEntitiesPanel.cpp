@@ -158,6 +158,10 @@ namespace rvn {
 				if (ImGui::MenuItem("Camera")) {
 					entity.addComponent<CameraComponent>();
 				}
+			if (!entity.hasComponent<MeshComponent>())
+				if (ImGui::MenuItem("Mesh")) {
+					entity.addComponent<MeshComponent>();
+				}
 			ImGui::EndPopup();
 		}
 		// Draw RUID
@@ -198,6 +202,21 @@ namespace rvn {
 			ImGui::Text("Tiling factor"); ImGui::SameLine();
 			ImGui::DragFloat("##Tiling Factor", &component.tilingFactor, 0.01f, 0.01f, 10.0f);
 		});
+		drawComponent<MeshComponent>("Mesh", entity, [&](MeshComponent& component) {
+			if (ImGui::Button("Set Mesh")) {
+				std::optional<std::string> path = FileDialogs::openFile("Mesh File (OBJ)\0*.obj");
+				if (path) {
+					component.id = IdLookup::getID(path.value());
+					component.updateMesh = true;
+				}
+			}
+			ImGui::SameLine();
+			ImGui::Text(component.id == 0 ? "No mesh" : IdLookup::getPath(component.id).c_str());
+			if (ImGui::Button("Reset mesh")) {
+				component.id = 0;
+				component.mesh.reset();
+			}
+			});
 		drawComponent<CameraComponent>("Camera", entity, [&](CameraComponent& component) {
 			ImGui::Checkbox("Primary camera", &component.primary);
 

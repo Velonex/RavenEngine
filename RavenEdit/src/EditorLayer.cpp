@@ -14,6 +14,7 @@ namespace rvn {
     }
     void EditorLayer::onAttach()
     {
+        _editorRenderer.init();
         FramebufferSpecification fbSpec;
         fbSpec.width = 1280;
         fbSpec.height = 720;
@@ -160,7 +161,10 @@ namespace rvn {
 		// Select entity if hovered
 		if (_hoveredID != -1) {
 			_sceneEntitiesPanel.setSelectedEntity(_activeScene->getEntityByID(_hoveredID));
-		}
+        }
+        else {
+            _sceneEntitiesPanel.setSelectedEntity({});
+        }
 	}
 
     void EditorLayer::onViewportResize(std::uint32_t width, std::uint32_t height)

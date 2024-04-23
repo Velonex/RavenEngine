@@ -24,6 +24,7 @@ namespace rvn {
 	void Renderer::endScene()
 	{
 	}
+	// TODO: add functions that don't rebind the shader every time and re-set the vp matrix
 	void Renderer::draw(const ref<VertexArray>& vertexArray, const ref<Shader>& shader, const glm::mat4& transform)
 	{
 		shader->bind();

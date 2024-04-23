@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Entity.h"
 #include <Raven/rendering/Renderer2D.h>
+#include <Raven/rendering/Renderer.h>
 #include "Components.h"
 #include <Raven/assets/AssetManager.h>
 
@@ -9,6 +10,7 @@ namespace rvn {
 	Scene::Scene(const std::string& name)
 		: _name(name)
 	{
+		_3dDefaultShader = Shader::create("assets/internal/shaders/Editor_3D.glsl");
 	}
 	Scene::~Scene()
 	{
@@ -77,27 +79,52 @@ namespace rvn {
 		}
 		if (_mainCam) {
 			// Render Quads
-			Renderer2D::beginScene(*_mainCam, _mainCamTransform);
-			auto view = _registry.view<TransformComponent, SpriteRendererComponent>();
-			for (auto entity : view) {
+			{
+				Renderer2D::beginScene(*_mainCam, _mainCamTransform);
+				auto view = _registry.view<TransformComponent, SpriteRendererComponent>();
+				for (auto entity : view) {
 
-				TransformComponent transform = view.get<TransformComponent>(entity);
-				SpriteRendererComponent& spritecomp = view.get<SpriteRendererComponent>(entity);
+					TransformComponent transform = view.get<TransformComponent>(entity);
+					SpriteRendererComponent& spritecomp = view.get<SpriteRendererComponent>(entity);
 
-				if (spritecomp.id != 0) {
-					if (!spritecomp.texture || spritecomp.updateTexture) {
-						spritecomp.texture = AssetManager::loadTexture(spritecomp.id);
-						if (!spritecomp.texture) {
-							ASSERT(false, "Invalid ID");
+					if (spritecomp.id != 0) {
+						if (!spritecomp.texture || spritecomp.updateTexture) {
+							spritecomp.texture = AssetManager::loadTexture(spritecomp.id);
+							if (!spritecomp.texture) {
+								ASSERT(false, "Invalid ID");
+							}
 						}
+						Renderer2D::drawQuad(transform.getTransform(), spritecomp.texture, spritecomp.color, spritecomp.tilingFactor, (std::uint32_t)entity);
 					}
-					Renderer2D::drawQuad(transform.getTransform(), spritecomp.texture, spritecomp.color, spritecomp.tilingFactor, (std::uint32_t)entity);
+					else {
+						Renderer2D::drawQuad(transform.getTransform(), spritecomp.color, (std::uint32_t)entity);
+					}
 				}
-				else {
-					Renderer2D::drawQuad(transform.getTransform(), spritecomp.color, (std::uint32_t)entity);
-				}
+				Renderer2D::endScene();
 			}
-			Renderer2D::endScene();
+			{
+				// TODO: Add different shaders, for now use default editor shader
+				// Render Meshes
+				Renderer::beginScene(*_mainCam, _mainCamTransform);
+				auto view = _registry.view<TransformComponent, MeshComponent>();
+				for (auto entity : view) {
+					TransformComponent transform = view.get<TransformComponent>(entity);
+					MeshComponent& mesh = view.get<MeshComponent>(entity);
+
+					if (mesh.id != 0) {
+						if (!mesh.mesh || mesh.updateMesh) {
+							mesh.mesh = AssetManager::loadMesh(mesh.id);
+							if (!mesh.mesh) {
+								ASSERT(false, "Invalid ID");
+							}
+						}
+						_3dDefaultShader->setUInt("u_EntityID", (std::uint32_t)entity);
+						Renderer::draw(mesh.mesh, _3dDefaultShader, transform.getTransform());
+					}
+					// TODO: else error/ draw error mesh
+				}
+				Renderer::endScene();
+			}
 		}
 	}
 	void Scene::onViewportResize(std::uint32_t width, std::uint32_t height)
@@ -128,6 +155,10 @@ namespace rvn {
 	}
 	template<>
 	void Scene::onComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component) {
+
+	}
+	template<>
+	void Scene::onComponentAdded<MeshComponent>(Entity entity, MeshComponent& component) {
 
 	}
 	template<>

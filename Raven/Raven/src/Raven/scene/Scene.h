@@ -4,6 +4,7 @@
 #include <Raven/rendering/OrthographicCamera.h>
 #include <string>
 #include <Raven/scene/SceneCamera.h>
+#include <Raven/rendering/Shader.h>
 
 namespace rvn {
 
@@ -47,6 +48,8 @@ namespace rvn {
 		std::string _name = "";
 		glm::vec4 _clearColor = { 0.7f, 0.7f, 0.7f, 1.0f };
 	private:
+		ref<Shader> _3dDefaultShader = nullptr;
+
 		SceneCamera* _mainCam = nullptr;
 		glm::mat4 _mainCamTransform;
 	};

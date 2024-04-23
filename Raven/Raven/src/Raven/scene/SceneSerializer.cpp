@@ -111,6 +111,11 @@ namespace rvn {
 			out << YAML::Key << "TilingFactor" << YAML::Value << entity.getComponent<SpriteRendererComponent>().tilingFactor;
 			out << YAML::EndMap;
 		}
+		if (entity.hasComponent<MeshComponent>()) {
+			out << YAML::Key << "MeshComponent" << YAML::Value << YAML::BeginMap;
+			out << YAML::Key << "MeshID" << YAML::Value << entity.getComponent<MeshComponent>().id;
+			out << YAML::EndMap;
+		}
 		if (entity.hasComponent<CameraComponent>()) {
 			out << YAML::Key << "CameraComponent" << YAML::Value << YAML::BeginMap;
 			auto& cameraComponent = entity.getComponent<CameraComponent>();
@@ -315,6 +320,12 @@ namespace rvn {
 					src.color = spriteRendererComponent["Color"].as<glm::vec4>();
 					src.id = spriteRendererComponent["TextureID"].as<std::uint64_t>();
 					src.tilingFactor = spriteRendererComponent["TilingFactor"].as<float>();
+				}
+
+				auto meshComponent = entity["MeshComponent"];
+				if (meshComponent) {
+					auto& src = curEntity.addComponent<MeshComponent>();
+					src.id = meshComponent["MeshID"].as<std::uint64_t>();
 				}
 
 				auto cameraComponent = entity["CameraComponent"];

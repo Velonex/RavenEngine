@@ -6,6 +6,7 @@
 namespace rvn {
 
 	std::unordered_map<std::uint64_t, std::weak_ptr<Texture2D>> AssetManager::s_textureCache;
+	std::unordered_map<std::uint64_t, std::weak_ptr<Mesh>> AssetManager::s_meshCache;
 
 	ref<Texture2D> AssetManager::loadTexture(std::uint64_t id)
 	{
@@ -35,6 +36,21 @@ namespace rvn {
 			}
 		}
 		return ref<Texture2D>();
+	}
+
+	ref<Mesh> AssetManager::loadMesh(std::uint64_t id)
+	{
+		// TODO: alternative loading that doesn't rely on other function to future proof it for packed assets
+		eraseExpired<Mesh>(s_meshCache);
+		if (s_meshCache.find(id) != s_meshCache.end()) {
+			return s_meshCache[id].lock();
+		}
+		else {
+			auto sp = s_meshCache[id].lock();
+			if (!sp) s_meshCache[id] = sp = Mesh::createFromFile(IdLookup::getPath(id), MeshFormat::OBJ);
+			return sp;
+		}
+		return ref<Mesh>();
 	}
 
 	template<typename T>

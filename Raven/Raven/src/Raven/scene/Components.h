@@ -10,6 +10,7 @@
 #include "ScriptableEntity.h"
 
 #include <Raven/rendering/Texture.h>
+#include <Raven/rendering/Mesh.h>
 
 namespace rvn {
 
@@ -59,7 +60,19 @@ namespace rvn {
 		SpriteRendererComponent(glm::vec4 color)
 			: color(color) {}
 		SpriteRendererComponent(glm::vec4 color, std::uint64_t id, float tilingFactor)
-			: color(color), id(id), tilingFactor(tilingFactor) {}
+			: color(color), id(id), tilingFactor(tilingFactor) {
+// TODO: should updateTexture be set to true?;			
+		}
+	};
+	struct MeshComponent {
+		std::uint64_t id = 0;
+		ref<Mesh> mesh;
+		bool updateMesh = false;
+
+		MeshComponent() = default;
+		MeshComponent(const MeshComponent&) = default;
+		MeshComponent(std::uint64_t id)
+			: id(id) {}
 	};
 	struct CameraComponent {
 		SceneCamera camera;
