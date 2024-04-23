@@ -163,7 +163,8 @@ namespace rvn {
 			_sceneEntitiesPanel.setSelectedEntity(_activeScene->getEntityByID(_hoveredID));
         }
         else {
-            _sceneEntitiesPanel.setSelectedEntity({});
+            if(_viewportHovered)
+                _sceneEntitiesPanel.setSelectedEntity({});
         }
 	}
 
